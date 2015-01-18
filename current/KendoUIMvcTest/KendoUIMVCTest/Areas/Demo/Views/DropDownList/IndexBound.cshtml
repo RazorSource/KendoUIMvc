@@ -1,0 +1,10 @@
+﻿@model KendoUIMVCTest.Models.DemoModel
+
+@{
+    ViewBag.Title = "Kendo UI MVC Drop Down List";
+}
+
+<h2>Drop Down List</h2>
+
+@(UI.DropDownListFor(model => model.FavoriteDay)
+    .SetDataSource((IList<SelectListItem>)ViewBag.DaysOfTheWeek))

@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/Prism/prism.css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/Content/Prism/prism.js")
+
+    @Styles.Render("~/Content/kendo/styles/kendo.common-bootstrap.min.css")
+    @Styles.Render("~/Content/kendo/styles/kendo.bootstrap.min.css")
+
+    @*<link href="http://cdn.kendostatic.com/2014.3.1314/styles/kendo.common-material.min.css" rel="stylesheet" />
+    <link href="http://cdn.kendostatic.com/2014.3.1314/styles/kendo.rtl.min.css" rel="stylesheet" />
+    <link href="http://cdn.kendostatic.com/2014.3.1314/styles/kendo.material.min.css" rel="stylesheet" />
+    <link href="http://cdn.kendostatic.com/2014.3.1314/styles/kendo.material.mobile.min.css" rel="stylesheet" />
+    <link href="http://cdn.kendostatic.com/2014.3.1314/styles/kendo.dataviz.min.css" rel="stylesheet" />
+    <link href="http://cdn.kendostatic.com/2014.3.1314/styles/kendo.dataviz.material.min.css" rel="stylesheet" />*@
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/Content/kendo/js/kendo.ui.core.min.js")
+    @RenderSection("scripts", required: false)
+
+    <script src="http://cdn.kendostatic.com/2014.3.1314/js/kendo.all.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2014.3.1314/js/kendo.timezones.min.js"></script>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Kendo UI MVC", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer style="display: block;">            
+            <p>&copy; @DateTime.Now.Year</p>
+        </footer>
+    </div>    
+</body>
+</html>

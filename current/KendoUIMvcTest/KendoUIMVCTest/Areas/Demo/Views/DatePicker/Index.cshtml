@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewBag.Title = "Kendo UI MVC Date Picker";
+}
+
+<h2>Date Picker</h2>
+
+@(UI.DatePicker("yourBirthday")
+    .SetLabelText("Your Birthday"))
+
+@(UI.TabStrip("codeSamples")
+    .AddTab("razorCode", ".cshtml", @"<pre>
+<code class=""language-markup"">
+@(UI.DatePicker(""yourBirthday"")
+    .SetLabelText(""Your Birthday""))
+</code></pre>")
+    .AddPartialPageTab("controllerCode", "Controller", "ControllerSample")
+)

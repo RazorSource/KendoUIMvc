@@ -1,0 +1,23 @@
+﻿@model KendoUIMVCTest.Models.DemoModel
+
+@{
+    ViewBag.Title = "Kendo UI MVC Date Picker Bound";
+}
+
+<h2>Date Picker</h2>
+
+@UI.DatePickerFor(model => model.BirthDate)
+
+@(UI.TabStrip("codeSamples")
+    .AddTab("razorCode", ".cshtml", @"<pre>
+<code class=""language-markup"">
+@UI.DatePickerFor(model => model.BirthDate)
+</code></pre>")
+    .AddTab("controllerCode", "Controller", @"<pre>
+<code class=""language-csharp"">
+public ActionResult IndexBound()
+{
+    return View(new DemoModel());
+}
+</code></pre>")
+)

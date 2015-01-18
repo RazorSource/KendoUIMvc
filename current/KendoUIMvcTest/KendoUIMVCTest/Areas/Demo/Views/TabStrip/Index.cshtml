@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewBag.Title = "Kendo UI MVC Tab Strip";
+}
+
+<h2>Tab Strip</h2>
+
+<div id="tabStripDemo">
+    <ul>
+        <li class="k-state-active">
+            .cshtml
+        </li>
+        <li>
+            controller
+        </li>
+    </ul>
+    <div>
+<pre>
+<code class="language-markup"><script type="prism-html-markup">
+<div>
+    Hey
+</div>
+</script></code></pre>
+    </div>
+    <div>
+        <pre>
+<code class="language-csharp">
+public ActionResult Index()
+{
+    return View();
+}
+</code></pre>
+    </div>    
+</div>
+
+<script>
+    $(document).ready(function() {
+        $("#tabStripDemo").kendoTabStrip();
+    });
+</script>
+
