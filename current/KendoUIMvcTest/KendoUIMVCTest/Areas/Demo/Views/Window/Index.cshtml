@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "Kendo UI MVC Window";
+}
+
+<h2>Window</h2>
+
+<button onclick="showWindow()">Show</button>
+
+@using (UI.Window("helloWindow")
+          .SetShowOnLoad(false)
+          .SetTitle("The Hello Window")
+          .RenderBegin())
+{
+    <text>
+        Hello from the Kendo Window.
+    </text>
+}
+
+<script type="text/javascript">
+    function showWindow() {
+        //$('#helloWindow').data("kendoWindow").open();
+        showhelloWindow();
+    }
+</script>

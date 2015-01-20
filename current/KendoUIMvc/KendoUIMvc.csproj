@@ -46,8 +46,10 @@
     <Compile Include="Controls\DatePicker.cs" />
     <Compile Include="Controls\DropDownList.cs" />
     <Compile Include="Controls\HtmlForm.cs" />
+    <Compile Include="Controls\RazorGrid.cs" />
     <Compile Include="Controls\TabStrip.cs" />
     <Compile Include="Controls\TextBox.cs" />
+    <Compile Include="Controls\Window.cs" />
     <Compile Include="KendoUIHtmlHelperExtension.cs" />
     <Compile Include="KendoUIHtmlHelper.cs" />
     <Compile Include="KendoUIWebViewPage.cs" />

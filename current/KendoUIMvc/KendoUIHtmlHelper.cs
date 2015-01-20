@@ -71,5 +71,24 @@ namespace KendoUIMvc
         {
             return new TabStrip<TModel>(this.htmlHelper, name);
         }
+
+        public Window<TModel> BeginWindow(string name)
+        {
+            Window<TModel> window = new Window<TModel>(this.htmlHelper, name);
+
+            return window.RenderBegin();
+        }
+
+        public Window<TModel> Window(string name)
+        {
+            Window<TModel> window = new Window<TModel>(this.htmlHelper, name);
+
+            return window;
+        }
+
+        public RazorGrid<TModel> RazorGrid(string name)
+        {
+            return new RazorGrid<TModel>(this.htmlHelper, name);
+        }
     }
 }
