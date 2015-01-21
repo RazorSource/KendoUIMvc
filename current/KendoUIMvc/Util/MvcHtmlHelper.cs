@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace KendoUIMvc.Util
 {
@@ -37,6 +38,29 @@ namespace KendoUIMvc.Util
         public static void WriteUnencodedContent<TModel>(HtmlHelper<TModel> htmlHelper, string html)
         {
             htmlHelper.ViewContext.Writer.WriteLine(html);
+        }
+
+        public static string GetActionUrl<TModel>(HtmlHelper<TModel> htmlHelper, string action, string controller, string area)
+        {
+            UrlHelper urlHelper = new UrlHelper(htmlHelper.ViewContext.RequestContext);
+            RouteValueDictionary routeValues = new RouteValueDictionary();
+
+            if (area != null)
+            {
+                routeValues.Add("area", area);
+            }
+
+            return urlHelper.Action(action, controller, routeValues);
+        }
+
+        /// <summary>
+        /// Returns a string to use in javascript for a boolean value.
+        /// </summary>
+        /// <param name="value">The boolean value.</param>
+        /// <returns>If the passed in value is True, "true" is returned, else "false" is returned.</returns>
+        public static string GetJavascriptBoolean(bool value)
+        {
+            return value ? "true" : "false";
         }
     }
 }

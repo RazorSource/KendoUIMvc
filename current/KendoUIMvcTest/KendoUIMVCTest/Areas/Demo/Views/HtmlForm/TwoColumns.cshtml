@@ -1,0 +1,16 @@
+﻿@model KendoUIMVCTest.Models.DemoModel
+
+@{
+    ViewBag.Title = "Kendo UI MVC HTML Form Two Columns";
+}
+
+<h2>HTML Form - Two Columns</h2>
+
+@using (UI.Form("frmSample", "Index", "HtmlForm")
+    .SetDefaultGroupColumnStyle("col-md-6")  // Set the column groups to be 6 of the 12 columns
+    .RenderBegin())
+{
+    @UI.TextBoxFor(model => model.Id)
+    @UI.TextBoxFor(model => model.FavoriteDay)
+    @UI.DatePickerFor(model => model.BirthDate)
+}

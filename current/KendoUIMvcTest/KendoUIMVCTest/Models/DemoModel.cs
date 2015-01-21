@@ -13,6 +13,7 @@ namespace KendoUIMVCTest.Models
             FavoriteDay = 6;
         }
 
+        public int Id { get; set; }
         public DateTime BirthDate { get; set; }
         public int FavoriteDay { get; set; }
     }

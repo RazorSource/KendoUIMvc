@@ -24,13 +24,17 @@ namespace KendoUIMvc.Controls
 
         protected string GetBaseControlString()
         {
+            IDictionary<string, object> attributes = GetControlAttributes();
+
+            //attributes.Add("data-parse-formats", "YYYY-MM-DDThh:mm:ss");
+
             if (this.expression == null)
             {
-                return this.htmlHelper.TextBox(this.unboundName, this.unboundValue, GetControlAttributes()).ToString();
+                return this.htmlHelper.TextBox(this.unboundName, this.unboundValue, attributes).ToString();
             }
             else
             {
-                return this.htmlHelper.TextBoxFor(expression, GetControlAttributes()).ToString();
+                return this.htmlHelper.TextBoxFor(expression, attributes).ToString();
             }
         }
 
@@ -40,12 +44,20 @@ namespace KendoUIMvc.Controls
 
             AddControlClass("date-picker");
 
+            html.Append(@"
+                <div style=""display: block;"">
+                ");
             html.AppendLine(GetBaseControlString());
+            html.Append(@"
+                </div>
+                ");
 
             html.AppendLine(@"
                 <script type=""text/javascript"">
                     $(document).ready(function() {
-                        $('#" + this.controlId + @"').kendoDatePicker();
+                        $('#" + this.controlId + @"').kendoDatePicker({                            
+                            parseFormats: [""yyyy-MM-ddTHH:mm:ss""]
+                        });
                     });
                 </script>");
 

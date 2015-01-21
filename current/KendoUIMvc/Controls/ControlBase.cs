@@ -155,6 +155,16 @@ namespace KendoUIMvc.Controls
             return attributes;
         }
 
+        /// <summary>
+        /// Gets the data-bind attribute name to use for a control.  Most controls use "value", which is the default implementation.
+        /// However there are some special exceptions such as the checkbox control which uses "checked".
+        /// </summary>
+        /// <returns>String to use for the data binding attribute.</returns>
+        protected virtual string GetDataBindingAttributeName()
+        {
+            return "value";
+        }
+
         protected virtual IDictionary<string, object> GetControlAttributes()
         {
             ViewSettings viewSettings = this.htmlHelper.ViewData.GetViewSettings();
@@ -167,6 +177,9 @@ namespace KendoUIMvc.Controls
             {
                 attributes.Add("class", string.Join<string>(" ", this.controlClasses));
             }
+
+            // Add the data-bind attribute for client side model binding.
+            attributes.Add(@"data-bind", GetDataBindingAttributeName() + ": " + this.controlId);
 
             return attributes;
         }

@@ -160,6 +160,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\Demo\Controllers\DatePickerController.cs" />
     <Compile Include="Areas\Demo\Controllers\DropDownListController.cs" />
+    <Compile Include="Areas\Demo\Controllers\HtmlFormController.cs" />
     <Compile Include="Areas\Demo\Controllers\RazorGridController.cs" />
     <Compile Include="Areas\Demo\Controllers\TabStripController.cs" />
     <Compile Include="Areas\Demo\Controllers\WindowController.cs" />
@@ -941,6 +942,10 @@
     <Content Include="Areas\Demo\Views\DropDownList\IndexBound.cshtml" />
     <Content Include="Areas\Demo\Views\Window\Index.cshtml" />
     <Content Include="Areas\Demo\Views\RazorGrid\Index.cshtml" />
+    <Content Include="Areas\Demo\Views\HtmlForm\Index.cshtml" />
+    <Content Include="Areas\Demo\Views\HtmlForm\HorizontalLabels.cshtml" />
+    <Content Include="Areas\Demo\Views\HtmlForm\TwoColumns.cshtml" />
+    <Content Include="Areas\Demo\Views\HtmlForm\TwoColumnsHorizontalLabels.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

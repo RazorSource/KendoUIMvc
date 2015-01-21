@@ -1,10 +1,22 @@
-﻿
+﻿@model KendoUIMVCTest.Models.DemoModel
+
 @{
     ViewBag.Title = "Kendo UI MVC Razor Grid";
 }
 
 <h2>Razor Grid</h2>
 
-@(UI.RazorGrid("gridSample")
-    .AddColumn("FavoriteDay", "Favorite Day"))
+@(UI.RazorGrid("gridSample", "Id")
+    .SetRemoteDataSource("GetData", "RazorGrid", "Demo")
+    .SetPageSize(4)
+    .SetServerPaging(true)
+    .SetContainerColumnStyle("col-md-6")
+    .AddEditColumn("editGridSample", "", "")
+    .AddColumn("FavoriteDay", "Favorite Day")
+    .AddDateColumn("BirthDate", "Birth Date"))
 
+@using (UI.BeginWindow("editGridSample"))
+{
+    @UI.TextBoxFor(model => model.FavoriteDay)
+    @UI.DatePickerFor(model => model.BirthDate)
+}

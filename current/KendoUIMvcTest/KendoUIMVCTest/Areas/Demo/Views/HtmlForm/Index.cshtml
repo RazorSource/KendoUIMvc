@@ -1,0 +1,14 @@
+﻿@model KendoUIMVCTest.Models.DemoModel
+
+@{
+    ViewBag.Title = "Kendo UI MVC HTML Form";
+}
+
+<h2>HTML Form</h2>
+
+@using (UI.BeginForm("frmSample", "Index", "HtmlForm"))
+{
+    @UI.TextBoxFor(model => model.Id)
+    @UI.TextBoxFor(model => model.FavoriteDay)
+    @UI.DatePickerFor(model => model.BirthDate)
+}

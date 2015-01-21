@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
+using KendoUIMvc.Util;
 
 namespace KendoUIMvc.Controls
 {
@@ -23,13 +24,15 @@ namespace KendoUIMvc.Controls
 
         protected string GetBaseControlString()
         {
+            IDictionary<string, object> attributes = GetControlAttributes();
+            
             if (this.expression == null)
             {
-                return this.htmlHelper.TextBox(this.unboundName, this.unboundValue, GetControlAttributes()).ToString();
+                return this.htmlHelper.TextBox(this.unboundName, this.unboundValue, attributes).ToString();
             }
             else
             {
-                return this.htmlHelper.TextBoxFor(expression, GetControlAttributes()).ToString();
+                return this.htmlHelper.TextBoxFor(expression, attributes).ToString();
             }
         }
 

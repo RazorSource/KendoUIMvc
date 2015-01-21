@@ -86,9 +86,9 @@ namespace KendoUIMvc
             return window;
         }
 
-        public RazorGrid<TModel> RazorGrid(string name)
+        public RazorGrid<TModel> RazorGrid(string name, string keyProperty)
         {
-            return new RazorGrid<TModel>(this.htmlHelper, name);
+            return new RazorGrid<TModel>(this.htmlHelper, name, keyProperty);
         }
     }
 }
