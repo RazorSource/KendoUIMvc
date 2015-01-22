@@ -7,8 +7,9 @@ using KendoUIMVCTest.Models;
 
 namespace KendoUIMVCTest.Areas.Demo.Controllers
 {
-    public class WindowController : Controller
+    public class PanelController : Controller
     {
+        // GET: Demo/Panel
         public ActionResult Index()
         {
             return View();
@@ -21,17 +22,6 @@ namespace KendoUIMVCTest.Areas.Demo.Controllers
 
         [HttpPost]
         public ActionResult WithForm(DemoModel demoModel)
-        {
-            return View();
-        }
-
-        public ActionResult WithFormCustomized()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult WithFormCustomized(DemoModel demoModel)
         {
             return View();
         }

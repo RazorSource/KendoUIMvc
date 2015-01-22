@@ -1,0 +1,72 @@
+﻿@model KendoUIMVCTest.Models.DemoModel
+
+@{
+    ViewBag.Title = "Kendo UI MVC Window with Form Customized";
+}
+
+<h2>Window with Form Customized</h2>
+
+@*@using (UI.AjaxForm("frmHelloWindow2", "WithForm", "Window")
+                  .SetAjaxOptions(new AjaxOptions() { OnSuccess = "FormSuccess", OnFailure = "FormFailure" })
+                  .SetFormLayout(KendoUIMvc.Models.ViewSettings.FormLayoutOption.Horizontal)
+                  .SetDefaultGroupColumnStyle("col-md-6")
+                  .SetDefaultLabelColumnStyle("col-md-3")
+                  .SetDefaultControlColumnStyle("col-md-9")
+                  .RenderBegin())
+{
+    <div class="row">
+        @UI.TextBoxFor(model => model.Id)
+        @UI.TextBoxFor(model => model.FavoriteDay)
+    </div>
+    <div class="row">
+        @UI.DatePicker("otherDate").SetLabelText("Other Date")
+    </div>
+    
+}
+*@
+
+@UI.Button("btnShow", "Show").SetOnClick("showWindow()")
+
+@using (UI.Window("helloWindow")
+    .SetShowOnLoad(false)
+    .SetTitle("The Window with a Form")
+    .SetAjaxForm(
+        UI.AjaxForm("frmHelloWindow", "WithForm", "Window")
+            .SetAjaxOptions(new AjaxOptions() { OnSuccess = "FormSuccess", OnFailure = "FormFailure" })
+            .SetFormLayout(KendoUIMvc.Models.ViewSettings.FormLayoutOption.Horizontal)
+            .SetDefaultGroupColumnStyle("col-md-6")
+            .SetDefaultLabelColumnStyle("col-md-3")
+            .SetDefaultControlColumnStyle("col-md-9")
+            .SetPanelTitle("Demo Data")
+            .SetIncludePanel(false)
+            .AddFooterActionButton(UI.Button("btnCancel", "Cancel").SetOnClick("handleCancel()"))
+            .AddFooterActionButton(UI.SubmitButton("btnSave", "Save")))
+    .SetWidth(800)
+    .RenderBegin())
+{
+    @UI.TextBoxFor(model => model.Id)
+    @UI.TextBoxFor(model => model.FavoriteDay)
+    @UI.DatePickerFor(model => model.BirthDate)
+}
+
+@*<div class="col-md-12">
+    @UI.SubmitButton("btnSave", "Save")
+</div>*@
+
+<script type="text/javascript">
+    function showWindow() {
+        showhelloWindow();
+    }
+
+    function FormSuccess() {
+        alert("success")
+    }
+
+    function FormFailure() {
+        alert("failed")
+    }
+
+    function handleCancel() {
+        $('#helloWindow').data('kendoWindow').close();
+    }
+</script>

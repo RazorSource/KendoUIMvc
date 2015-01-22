@@ -11,4 +11,8 @@
     @UI.TextBoxFor(model => model.Id)
     @UI.TextBoxFor(model => model.FavoriteDay)
     @UI.DatePickerFor(model => model.BirthDate)
+    <div class="km-panel-action-footer">
+        @UI.Button("btnCancel", "Cancel")
+        @UI.SubmitButton("btnSave", "Save")
+    </div>
 }

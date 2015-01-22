@@ -28,5 +28,10 @@ namespace KendoUIMVCTest.Areas.Demo.Controllers
         {
             return View();
         }
+
+        public ActionResult WithPanel()
+        {
+            return View();
+        }
     }
 }

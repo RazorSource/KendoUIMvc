@@ -4,13 +4,24 @@
     ViewBag.Title = "Kendo UI MVC HTML Form Horizontal Labels";
 }
 
-<h2>HTML Form - Horizontal</h2>
+<h2>HTML Form - Horizontal Labels</h2>
 
 @using (UI.Form("frmSample", "Index", "HtmlForm")
+           .SetPanelTitle("Horizontal Labels")
            .SetFormLayout(KendoUIMvc.Models.ViewSettings.FormLayoutOption.Horizontal)
+           //.SetFormColumnStyle("col-md-6") // Each column uses half the space
+           .SetDefaultGroupColumnStyle("col-md-6")
+           .AddFooterActionButton(UI.Button("btnCancel", "Cancel").SetOnClick("handleCancel()"))
+           .AddFooterActionButton(UI.SubmitButton("btnSave", "Save"))
            .RenderBegin())
 {
     @UI.TextBoxFor(model => model.Id)
     @UI.TextBoxFor(model => model.FavoriteDay)
     @UI.DatePickerFor(model => model.BirthDate)
 }
+
+<script type="text/javascript">
+    function handleCancel() {
+        alert('Cancel was clicked');
+    }
+</script>

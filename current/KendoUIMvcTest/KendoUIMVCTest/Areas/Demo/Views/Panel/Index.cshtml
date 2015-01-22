@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Kendo UI MVC Panel";
+}
+
+<h2>Panel</h2>
+
+@using (UI.Panel("helloWindow")
+          .SetTitle("Hello Panel Title")
+          .RenderBegin())
+{
+    <pre style="border-style: none;">
+        Hello from the Panel.
+        Here is some text to display
+        in the panel.
+    </pre>
+    <div class="km-panel-action-footer">
+        More Footer Text
+    </div>
+}

@@ -15,11 +15,11 @@ namespace KendoUIMvc.Controls
         public HtmlForm(HtmlHelper<TModel> htmlHelper, string formId, string actionName, string controllerName)
             : base(htmlHelper, formId, actionName, controllerName)
         {            
-        }        
+        }
 
-        protected override void RenderBeginForm(IDictionary<string, object> layoutAttributes)
+        protected override MvcForm RenderBeginForm(IDictionary<string, object> layoutAttributes)
         {
-            mvcForm = this.htmlHelper.BeginForm(actionName, controllerName, FormMethod.Post, layoutAttributes);
+            return this.htmlHelper.BeginForm(actionName, controllerName, FormMethod.Post, layoutAttributes);
         }
     }
 }

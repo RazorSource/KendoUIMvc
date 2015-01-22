@@ -1,0 +1,27 @@
+﻿@model KendoUIMVCTest.Models.DemoModel
+
+@{
+    ViewBag.Title = "Kendo UI MVC Panel with Form";
+}
+
+<h2>Panel with Form</h2>
+
+@using (UI.Panel("helloWindow")
+          .SetTitle("Panel with Form")
+          .RenderBegin())
+{
+    using (UI.Form("frmPanel", "WithForm", "Panel")
+            .SetFormLayout(KendoUIMvc.Models.ViewSettings.FormLayoutOption.Horizontal)
+            .SetDefaultGroupColumnStyle("col-md-6")
+            .RenderBegin())
+    {
+        @UI.TextBoxFor(model => model.Id)
+        @UI.TextBoxFor(model => model.FavoriteDay)
+        @UI.DatePickerFor(model => model.BirthDate)
+
+    <div style="clear: both;" class="km-panel-action-footer col-md-12">
+        @UI.Button("btnCancel", "Cancel")
+        @UI.SubmitButton("btnSave", "Save")
+    </div>
+    }
+}

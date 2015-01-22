@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Web.Mvc.Html;
+using System.Web.Mvc.Ajax;
 
 namespace KendoUIMvc.Controls
 {
@@ -12,14 +14,17 @@ namespace KendoUIMvc.Controls
     {
         protected bool disposed;
         protected HtmlHelper<TModel> htmlHelper;
+        protected AjaxHelper<TModel> ajaxHelper;
         protected string name;
         protected int width;
         protected bool showOnLoad;
         protected string title;
+        protected AjaxForm<TModel> ajaxForm;
 
-        public Window(HtmlHelper<TModel> htmlHelper, string name)
+        public Window(HtmlHelper<TModel> htmlHelper, AjaxHelper<TModel> ajaxHelper, string name)
         {
             this.htmlHelper = htmlHelper;
+            this.ajaxHelper = ajaxHelper;
             this.name = name;
 
             // Set default values
@@ -64,14 +69,52 @@ namespace KendoUIMvc.Controls
             return this;
         }
 
+        /// <summary>
+        /// Sets ajax action that are used to post data from the form to an ajax request.  Adding the actions will automatically
+        /// wrap all elements in the window in an AjaxForm.
+        /// </summary>
+        /// <param name="actionName">The action used to post data.</param>
+        /// <param name="controllerName">The controller used to post data.  If null, the current controller is used.</param>
+        /// <param name="ajaxOptions">AjaxOptions to add to the auto-included AjaxForm on the window.</param>
+        /// <returns></returns>
+        public Window<TModel> SetAjaxActions(string actionName, string controllerName = null, AjaxOptions ajaxOptions = null)
+        {
+            this.ajaxForm = new AjaxForm<TModel>(this.htmlHelper, this.ajaxHelper, this.name + "Form", actionName, controllerName);
+
+            if (ajaxOptions != null)
+            {
+                this.ajaxForm.SetAjaxOptions(ajaxOptions);
+            }
+
+            return this;
+        }        
+
+        /// <summary>
+        /// Sets the AjaxForm instance to embed in the window.  SetAjaxActions can be used for basic configuration.  For more detailed AjaxForm configuration
+        /// this method can be used.
+        /// </summary>
+        /// <param name="ajaxForm">The AjaxForm to embed in the window.</param>
+        /// <returns></returns>
+        public Window<TModel> SetAjaxForm(AjaxForm<TModel> ajaxForm)
+        {
+            this.ajaxForm = ajaxForm;
+            return this;
+        }
+
         public Window<TModel> RenderBegin()
         {
             StringBuilder html = new StringBuilder();
 
             html.Append(@"
-            <div id=""" + this.name + @""">");
+            <div id=""" + this.name + @""" style=""display: none;"">");
 
             MvcHtmlHelper.WriteUnencodedContent(this.htmlHelper, html.ToString());
+
+            // If an AJAX action is configured add an AjaxForm to the window.
+            if (this.ajaxForm != null)
+            {
+                this.ajaxForm.RenderBegin();
+            }
 
             return this;
         }
@@ -88,6 +131,12 @@ namespace KendoUIMvc.Controls
             {
                 this.disposed = true;
 
+                // If the window contained an AjaxForm close it out.
+                if (this.ajaxForm != null)
+                {
+                    this.ajaxForm.EndForm();
+                }
+
                 // Write out closing div tag.
                 MvcHtmlHelper.WriteUnencodedContent(this.htmlHelper, @"
             </div>
@@ -103,16 +152,11 @@ namespace KendoUIMvc.Controls
                         $('#" + this.name + @"').kendoWindow({
                             width: '" + this.width + @"',
                             title: '" + this.title + @"',
-                            actions: ['Pin', 'Minimize', 'Maximize', 'Close']
-                        });
+                            actions: ['Pin', 'Minimize', 'Maximize', 'Close'],
+                            visible: " + MvcHtmlHelper.GetJavascriptBoolean(this.showOnLoad) + @"
+                        }).data('kendoWindow').center();
                     }");
-
-            if (!this.showOnLoad)
-            {
-                MvcHtmlHelper.WriteUnencodedContent(this.htmlHelper, @"
-                    kendoWindowDiv.data('kendoWindow').close();");
-            }
-
+           
             // Close out document ready function.
             MvcHtmlHelper.WriteUnencodedContent(this.htmlHelper, @"
                 });

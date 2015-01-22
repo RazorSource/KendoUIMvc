@@ -19,8 +19,13 @@ namespace KendoUIMvc.Controls
         protected string actionName;
         protected string controllerName;
         protected ViewSettings.FormLayoutOption? formLayout;
+        protected string formColumnStyle;
+        protected IList<Button<TModel>> footerActionButtons = new List<Button<TModel>>();
+        protected bool includePanel;
+        protected string panelTitle;
+        protected Panel<TModel> panel;
 
-        protected abstract void RenderBeginForm(IDictionary<string, object> layoutAttributes);
+        protected abstract MvcForm RenderBeginForm(IDictionary<string, object> layoutAttributes);
 
         public FormBase(HtmlHelper<TModel> htmlHelper, string formId, string actionName, string controllerName)
         {
@@ -30,6 +35,9 @@ namespace KendoUIMvc.Controls
             this.controllerName = controllerName;
             // Restore Default View Settings each time a form is constructed to support multiple forms on a view.
             RestoreDefaultViewSettings();
+
+            // By default include the panel around the form.
+            this.includePanel = true;
         }
 
         protected virtual void RestoreDefaultViewSettings()
@@ -75,7 +83,7 @@ namespace KendoUIMvc.Controls
         }
 
         /// <summary>
-        /// Sets the default group column style to apply to child elements.
+        /// Sets the default group column style to apply to child elements.  The group contains the label and the control.
         /// </summary>
         /// <param name="defaultLabelColumnStyle">Default column style to apply to control groups.  The default value
         /// is to not have a column style on the control group (null).</param>
@@ -86,16 +94,71 @@ namespace KendoUIMvc.Controls
             return this as TControl;
         }
 
+        /// <summary>
+        /// Sets the column style to use for the form.  This can be used to adjust the width of the entire form.
+        /// </summary>
+        /// <param name="formColumnStyle">The column style to apply to the form.  The default value
+        /// is to not have a column style on the form (null).</param>
+        /// <returns></returns>
+        public TControl SetFormColumnStyle(string formColumnStyle)
+        {
+            this.formColumnStyle = formColumnStyle;
+            return this as TControl;
+        }
+
+        /// <summary>
+        /// Adds an action button to the footer of the form.  Buttons are right aligned to the bottom of the form
+        /// and are displayed in the order added to the form.
+        /// </summary>
+        /// <param name="button">The button to add.</param>
+        /// <returns></returns>
+        public TControl AddFooterActionButton(Button<TModel> button)
+        {
+            this.footerActionButtons.Add(button);
+            return this as TControl;
+        }
+
+        /// <summary>
+        /// Sets a flag indicating if the form should be wrapped in a styled panel.  By default the form is wrapped in a panel.
+        /// </summary>
+        /// <param name="includePanel">True if the form should be wrapped in a styled panel (default).  False if the form should
+        /// not be wrapped in a panel.</param>
+        /// <returns></returns>
+        public TControl SetIncludePanel(bool includePanel)
+        {
+            this.includePanel = includePanel;
+            return this as TControl;
+        }
+
+        /// <summary>
+        /// Sets the panel title to display.  Note if includePanel is false, the title will not be shown.
+        /// </summary>
+        /// <param name="panelTitle">Title to display on the panel.</param>
+        /// <returns></returns>
+        public TControl SetPanelTitle(string panelTitle)
+        {
+            this.panelTitle = panelTitle;
+            return this as TControl;
+        }
+
         public TControl RenderBegin()
         {
             ViewSettings viewSettings = this.htmlHelper.ViewData.GetViewSettings();
+            List<string> classes = new List<string>();
 
             IDictionary<string, object> attributes = new Dictionary<string, object>();
             attributes.Add("id", this.formId);
 
+            // If a bootstrap column style has been specified for the form, add the class, unless a panel
+            // is included,  If a panel is included, the specified style is applied to the panel.
+            if (formColumnStyle != null && !includePanel)
+            {
+                classes.Add(formColumnStyle);
+            }
+
             if (this.formLayout != null && this.formLayout.Value == ViewSettings.FormLayoutOption.Horizontal)
             {
-                attributes.Add("class", BootstrapCssClass.form_horizontal);
+                classes.Add(BootstrapCssClass.form_horizontal);
                 // Set the view settings form layout, so nested controls know how to render.
                 viewSettings.FormLayout = ViewSettings.FormLayoutOption.Horizontal;
             }
@@ -104,7 +167,23 @@ namespace KendoUIMvc.Controls
                 viewSettings.FormLayout = ViewSettings.FormLayoutOption.Vertical;
             }
 
-            RenderBeginForm(attributes);
+            // Add CSS classes.
+            if (classes.Count > 0)
+            {
+                attributes.Add("class", string.Join(" ", classes));
+            }
+
+            if (includePanel)
+            {
+                // If a panel if included, render the start to the panel.  The panel
+                // will be close out in the dispose method.
+                this.panel = new Panel<TModel>(this.htmlHelper, this.formId + "Panel")
+                    .SetPanelColumnStyle(this.formColumnStyle) // Make the panels column style the same as the forms.
+                    .SetTitle(panelTitle)
+                    .RenderBegin();
+            }
+
+            this.mvcForm = RenderBeginForm(attributes);
 
             return this as TControl;
         }
@@ -115,17 +194,62 @@ namespace KendoUIMvc.Controls
             GC.SuppressFinalize(this);
         }
 
+        protected string GetFooterActionButtons()
+        {
+            StringBuilder html = new StringBuilder();
+            List<string> classes = new List<string>();
+
+            classes.Add("km-panel-action-footer");
+
+            //if (form)
+
+            html.Append(@"
+                <div style=""clear: both;"" class=""km-panel-action-footer"">"); // May need column size
+
+            foreach (Button<TModel> nextButton in this.footerActionButtons)
+            {
+                html.Append(nextButton.GetControlString());
+            }
+
+            html.Append(@"
+                </div>");
+
+            return html.ToString();
+        }
+
         protected virtual void Dispose(bool disposing)
         {
             if (!this.disposed)
             {
                 this.disposed = true;
 
+                // Write out footer action buttons if included.
+                if (this.footerActionButtons.Count > 0)
+                {
+                    MvcHtmlHelper.WriteUnencodedContent(this.htmlHelper, GetFooterActionButtons());
+                }
+
+                // Close out form.
                 if (this.mvcForm != null)
                 {
                     this.mvcForm.EndForm();
                 }
+
+                // Close out the panel if included.
+                if (this.panel != null)
+                {
+                    this.panel.EndPanel();
+                }
+
             }
+        }
+
+        /// <summary>
+        /// Writes out the ending tags for the form.
+        /// </summary>
+        public virtual void EndForm()
+        {
+            Dispose(true);
         }
     }
 }

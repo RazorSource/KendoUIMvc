@@ -3,35 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using KendoUIMVCTest.Models;
 
 namespace KendoUIMVCTest.Areas.Demo.Controllers
 {
-    public class WindowController : Controller
+    public class AjaxFormController : Controller
     {
         public ActionResult Index()
         {
             return View();
         }
 
-        public ActionResult WithForm()
+        public ActionResult HorizontalLabels()
         {
             return View();
         }
 
-        [HttpPost]
-        public ActionResult WithForm(DemoModel demoModel)
+        public ActionResult TwoColumns()
         {
             return View();
         }
 
-        public ActionResult WithFormCustomized()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult WithFormCustomized(DemoModel demoModel)
+        public ActionResult TwoColumnsHorizontalLabels()
         {
             return View();
         }

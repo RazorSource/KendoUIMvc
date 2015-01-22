@@ -11,6 +11,8 @@
 
     @Styles.Render("~/Content/kendo/styles/kendo.common-bootstrap.min.css")
     @Styles.Render("~/Content/kendo/styles/kendo.bootstrap.min.css")
+    <!-- This needs to be the last CSS file included to override some Kendo styles. -->
+    @Styles.Render("~/Content/KendoBootstrapFixup.css")
 
     @*<link href="http://cdn.kendostatic.com/2014.3.1314/styles/kendo.common-material.min.css" rel="stylesheet" />
     <link href="http://cdn.kendostatic.com/2014.3.1314/styles/kendo.rtl.min.css" rel="stylesheet" />
@@ -21,11 +23,13 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryajax")
     @Scripts.Render("~/Content/kendo/js/kendo.ui.core.min.js")
     @RenderSection("scripts", required: false)
 
-    <script src="http://cdn.kendostatic.com/2014.3.1314/js/kendo.all.min.js"></script>
-    <script src="http://cdn.kendostatic.com/2014.3.1314/js/kendo.timezones.min.js"></script>
+    @*<script src="http://cdn.kendostatic.com/2014.3.1314/js/kendo.all.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2014.3.1314/js/kendo.timezones.min.js"></script>*@
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -50,10 +54,12 @@
     </div>
     <div class="container body-content">
         @RenderBody()
-        <hr style="clear: both;" />
-        <footer style="display: block;">            
-            <p>&copy; @DateTime.Now.Year</p>
-        </footer>
+        <div style="clear: both; padding-top: 10px;">
+            <hr />
+            <footer style="display: block;">
+                <p>&copy; @DateTime.Now.Year</p>
+            </footer>
+        </div>
     </div>    
 </body>
 </html>

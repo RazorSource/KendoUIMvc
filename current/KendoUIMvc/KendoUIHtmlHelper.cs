@@ -45,16 +45,24 @@ namespace KendoUIMvc
 
         public HtmlForm<TModel> BeginForm(string formId, string actionName, string controllerName)
         {
-            HtmlForm<TModel> htmlForm = new HtmlForm<TModel>(this.htmlHelper, formId, actionName, controllerName);
-
-            return htmlForm.RenderBegin();
+            return new HtmlForm<TModel>(this.htmlHelper, formId, actionName, controllerName)
+                .RenderBegin();
         }
 
         public HtmlForm<TModel> Form(string formId, string actionName, string controllerName)
         {
-            HtmlForm<TModel> htmlForm = new HtmlForm<TModel>(this.htmlHelper, formId, actionName, controllerName);
+            return new HtmlForm<TModel>(this.htmlHelper, formId, actionName, controllerName);
+        }
 
-            return htmlForm;
+        public AjaxForm<TModel> BeginAjaxForm(string formId, string actionName, string controllerName)
+        {
+            return new AjaxForm<TModel>(this.htmlHelper, this.ajaxHelper, formId, actionName, controllerName)
+                .RenderBegin();
+        }
+
+        public AjaxForm<TModel> AjaxForm(string formId, string actionName, string controllerName)
+        {
+            return new AjaxForm<TModel>(this.htmlHelper, this.ajaxHelper, formId, actionName, controllerName);
         }
 
         public DropDownList<TModel, TProperty> DropDownListFor<TProperty>(Expression<Func<TModel, TProperty>> expression)
@@ -74,21 +82,35 @@ namespace KendoUIMvc
 
         public Window<TModel> BeginWindow(string name)
         {
-            Window<TModel> window = new Window<TModel>(this.htmlHelper, name);
-
-            return window.RenderBegin();
+            return new Window<TModel>(this.htmlHelper, this.ajaxHelper, name)
+                .RenderBegin();
         }
 
         public Window<TModel> Window(string name)
         {
-            Window<TModel> window = new Window<TModel>(this.htmlHelper, name);
-
-            return window;
+            return new Window<TModel>(this.htmlHelper, this.ajaxHelper, name);
         }
 
         public RazorGrid<TModel> RazorGrid(string name, string keyProperty)
         {
             return new RazorGrid<TModel>(this.htmlHelper, name, keyProperty);
+        }
+
+        public Button<TModel> Button(string name, string label)
+        {
+            return new Button<TModel>(this.htmlHelper, name, label);
+        }
+
+        public Button<TModel> SubmitButton(string name, string label)
+        {
+            return new Button<TModel>(this.htmlHelper, name, label)
+                .SetSubmit(true)
+                .SetPrimary(true);
+        }
+
+        public Panel<TModel> Panel(string name)
+        {
+            return new Panel<TModel>(this.htmlHelper, name);
         }
     }
 }

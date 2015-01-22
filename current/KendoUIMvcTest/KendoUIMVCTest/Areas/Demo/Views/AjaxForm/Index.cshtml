@@ -1,0 +1,14 @@
+﻿@model KendoUIMVCTest.Models.DemoModel
+
+@{
+    ViewBag.Title = "Kendo UI MVC AJAX Form";
+}
+
+<h2>AJAX Form</h2>
+
+@using (UI.BeginAjaxForm("frmSample", "Index", "AjaxForm"))
+{
+    @UI.TextBoxFor(model => model.Id)
+    @UI.TextBoxFor(model => model.FavoriteDay)
+    @UI.DatePickerFor(model => model.BirthDate)
+}

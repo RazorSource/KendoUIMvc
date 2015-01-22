@@ -5,7 +5,7 @@
 
 <h2>Window</h2>
 
-<button onclick="showWindow()">Show</button>
+@UI.Button("btnShow", "Show").SetOnClick("showWindow()")
 
 @using (UI.Window("helloWindow")
           .SetShowOnLoad(false)
@@ -19,7 +19,6 @@
 
 <script type="text/javascript">
     function showWindow() {
-        //$('#helloWindow').data("kendoWindow").open();
         showhelloWindow();
     }
 </script>

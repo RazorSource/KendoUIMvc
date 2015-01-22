@@ -1,0 +1,39 @@
+﻿@model KendoUIMVCTest.Models.DemoModel
+
+@{
+    ViewBag.Title = "Kendo UI MVC HTML Form with Panel";
+}
+
+<h2>HTML Form - With Panel</h2>
+
+@using (UI.Form("frmSample", "Index", "HtmlForm")
+    .SetFormLayout(KendoUIMvc.Models.ViewSettings.FormLayoutOption.Horizontal)
+    .SetIncludePanel(false) // Manually add multiple panels to the form below
+    .SetDefaultGroupColumnStyle("col-md-6")  // Set the column groups to be 6 of the 12 columns
+    .RenderBegin())
+{
+    using (UI.Panel("pnlSample")
+             .SetPanelColumnStyle("col-md-11")
+             .SetTitle("Nested Panel")
+             .RenderBegin())
+    { 
+        @UI.TextBoxFor(model => model.Id)
+        @UI.TextBoxFor(model => model.FavoriteDay)
+        @UI.DatePickerFor(model => model.BirthDate)
+    }
+
+    using (UI.Panel("pnlSample2")
+             .SetPanelColumnStyle("col-md-11")
+             .SetTitle("Nested Panel 2")
+             .RenderBegin())
+    {
+        @UI.TextBoxFor(model => model.Id)
+        @UI.TextBoxFor(model => model.FavoriteDay)
+        @UI.DatePickerFor(model => model.BirthDate)
+
+        <div style="clear: both;" class="km-panel-action-footer col-md-12">
+            @UI.Button("btnCancel", "Cancel")
+            @UI.SubmitButton("btnSave", "Save")
+        </div>
+    }
+}

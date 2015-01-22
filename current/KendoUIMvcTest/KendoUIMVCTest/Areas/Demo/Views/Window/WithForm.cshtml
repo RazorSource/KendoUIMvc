@@ -1,0 +1,35 @@
+﻿@model KendoUIMVCTest.Models.DemoModel
+
+@{
+    ViewBag.Title = "Kendo UI MVC Window with Form";
+}
+
+<h2>Window with Form</h2>
+
+@UI.Button("btnShow", "Show").SetOnClick("showWindow()")
+
+@using (UI.Window("helloWindow")
+          .SetShowOnLoad(false)
+          .SetTitle("The Window with a Form")
+          .SetAjaxActions("WithForm", "Window", new AjaxOptions() { OnSuccess = "FormSuccess", OnFailure = "FormFailure" })
+          .RenderBegin())
+{
+    @UI.TextBoxFor(model => model.Id)
+    @UI.TextBoxFor(model => model.FavoriteDay)
+    @UI.DatePickerFor(model => model.BirthDate)
+    @UI.SubmitButton("btnSave", "Save")
+}
+
+<script type="text/javascript">
+    function showWindow() {
+        showhelloWindow();
+    }
+
+    function FormSuccess() {
+        alert("success")
+    }
+
+    function FormFailure() {
+        alert("failed")
+    }
+</script>

@@ -1,15 +1,14 @@
 ﻿@model KendoUIMVCTest.Models.DemoModel
 
 @{
-    ViewBag.Title = "Kendo UI MVC HTML Form Two Columns";
+    ViewBag.Title = "Kendo UI MVC AJAX Form Two Columns Horizontal Labels";
 }
 
-<h2>HTML Form - Two Columns</h2>
+<h2>AJAX Form - Two Columns Horizontal Labels</h2>
 
-@using (UI.Form("frmSample", "Index", "HtmlForm")
+@using (UI.AjaxForm("frmSample", "Index", "AjaxForm")
     .SetDefaultGroupColumnStyle("col-md-6")  // Set the column groups to be 6 of the 12 columns
-    //.SetFormColumnStyle("col-md-12")
-    // .AddFooterActionButton(UI.SubmitButton("btnSave", "Save"))
+    .SetFormLayout(KendoUIMvc.Models.ViewSettings.FormLayoutOption.Horizontal)
     .RenderBegin())
 {
     @UI.TextBoxFor(model => model.Id)

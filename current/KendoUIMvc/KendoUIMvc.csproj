@@ -42,11 +42,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\AjaxForm.cs" />
+    <Compile Include="Controls\Button.cs" />
     <Compile Include="Controls\ControlBase.cs" />
     <Compile Include="Controls\DatePicker.cs" />
     <Compile Include="Controls\DropDownList.cs" />
     <Compile Include="Controls\FormBase.cs" />
     <Compile Include="Controls\HtmlForm.cs" />
+    <Compile Include="Controls\Panel.cs" />
     <Compile Include="Controls\RazorGrid.cs" />
     <Compile Include="Controls\TabStrip.cs" />
     <Compile Include="Controls\TextBox.cs" />
