@@ -72,5 +72,30 @@ namespace KendoUIMVCTest.Areas.Demo.Controllers
 
             return filteredModels;
         }
+
+        [HttpPost]
+        public ActionResult Edit(DemoModel demoModel)
+        {           
+            return new ContentResult
+            {
+                Content = JsonConvert.SerializeObject(new PageOfData<DemoModel>(demoModel)),
+                ContentType = "application/json",
+                ContentEncoding = Encoding.UTF8
+            };
+        }
+
+        [HttpPost]
+        public ActionResult Add(DemoModel demoModel)
+        {
+            // For demo purposes add a random number ID when adding to see the new ID being returned.
+            demoModel.Id = new Random().Next();
+
+            return new ContentResult
+            {
+                Content = JsonConvert.SerializeObject(new PageOfData<DemoModel>(demoModel)),
+                ContentType = "application/json",
+                ContentEncoding = Encoding.UTF8
+            };
+        }
     }
 }

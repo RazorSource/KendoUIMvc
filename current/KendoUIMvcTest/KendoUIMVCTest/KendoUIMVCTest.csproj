@@ -159,6 +159,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\Demo\Controllers\AjaxFormController.cs" />
+    <Compile Include="Areas\Demo\Controllers\ButtonController.cs" />
     <Compile Include="Areas\Demo\Controllers\DatePickerController.cs" />
     <Compile Include="Areas\Demo\Controllers\DropDownListController.cs" />
     <Compile Include="Areas\Demo\Controllers\HtmlFormController.cs" />
@@ -958,6 +959,7 @@
     <Content Include="Areas\Demo\Views\Panel\Index.cshtml" />
     <Content Include="Areas\Demo\Views\Panel\WithForm.cshtml" />
     <Content Include="Areas\Demo\Views\HtmlForm\WithPanel.cshtml" />
+    <Content Include="Areas\Demo\Views\Button\Index.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

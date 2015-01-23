@@ -1,22 +1,60 @@
 ﻿@model KendoUIMVCTest.Models.DemoModel
 
+@using KendoUIMvc.Controls
+@using KendoUIMVCTest.Models
+
 @{
     ViewBag.Title = "Kendo UI MVC Razor Grid";
 }
 
 <h2>Razor Grid</h2>
 
-@(UI.RazorGrid("gridSample", "Id")
-    .SetRemoteDataSource("GetData", "RazorGrid", "Demo")
-    .SetPageSize(4)
-    .SetServerPaging(true)
-    .SetContainerColumnStyle("col-md-6")
-    .AddEditColumn("editGridSample", "", "")
-    .AddColumn("FavoriteDay", "Favorite Day")
-    .AddDateColumn("BirthDate", "Birth Date"))
+@{  RazorGrid<DemoModel> grid = UI.RazorGrid("gridSample", "Id")
+        .SetRemoteDataSource("GetData", "RazorGrid", "Demo")
+        .SetWindowAddButton("Add", "RazorGrid")
+        .SetPageSize(4)
+        .SetPageData(true)
+        .SetServerPaging(true)
+        .SetContainerColumnStyle("col-md-6")
+        .AddWindowEditColumn("", "Maintain Demo Data", "Demo Data", "Edit", "RazorGrid")
+        .AddColumn("FavoriteDay", "Favorite Day")
+        .AddDateColumn("BirthDate", "Birth Date");}
 
-@using (UI.BeginWindow("editGridSample"))
+@grid.Render()
+
+@using (grid.GetEditWindow()
+           .RenderBegin())
 {
+    @UI.TextBoxFor(model => model.Id)
     @UI.TextBoxFor(model => model.FavoriteDay)
     @UI.DatePickerFor(model => model.BirthDate)
 }
+
+<script type="text/javascript">
+    function SaveFailure(context) {
+        alert('save failed');
+    }
+
+    function bindgridSampleNewRow(windowName) {
+        var form = $('#' + windowName + ' form');
+
+        if (form.length > 0) {
+            var serializedForm = form.serializeArray();
+            //var jsonFormData = JSON.stringify(serializedForm);
+            var json = {};
+           
+            jQuery.each(serializedForm, function () {
+                json[this.name] = this.value || '';
+            });
+
+            //gridSample_dataSource.add('{ "data: "' + JSON.stringify(json) + '}');
+
+            //var pageData = { data: json };
+
+            //gridSample_dataSource.add(pageData);
+            //!  gridSample_dataSource.add(json);
+
+            gridSample_dataSource.add(JSON.parse('{ "Id": 1, "BirthDate": "2015-01-19T00:00:00", "FavoriteDay": 55 }'))
+        }
+    }
+</script>

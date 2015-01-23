@@ -31,6 +31,19 @@ namespace KendoUIMvc.Models
         }
 
         /// <summary>
+        /// Constructs a PageOfData with a single item.  This constructor can be used to return the same
+        /// data structure sent by an original page of data.  This is useful for client side observable model
+        /// binding, which expects similar data structure for create and update methods.
+        /// </summary>
+        /// <param name="model">Model instance.</param>
+        public PageOfData(TModel model)
+        {
+            this.data = new List<TModel>();
+            data.Add(model);
+            this.total = 1;
+        }
+
+        /// <summary>
         /// A list of items that represent one page of data.
         /// </summary>
         public List<TModel> data { get; set; }

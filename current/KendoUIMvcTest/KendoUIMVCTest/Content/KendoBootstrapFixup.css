@@ -14,6 +14,21 @@
     padding: 0 19px 0.7222em;
 }
 
+.km-form-title
+{
+    border-bottom: 1px solid #e7e7e7;
+    font-size: 1.2857em;
+    line-height: 1.2857em;
+    margin-bottom: 0.8333em;
+    padding: 0 19px 0.7222em;
+}
+
+/* Pulls up the grid pager into the default bootstrap table bottom margin space. */
+.km-grid-pager
+{
+    margin-top: -20px;
+}
+
 /* All of the following CSS is used to address styling conflicts between Bootstrap and Kendo. */
 /* reset everything to the default box model */
 *,

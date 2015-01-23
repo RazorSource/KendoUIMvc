@@ -22,7 +22,7 @@ namespace KendoUIMvc.Controls
         protected string formColumnStyle;
         protected IList<Button<TModel>> footerActionButtons = new List<Button<TModel>>();
         protected bool includePanel;
-        protected string panelTitle;
+        protected string title;
         protected Panel<TModel> panel;
 
         protected abstract MvcForm RenderBeginForm(IDictionary<string, object> layoutAttributes);
@@ -131,13 +131,13 @@ namespace KendoUIMvc.Controls
         }
 
         /// <summary>
-        /// Sets the panel title to display.  Note if includePanel is false, the title will not be shown.
+        /// Sets the title to display.
         /// </summary>
-        /// <param name="panelTitle">Title to display on the panel.</param>
+        /// <param name="panelTitle">Title to display above the form.</param>
         /// <returns></returns>
-        public TControl SetPanelTitle(string panelTitle)
+        public TControl SetTitle(string title)
         {
-            this.panelTitle = panelTitle;
+            this.title = title;
             return this as TControl;
         }
 
@@ -179,8 +179,15 @@ namespace KendoUIMvc.Controls
                 // will be close out in the dispose method.
                 this.panel = new Panel<TModel>(this.htmlHelper, this.formId + "Panel")
                     .SetPanelColumnStyle(this.formColumnStyle) // Make the panels column style the same as the forms.
-                    .SetTitle(panelTitle)
                     .RenderBegin();
+            }
+
+            if (title != null)
+            {
+                string titleClass = includePanel ? "km-panel-title" : "km-form-title";
+
+                MvcHtmlHelper.WriteUnencodedContent(this.htmlHelper, @"
+                    <div class=""" + titleClass + @""">" + this.title + @"</div>");
             }
 
             this.mvcForm = RenderBeginForm(attributes);
@@ -197,14 +204,9 @@ namespace KendoUIMvc.Controls
         protected string GetFooterActionButtons()
         {
             StringBuilder html = new StringBuilder();
-            List<string> classes = new List<string>();
-
-            classes.Add("km-panel-action-footer");
-
-            //if (form)
-
+            
             html.Append(@"
-                <div style=""clear: both;"" class=""km-panel-action-footer"">"); // May need column size
+                <div style=""clear: both;"" class=""km-panel-action-footer"">");
 
             foreach (Button<TModel> nextButton in this.footerActionButtons)
             {

@@ -17,6 +17,8 @@ namespace KendoUIMvc.Controls
         protected bool submit;
         protected string onClick;
         protected bool primary;
+        protected IList<string> additionalClasses = new List<string>();
+        protected string icon;
 
         /// <summary>
         /// Constructor.
@@ -74,9 +76,32 @@ namespace KendoUIMvc.Controls
             return this;
         }
 
+        /// <summary>
+        /// Adds a CSS class to add to the button. 
+        /// </summary>
+        /// <param name="cssClass">CSS class to add.</param>
+        /// <returns></returns>
+        public Button<TModel> AddClass(string cssClass)
+        {
+            additionalClasses.Add(cssClass);
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the Kendo Icon to use with the button.
+        /// </summary>
+        /// <param name="icon">Name of the Kendo Icon (i.e. "plus")</param>
+        /// <returns></returns>
+        public Button<TModel> SetIcon(string icon)
+        {
+            this.icon = icon;
+            return this;
+        }
+
         protected IList<string> GetClasses()
         {
-            List<string> classes = new List<string>();
+            // Start from the additional CSS classes that have been specified.
+            List<string> classes = new List<string>(additionalClasses);
 
             if (primary)
             {
@@ -118,11 +143,35 @@ namespace KendoUIMvc.Controls
             html.Append(@">" + this.label + "</" + tag + @">
                 <script type=""text/javascript"">
                     $(document).ready(function () {
-                        $('#" + this.name + @"').kendoButton();
+                        $('#" + this.name + @"').kendoButton(" + GetButtonAttributes() + @");
                     });
                 </script>");
 
             return html.ToString();
+        }
+
+        /// <summary>
+        /// Gets all attributes from various propery settings for the button.
+        /// </summary>
+        /// <returns></returns>
+        protected string GetButtonAttributes()
+        {
+            StringBuilder attributes = new StringBuilder();
+
+            if (icon != null)
+            {
+                attributes.Append(@"
+                            icon: '" + this.icon + "'");
+            }
+
+            if (attributes.Length > 0)
+            {
+                return "{" + attributes.ToString() + "}";
+            }
+            else
+            {
+                return "";
+            }
         }
 
         public override string ToString()

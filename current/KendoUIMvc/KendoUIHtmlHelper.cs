@@ -43,24 +43,24 @@ namespace KendoUIMvc
             return new TextBox<TModel, TProperty>(this.htmlHelper, expression);
         }
 
-        public HtmlForm<TModel> BeginForm(string formId, string actionName, string controllerName)
+        public HtmlForm<TModel> BeginForm(string formId, string actionName = null, string controllerName = null)
         {
             return new HtmlForm<TModel>(this.htmlHelper, formId, actionName, controllerName)
                 .RenderBegin();
         }
 
-        public HtmlForm<TModel> Form(string formId, string actionName, string controllerName)
+        public HtmlForm<TModel> Form(string formId, string actionName = null, string controllerName = null)
         {
             return new HtmlForm<TModel>(this.htmlHelper, formId, actionName, controllerName);
         }
 
-        public AjaxForm<TModel> BeginAjaxForm(string formId, string actionName, string controllerName)
+        public AjaxForm<TModel> BeginAjaxForm(string formId, string actionName = null, string controllerName = null)
         {
             return new AjaxForm<TModel>(this.htmlHelper, this.ajaxHelper, formId, actionName, controllerName)
                 .RenderBegin();
         }
 
-        public AjaxForm<TModel> AjaxForm(string formId, string actionName, string controllerName)
+        public AjaxForm<TModel> AjaxForm(string formId, string actionName = null, string controllerName = null)
         {
             return new AjaxForm<TModel>(this.htmlHelper, this.ajaxHelper, formId, actionName, controllerName);
         }
@@ -93,7 +93,7 @@ namespace KendoUIMvc
 
         public RazorGrid<TModel> RazorGrid(string name, string keyProperty)
         {
-            return new RazorGrid<TModel>(this.htmlHelper, name, keyProperty);
+            return new RazorGrid<TModel>(this.htmlHelper, this.ajaxHelper, name, keyProperty);
         }
 
         public Button<TModel> Button(string name, string label)

@@ -5,20 +5,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Web.Mvc.Ajax;
 
 namespace KendoUIMvc.Controls
 {
     public class RazorGrid<TModel>
     {
         protected HtmlHelper<TModel> htmlHelper;
+        protected AjaxHelper<TModel> ajaxHelper;
         protected string name;
         protected IList<Column> columns = new List<Column>();
         protected string remoteDataSourceUrl;
+        protected string remoteEditUrl;
+        protected string remoteCreateUrl;
+        protected string remoteDeleteUrl;
         protected bool pageData;
         protected int pageSize;
         protected bool serverPaging;
         protected string containerColumnStyle;
         protected string keyProperty;
+        protected RazorGridWindow<TModel> editWindow;
+        protected RazorGridWindow<TModel> addWindow;
 
         /// <summary>
         /// Constructor.
@@ -26,9 +33,10 @@ namespace KendoUIMvc.Controls
         /// <param name="htmlHelper">MVC HTML Helper used to generate controls.</param>
         /// <param name="name">Name of the grid.</param>
         /// <param name="keyProperty">The key property on the model.</param>
-        public RazorGrid(HtmlHelper<TModel> htmlHelper, string name, string keyProperty)
+        public RazorGrid(HtmlHelper<TModel> htmlHelper, AjaxHelper<TModel> ajaxHelper, string name, string keyProperty)
         {
             this.htmlHelper = htmlHelper;
+            this.ajaxHelper = ajaxHelper;
             this.name = name;
 
             // By default page data.
@@ -66,18 +74,47 @@ namespace KendoUIMvc.Controls
             return this;
         }
 
+        protected string GetEditWindowName()
+        {
+            return this.name + "_editWindow";
+        }
+
         /// <summary>
         /// Adds an edit column that is used to show an edit form associated with the grid data.
         /// </summary>
-        /// <param name="windowName"></param>
-        /// <param name="label"></param>
-        /// <param name="saveAction"></param>
+        /// <param name="columnLabel"></param>
+        /// <param name="actionName"></param>
+        /// <param name="controllerName"></param>
         /// <returns></returns>
-        public RazorGrid<TModel> AddEditColumn(string windowName, string label, string saveAction)
-        {           
-            string script = "Bind" + this.name + @"Row('" + windowName + @"', '#: " + this.keyProperty + @" #')";
-            columns.Add(new ActionColumn(label, script, @"<span class=""k-icon k-i-pencil""></span>"));
+        public RazorGrid<TModel> AddWindowEditColumn(string columnLabel, string windowTitle, string formHeader,
+            string actionName, string controllerName = null, string areaName = null)
+        {
+            string script = "bind" + this.name + @"Row('" + GetEditWindowName() + @"', '#: " + this.keyProperty + @" #')";
+            ActionColumn editColumn = new ActionColumn(columnLabel, script, @"<span class=""k-icon k-i-pencil""></span>");
+            editColumn.ColumnId = "edit";
+            columns.Add(editColumn);
 
+            //TODO:  Do something to handle multiple edit columns, or only allow one
+            this.remoteEditUrl = MvcHtmlHelper.GetActionUrl(this.htmlHelper, actionName, controllerName, areaName);
+
+            editWindow = new RazorGridWindow<TModel>(this.htmlHelper, this.ajaxHelper, GetEditWindowName(), this)
+                    .SetAjaxForm(new AjaxForm<TModel>(this.htmlHelper, this.ajaxHelper, this.name + "_editForm", actionName, controllerName)
+                //.SetAjaxOptions(new AjaxOptions() {  OnSuccess = "SaveSuccess", OnFailure = "SaveFailure" }) // May not need this now.
+                          .SetTitle(formHeader)
+                          .SetIncludePanel(false)
+                          .AddFooterActionButton(new Button<TModel>(this.htmlHelper, this.name + "_cancelButton", "Cancel").SetOnClick(this.name + "_cancel()"))
+                          .AddFooterActionButton(new Button<TModel>(this.htmlHelper, this.name + "_saveButton", "Save").SetOnClick(this.name + "_save()"))
+                       )
+                    .SetTitle(windowTitle) as RazorGridWindow<TModel>;
+
+            return this;
+        }
+
+        public RazorGrid<TModel> SetWindowAddButton(string actionName, string controllerName = null, string areaName = null)
+        {
+            this.remoteCreateUrl = MvcHtmlHelper.GetActionUrl(this.htmlHelper, actionName, controllerName, areaName);
+
+            this.addWindow = new RazorGridWindow<TModel>(this.htmlHelper, this.ajaxHelper, this.name + "_addWindow", this);
             return this;
         }
 
@@ -156,15 +193,33 @@ namespace KendoUIMvc.Controls
             <div id=""" + this.name + @"Container"" class=""container"">
                 <div class=""row"">
                     <div class=""" + this.containerColumnStyle + @""" id=""" + this.name + @"Wrapper"" style=""position: relative;"">
-                        <table id=""" + this.name + @""" class=""table table-striped"">
+                        <table id=""" + this.name + @""" class=""table table-striped table-bordered table-hover"">
                             <thead>
+                                <tr>
+                                    <th colspan=""" + this.columns.Count() + @""" class=""k-header"">
+                                        <div class=""col-md-9"">The Title</div>");
+            
+            // Add the add record button.
+            if (addWindow != null)
+            {
+                Button<TModel> addButton = new Button<TModel>(this.htmlHelper, this.name + "_addButton", "Add")
+                        .SetIcon("plus")
+                        .AddClass("pull-right")
+                        .SetOnClick("bind" + this.name + @"Row('" + GetEditWindowName() + @"')");
+                html.Append(@"
+                                        <div class=""col-md-3"">" + addButton.GetControlString() + @"</div>");
+            }
+
+            html.Append(@"
+                                    </th>
+                                </tr>
                                 <tr>");
 
             // Render column headers.
             foreach (Column nextColumn in columns)
             {
                 html.Append(@"
-                                    <th>" + nextColumn.Label + @"</th>");
+                                    <th class=""k-header"">" + nextColumn.Label + @"</th>");
             }
 
             html.Append(@"
@@ -176,8 +231,8 @@ namespace KendoUIMvc.Controls
 
             if (this.pageData)
             {
-                html.Append(@"
-                        <div id=""" + this.name + @"Pager"" data-role=""pager"" data-bind=""source: " + dataSourceName + @"""></div>
+                html.Append(@"                        
+                        <div id=""" + this.name + @"Pager"" class=""km-grid-pager""></div>
                 ");
             }
 
@@ -195,7 +250,7 @@ namespace KendoUIMvc.Controls
             foreach (Column nextColumn in columns)
             {
                 html.Append(@"
-                                    <td>" + nextColumn.RenderContent() + "</td>");
+                                    <td data-property=""" + nextColumn.GetId() + @""">" + nextColumn.RenderContent() + "</td>");
             }
 
             html.Append(@"
@@ -203,10 +258,13 @@ namespace KendoUIMvc.Controls
             </script>
             <script type=""text/javascript"">
                 var " + dataSourceName + @";
+                var " + dataSourceName + @"Collection;
 
                 $(document).ready(function() {
                     var wrapper = $('#" + this.name + @"Wrapper');
                     var gridContainer = $('#" + this.name + @"Container');
+                    var pager = $('#" + this.name + @"Pager');                    
+
                     " + dataSourceName + @" = new kendo.data.DataSource({");
 
             if (this.pageData)
@@ -218,11 +276,33 @@ namespace KendoUIMvc.Controls
 
             html.Append(@"
                         type: 'json',
-                        transport: {
+                        transport: {");
+
+            // Add update option if an edit column was created.
+            if (this.remoteEditUrl != null)
+            {
+                html.Append(@"
+                            update: {
+                                url: '" + this.remoteEditUrl + @"',
+                                type: 'post'
+                            },");
+            }
+
+            // Add create option if the add button is shown.
+            if (this.remoteCreateUrl != null)
+            {
+                html.Append(@"
+                            create: {
+                                url: '" + this.remoteCreateUrl + @"',
+                                type: 'post'
+                            },");
+            }
+
+            html.Append(@"
                             read: {
                                 url: '" + this.remoteDataSourceUrl + @"',
                                 dataType: 'json'
-                            }
+                            }                            
                         },
                         schema: {
                             data: 'data',
@@ -239,23 +319,41 @@ namespace KendoUIMvc.Controls
                         }
                     });
 
-                    var o = kendo.observable({
+                    " + dataSourceName + @"Collection = kendo.observable({
                         " + dataSourceName + @" : " + dataSourceName + @"
                     });
 
-                    kendo.bind(gridContainer, o);
+                    pager.kendoPager({
+                        autoBind: false,
+                        dataSource: " + dataSourceName + @",
+                        refresh: true
+                    });
+
+                    kendo.bind(gridContainer, " + dataSourceName + @"Collection);
                 });
 
-                function Bind" + this.name + @"Row(windowName, key) {
+                function " + this.name + @"_save() {
+          //          bindgridSampleNewRow('" + GetEditWindowName() + @"');
+
+                    " + dataSourceName + @".sync();
+                    $('#" + GetEditWindowName() + @"').data('kendoWindow').close();
+                }
+
+                function " + this.name + @"_cancel() {
+                    " + dataSourceName + @".cancelChanges();
+                    $('#" + GetEditWindowName() + @"').data('kendoWindow').close();
+                }
+
+                function bind" + this.name + @"Row(windowName, key) {
                     var model = " + dataSourceName + @".get(key);
-                    if (model != undefined) {
+                  //  if (model != undefined) {
                         var window = $('#' + windowName);
 
                         // Bind the model to the window.
                         kendo.bind(window, model);
                         // Show the window after binding.
                         window.data('kendoWindow').open();
-                    }
+                 //   }
 
                     return false;
                 }
@@ -282,6 +380,7 @@ namespace KendoUIMvc.Controls
             /// </summary>
             /// <returns></returns>
             public abstract string RenderContent();
+            public abstract string GetId();
 
             public Column()
             {
@@ -315,6 +414,11 @@ namespace KendoUIMvc.Controls
             {
                 return "#: " + this.Property + @" #";
             }
+
+            public override string GetId()
+            {
+                return this.Property;
+            }
         }       
 
         /// <summary>
@@ -345,12 +449,31 @@ namespace KendoUIMvc.Controls
             /// </summary>
             public string ActionLabel { get; set; }
 
+            /// <summary>
+            /// Used as a tag to identify the column uniquely when rendered.
+            /// </summary>
+            public string ColumnId { get; set; }
+
             public override string RenderContent()
             {                
                 return @"<a href=""\\#"" onclick=""return " + this.Script + @";"">" + this.ActionLabel + @"</a>";
                 //return @"<a href=""javascript: " + this.Script + @"();"">" + this.ActionLabel + @"</a>";
                 //return @"<button onclick=""return " + this.Script + @"();"">" + this.ActionLabel + @"</button>";
             }
+
+            public override string GetId()
+            {
+                return this.ColumnId;
+            }
+        }
+
+        /// <summary>
+        /// Gets the edit window control for the grid.
+        /// </summary>
+        /// <returns></returns>
+        public Window<TModel> GetEditWindow()
+        {
+            return this.editWindow;
         }
     }
 }
