@@ -8,3 +8,5 @@ C:\Projects\KendoUIMvc\current\KendoUIMvc\bin\Debug\KendoUIMvc.pdb
 C:\Projects\KendoUIMvc\current\KendoUIMvc\obj\Debug\KendoUIMvc.csprojResolveAssemblyReference.cache
 C:\Projects\KendoUIMvc\current\KendoUIMvc\obj\Debug\KendoUIMvc.dll
 C:\Projects\KendoUIMvc\current\KendoUIMvc\obj\Debug\KendoUIMvc.pdb
+C:\Projects\KendoUIMvc\current\KendoUIMvc\bin\Debug\Newtonsoft.Json.dll
+C:\Projects\KendoUIMvc\current\KendoUIMvc\bin\Debug\Newtonsoft.Json.xml

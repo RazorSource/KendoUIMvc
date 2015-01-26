@@ -112,5 +112,10 @@ namespace KendoUIMvc
         {
             return new Panel<TModel>(this.htmlHelper, name);
         }
+
+        public Notification<TModel> Notification(string name)
+        {
+            return new Notification<TModel>(this.htmlHelper, name);
+        }
     }
 }

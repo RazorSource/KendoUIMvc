@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "Kendo UI MVC Notification";
+}
+
+<h2>Notification</h2>
+
+@(UI.Notification("errorDisplay")
+    .SetNotificationType(KendoUIMvc.Controls.Notification.NotificationType.error)
+    .SetAppendTo("#btnContainer")
+    .SetAutoHideAfter(0)
+    .SetWidth("400")
+    .SetStacking(KendoUIMvc.Controls.Notification.StackingType.up)
+    .SetCanGrow(false))
+
+<div id="btnContainer">
+    @(UI.Button("btnShowError", "Show Error Notification")
+    .SetOnClick("showErrorClicked()"))
+</div>
+<script type="text/javascript">
+    function showErrorClicked() {
+        showerrorDisplay('An error occurred');
+    }
+</script>

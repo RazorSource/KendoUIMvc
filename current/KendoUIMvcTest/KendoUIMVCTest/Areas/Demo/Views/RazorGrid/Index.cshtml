@@ -43,9 +43,11 @@
             //var jsonFormData = JSON.stringify(serializedForm);
             var json = {};
            
-            jQuery.each(serializedForm, function () {
-                json[this.name] = this.value || '';
-            });
+        //    jQuery.each(serializedForm, function () {
+          //      json[this.name] = this.value || '';
+          //  });
+
+
 
             //gridSample_dataSource.add('{ "data: "' + JSON.stringify(json) + '}');
 
@@ -54,7 +56,8 @@
             //gridSample_dataSource.add(pageData);
             //!  gridSample_dataSource.add(json);
 
-            gridSample_dataSource.add(JSON.parse('{ "Id": 1, "BirthDate": "2015-01-19T00:00:00", "FavoriteDay": 55 }'))
+            //gridSample_dataSource.add(JSON.parse('{ "Id": 1, "BirthDate": "2015-01-19T00:00:00", "FavoriteDay": 55 }'))
+            gridSample_dataSourceCollection.add({ Id: 1, BirthDate: "2015-01-19T00:00:00", FavoriteDay: 55 })
         }
     }
 </script>

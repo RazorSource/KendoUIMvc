@@ -99,12 +99,12 @@ namespace KendoUIMvc.Controls
 
             editWindow = new RazorGridWindow<TModel>(this.htmlHelper, this.ajaxHelper, GetEditWindowName(), this)
                     .SetAjaxForm(new AjaxForm<TModel>(this.htmlHelper, this.ajaxHelper, this.name + "_editForm", actionName, controllerName)
-                //.SetAjaxOptions(new AjaxOptions() {  OnSuccess = "SaveSuccess", OnFailure = "SaveFailure" }) // May not need this now.
-                          .SetTitle(formHeader)
-                          .SetIncludePanel(false)
-                          .AddFooterActionButton(new Button<TModel>(this.htmlHelper, this.name + "_cancelButton", "Cancel").SetOnClick(this.name + "_cancel()"))
-                          .AddFooterActionButton(new Button<TModel>(this.htmlHelper, this.name + "_saveButton", "Save").SetOnClick(this.name + "_save()"))
-                       )
+                    .SetAjaxOptions(new AjaxOptions() { OnSuccess = "SaveSuccess", OnFailure = this.name + "_showError" })
+                        .SetTitle(formHeader)
+                        .SetIncludePanel(false)
+                        .AddFooterActionButton(new Button<TModel>(this.htmlHelper, this.name + "_cancelButton", "Cancel").SetOnClick(this.name + "_cancel()"))
+                        .AddFooterActionButton(new Button<TModel>(this.htmlHelper, this.name + "_saveButton", "Save").SetOnClick(this.name + "_save()"))
+                    )
                     .SetTitle(windowTitle) as RazorGridWindow<TModel>;
 
             return this;
@@ -183,11 +183,34 @@ namespace KendoUIMvc.Controls
             return this;
         }
 
+        /// <summary>
+        /// Appends the HTML needed for the notification popup that is used to display any errors back to the user.
+        /// </summary>
+        /// <param name="html">StringBuilder to use for the HTML.</param>
+        /// <returns>The name of the notification control.</returns>
+        protected string AppendNotification(StringBuilder html)
+        {
+            string notificationName = this.name + "_ErrorDisplay";
+            Notification<TModel> notification = new Notification<TModel>(this.htmlHelper, notificationName)
+                .SetNotificationType(KendoUIMvc.Controls.Notification.NotificationType.error)
+                .SetAppendTo("#" + this.name + "Wrapper")
+                .SetAutoHideAfter(0)
+                .SetStacking(KendoUIMvc.Controls.Notification.StackingType.up);
+
+            html.Append(notification.GetControlString());
+
+            return notificationName;
+        }
+
         public MvcHtmlString Render()
         {
             StringBuilder html = new StringBuilder();
             string dataTemplateName = name + "_layoutTemplate";
             string dataSourceName = name + "_dataSource";
+            // Used to track the current action for the record.  Either add or edit.
+            string actionMode = name + "_actionMode";
+
+            string notificationName = AppendNotification(html);
 
             html.Append(@"
             <div id=""" + this.name + @"Container"" class=""container"">
@@ -259,6 +282,7 @@ namespace KendoUIMvc.Controls
             <script type=""text/javascript"">
                 var " + dataSourceName + @";
                 var " + dataSourceName + @"Collection;
+                var " + actionMode + @";
 
                 $(document).ready(function() {
                     var wrapper = $('#" + this.name + @"Wrapper');
@@ -298,7 +322,7 @@ namespace KendoUIMvc.Controls
                             },");
             }
 
-            html.Append(@"
+            html.Append(@"                            
                             read: {
                                 url: '" + this.remoteDataSourceUrl + @"',
                                 dataType: 'json'
@@ -311,11 +335,14 @@ namespace KendoUIMvc.Controls
                                 id: '" + this.keyProperty + @"'
                             }
                         },
-                        requestStart: function () {
+                        requestStart: function (e) {
                             kendo.ui.progress(wrapper, true);
                         },
-                        requestEnd: function () {
+                        requestEnd: function (e) {
                             kendo.ui.progress(wrapper, false);
+                        },
+                        error: function (e) {
+                            " + this.name + @"_showError(e.xhr);
                         }
                     });
 
@@ -332,10 +359,31 @@ namespace KendoUIMvc.Controls
                     kendo.bind(gridContainer, " + dataSourceName + @"Collection);
                 });
 
-                function " + this.name + @"_save() {
-          //          bindgridSampleNewRow('" + GetEditWindowName() + @"');
+                function " + this.name + @"_showError(response) {
+                    var message = null;
 
-                    " + dataSourceName + @".sync();
+                    if (response.responseText != undefined) {
+                        // Get a detailed error if available.
+                        try {
+                            message = JSON.parse(response.responseText).errors;
+                        } catch (ex) { }
+                    }
+
+                    if (message == null) {
+                        message = ""Error Completing Request."";
+                    }
+
+                    show" + notificationName + @"(message);
+                }
+
+                function " + this.name + @"_save() {
+                    if (" + actionMode + @" == 'add') {
+                        $('#" + GetEditWindowName() + @" form').submit();
+                        " + dataSourceName + @".read();                   
+                    } else {
+                        " + dataSourceName + @".sync();
+                    }
+                    
                     $('#" + GetEditWindowName() + @"').data('kendoWindow').close();
                 }
 
@@ -346,14 +394,23 @@ namespace KendoUIMvc.Controls
 
                 function bind" + this.name + @"Row(windowName, key) {
                     var model = " + dataSourceName + @".get(key);
-                  //  if (model != undefined) {
-                        var window = $('#' + windowName);
+                    var window = $('#' + windowName);
 
-                        // Bind the model to the window.
-                        kendo.bind(window, model);
-                        // Show the window after binding.
-                        window.data('kendoWindow').open();
-                 //   }
+                    // Bind the model to the window.
+                    kendo.bind(window, model);
+                    // Show the window after binding.
+                    window.data('kendoWindow').open();
+
+                    var form = $('#" + GetEditWindowName() + @" form');
+
+                    // Set the action mode for the current window.
+                    if (model != undefined) {
+                        form.attr('action', '" + this.remoteEditUrl + @"');
+                        " + actionMode + @" = 'edit';
+                    } else {
+                        form.attr('action', '" + this.remoteCreateUrl + @"');
+                        " + actionMode + @" = 'add';
+                    }
 
                     return false;
                 }

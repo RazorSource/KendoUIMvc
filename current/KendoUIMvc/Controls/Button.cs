@@ -23,6 +23,7 @@ namespace KendoUIMvc.Controls
         /// <summary>
         /// Constructor.
         /// </summary>
+        /// <param name="htmlHelper">HtmlHelper instance used to write view elements.</param>
         /// <param name="name">Name of the button.</param>
         /// <param name="label">Label to display.</param>
         public Button (HtmlHelper<TModel> htmlHelper, string name, string label)

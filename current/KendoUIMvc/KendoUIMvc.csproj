@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\KendoUIMvcTest\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
@@ -49,23 +53,29 @@
     <Compile Include="Controls\DropDownList.cs" />
     <Compile Include="Controls\FormBase.cs" />
     <Compile Include="Controls\HtmlForm.cs" />
+    <Compile Include="Controls\Notification.cs" />
     <Compile Include="Controls\Panel.cs" />
     <Compile Include="Controls\RazorGrid.cs" />
     <Compile Include="Controls\RazorGridWindow.cs" />
     <Compile Include="Controls\TabStrip.cs" />
     <Compile Include="Controls\TextBox.cs" />
     <Compile Include="Controls\Window.cs" />
+    <Compile Include="Filters\KendoUIMvcExceptionFilter.cs" />
     <Compile Include="KendoUIHtmlHelperExtension.cs" />
     <Compile Include="KendoUIHtmlHelper.cs" />
     <Compile Include="KendoUIWebViewPage.cs" />
     <Compile Include="Models\BootstrapCssClass.cs" />
+    <Compile Include="Models\KendoError.cs" />
+    <Compile Include="Models\KendoErrorCollection.cs" />
     <Compile Include="Models\PageOfData.cs" />
     <Compile Include="Models\ViewSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\MvcHtmlHelper.cs" />
     <Compile Include="Util\ViewDataExtension.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
