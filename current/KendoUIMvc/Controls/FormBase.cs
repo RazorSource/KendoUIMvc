@@ -24,6 +24,7 @@ namespace KendoUIMvc.Controls
         protected bool includePanel;
         protected string title;
         protected Panel<TModel> panel;
+        protected Notification<TModel> notification;
 
         protected abstract MvcForm RenderBeginForm(IDictionary<string, object> layoutAttributes);
 
@@ -38,6 +39,12 @@ namespace KendoUIMvc.Controls
 
             // By default include the panel around the form.
             this.includePanel = true;
+
+            // Initialize the notification control.
+            notification = new Notification<TModel>(this.htmlHelper, this.formId + "_errorDisplay")
+                        .SetNotificationType(KendoUIMvc.Controls.Notification.NotificationType.error)
+                        .SetAppendTo("#" + this.formId)
+                        .SetAutoHideAfter(0);
         }
 
         protected virtual void RestoreDefaultViewSettings()
@@ -237,13 +244,27 @@ namespace KendoUIMvc.Controls
                     this.mvcForm.EndForm();
                 }
 
+                // Write out notification panel and related javascript to show errors.
+                if (notification != null)
+                {
+                    MvcHtmlHelper.WriteUnencodedContent(this.htmlHelper, notification.GetControlString());
+                }
+                
                 // Close out the panel if included.
                 if (this.panel != null)
                 {
                     this.panel.EndPanel();
                 }
-
             }
+        }
+
+        /// <summary>
+        /// Gets the Notification used to display messages related to the form.
+        /// </summary>
+        /// <returns></returns>
+        public Notification<TModel> GetNotification()
+        {
+            return notification;
         }
 
         /// <summary>

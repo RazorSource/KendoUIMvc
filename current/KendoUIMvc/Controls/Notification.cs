@@ -155,6 +155,40 @@ namespace KendoUIMvc.Controls
         }
 
         /// <summary>
+        /// Gets the javascript string used to invoke the genererated "ShowAjaxResponse" javascript function.  This is intended to 
+        /// display an AJAX response from the server.
+        /// </summary>
+        /// <param name="response">The javascript variable containing the response.</param>
+        /// <param name="defaultMessage">The default message to display if a message cannot be extracted from the server response.</param>
+        /// <returns>The javascript function call as a string.</returns>
+        public string GetCallShowAjaxResponseScript(string response, string defaultMessage = "Error Completing Request.")
+        {            
+            return this.name + @"_showAjaxResponse(" + response + @", " + defaultMessage + @");";
+        }
+
+        /// <summary>
+        /// Gets the javascript string used to invoke the genererated "hide" javascript function.
+        /// </summary>
+        /// <returns>The javascript function call as a string.</returns>
+        public string GetCallHideScript()
+        {
+            return "hide" + this.name + @"();";
+        }
+
+        /// <summary>
+        /// Gets the javascript string used to invoke the genererated "show" javascript function.  This method shows a method from local
+        /// javascript variables.
+        /// </summary>
+        /// <param name="message">The message to display.</param>
+        /// <param name="notificationType">Notification type.  This is used to style the notification.  The parameter default value of
+        /// undefined will cause the default notification type to be used.</param>
+        /// <returns>The javascript function call as a string.</returns>
+        public string GetCallShowScript(string message, string notificationType = "undefined")
+        {
+            return "show" + this.name + "(" + message + ", " + notificationType + ");";
+        }
+
+        /// <summary>
         /// Gets the HTML used to render the control.
         /// </summary>
         /// <returns></returns>
@@ -207,6 +241,23 @@ namespace KendoUIMvc.Controls
 
                     function hide" + this.name + @"() {
                         " + popupVariableName + @".hide();
+                    }
+
+                    function " + this.name + @"_showAjaxResponse(response, defaultMessage) {
+                        var message = null;
+
+                        if (response.responseText != undefined) {
+                            // Get a detailed error if available.
+                            try {
+                                message = JSON.parse(response.responseText).errors;
+                            } catch (ex) { }
+                        }
+
+                        if (message == null) {
+                            message = defaultMessage;
+                        }
+
+                        show" + this.name + @"(message);
                     }
                 </script>");
             return html.ToString();

@@ -110,6 +110,12 @@ namespace KendoUIMVCTest.Areas.Demo.Controllers
             };
         }
 
+        [HttpDelete]
+        public void Delete(int id)
+        {
+            DeleteDemoModel(id);
+        }
+
         private List<DemoModel> GetDemoModels()
         {
             if (demoModels == null)
@@ -146,6 +152,18 @@ namespace KendoUIMVCTest.Areas.Demo.Controllers
             {
                 toUpdate.BirthDate = demoModel.BirthDate;
                 toUpdate.FavoriteDay = demoModel.FavoriteDay;
+            }
+        }
+
+        private void DeleteDemoModel(int id)
+        {
+            List<DemoModel> demoModels = GetDemoModels();
+
+            DemoModel toDelete = demoModels.Find(d => d.Id == id);
+
+            if (toDelete != null)
+            {
+                demoModels.Remove(toDelete);
             }
         }
     }

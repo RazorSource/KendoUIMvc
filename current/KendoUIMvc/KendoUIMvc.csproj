@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Controls\AjaxForm.cs" />
     <Compile Include="Controls\Button.cs" />
+    <Compile Include="Controls\ConfirmationDialog.cs" />
     <Compile Include="Controls\ControlBase.cs" />
     <Compile Include="Controls\DatePicker.cs" />
     <Compile Include="Controls\DropDownList.cs" />

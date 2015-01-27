@@ -99,7 +99,7 @@ namespace KendoUIMvc.Controls
 
             editWindow = new RazorGridWindow<TModel>(this.htmlHelper, this.ajaxHelper, GetEditWindowName(), this)
                     .SetAjaxForm(new AjaxForm<TModel>(this.htmlHelper, this.ajaxHelper, this.name + "_editForm", actionName, controllerName)
-                    .SetAjaxOptions(new AjaxOptions() { OnSuccess = "SaveSuccess", OnFailure = this.name + "_showError" })
+                    .SetAjaxOptions(new AjaxOptions() { OnSuccess = this.name + "_saveSuccess", OnFailure = this.name + "_showError" })
                         .SetTitle(formHeader)
                         .SetIncludePanel(false)
                         .AddFooterActionButton(new Button<TModel>(this.htmlHelper, this.name + "_cancelButton", "Cancel").SetOnClick(this.name + "_cancel()"))
@@ -115,6 +115,17 @@ namespace KendoUIMvc.Controls
             this.remoteCreateUrl = MvcHtmlHelper.GetActionUrl(this.htmlHelper, actionName, controllerName, areaName);
 
             this.addWindow = new RazorGridWindow<TModel>(this.htmlHelper, this.ajaxHelper, this.name + "_addWindow", this);
+            return this;
+        }
+
+        public RazorGrid<TModel> AddDeleteColumn(string columnLabel, string actionName, string controllerName = null, string areaName = null)
+        {
+            this.remoteDeleteUrl = MvcHtmlHelper.GetActionUrl(this.htmlHelper, actionName, controllerName, areaName);
+
+            //ActionColumn editColumn = new ActionColumn(columnLabel, script, @"<span class=""k-icon k-i-pencil""></span>");
+            //editColumn.ColumnId = "edit";
+            //columns.Add(editColumn);
+
             return this;
         }
 
@@ -190,7 +201,7 @@ namespace KendoUIMvc.Controls
         /// <returns>The name of the notification control.</returns>
         protected string AppendNotification(StringBuilder html)
         {
-            string notificationName = this.name + "_ErrorDisplay";
+            string notificationName = this.name + "_errorDisplay";
             Notification<TModel> notification = new Notification<TModel>(this.htmlHelper, notificationName)
                 .SetNotificationType(KendoUIMvc.Controls.Notification.NotificationType.error)
                 .SetAppendTo("#" + this.name + "Wrapper")
@@ -308,21 +319,35 @@ namespace KendoUIMvc.Controls
                 html.Append(@"
                             update: {
                                 url: '" + this.remoteEditUrl + @"',
-                                type: 'post'
+                                type: 'post',
+                                complete: function(jqXHR, textStatus) { 
+                                    if (textStatus == 'success') {
+                                        " + this.name + @"_saveSuccess()
+                                    }
+                                }
                             },");
             }
 
             // Add create option if the add button is shown.
-            if (this.remoteCreateUrl != null)
+//            if (this.remoteCreateUrl != null)
+//            {
+//                html.Append(@"
+//                            create: {
+//                                url: '" + this.remoteCreateUrl + @"',
+//                                type: 'post'
+//                            },");
+//            }
+
+            if (this.remoteDeleteUrl != null)
             {
                 html.Append(@"
-                            create: {
-                                url: '" + this.remoteCreateUrl + @"',
-                                type: 'post'
+                            delete: {
+                                url: '" + this.remoteDeleteUrl + @"',
+                                type: 'delete'
                             },");
             }
 
-            html.Append(@"                            
+            html.Append(@"
                             read: {
                                 url: '" + this.remoteDataSourceUrl + @"',
                                 dataType: 'json'
@@ -357,7 +382,11 @@ namespace KendoUIMvc.Controls
                     });
 
                     kendo.bind(gridContainer, " + dataSourceName + @"Collection);
-                });
+                });              
+
+                function " + this.name + @"_saveSuccess() {
+                    $('#" + GetEditWindowName() + @"').data('kendoWindow').close();
+                }
 
                 function " + this.name + @"_showError(response) {
                     var message = null;
@@ -371,9 +400,22 @@ namespace KendoUIMvc.Controls
 
                     if (message == null) {
                         message = ""Error Completing Request."";
-                    }
+                    }");
 
-                    show" + notificationName + @"(message);
+                if (this.editWindow != null && this.editWindow.GetAjaxForm() != null &&
+                    this.editWindow.GetAjaxForm().GetNotification() != null)
+                {
+                    html.Append(@"
+                    " + this.editWindow.GetAjaxForm().GetNotification().GetCallShowScript("message"));
+                }
+                else
+                {
+                    // Default to show errors on the grid notification, if an edit window does not exist.
+                    html.Append(@"
+                    show" + notificationName + @"(message);");
+                }
+
+                html.Append(@"
                 }
 
                 function " + this.name + @"_save() {
@@ -382,9 +424,7 @@ namespace KendoUIMvc.Controls
                         " + dataSourceName + @".read();                   
                     } else {
                         " + dataSourceName + @".sync();
-                    }
-                    
-                    $('#" + GetEditWindowName() + @"').data('kendoWindow').close();
+                    }                                       
                 }
 
                 function " + this.name + @"_cancel() {
@@ -413,7 +453,15 @@ namespace KendoUIMvc.Controls
                     }
 
                     return false;
-                }
+                }");
+
+            // Generate delete function if supported.
+            if (this.remoteDeleteUrl != null)
+            {
+
+            }
+
+            html.Append(@"
             </script>");
 
 

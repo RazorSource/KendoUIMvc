@@ -117,5 +117,10 @@ namespace KendoUIMvc
         {
             return new Notification<TModel>(this.htmlHelper, name);
         }
+
+        //public Window<TModel> ConfirmationDialog(string message, string yesAction, string noAction, string cancelAction = null)
+        //{
+
+        //}
     }
 }

@@ -125,6 +125,15 @@ namespace KendoUIMvc.Controls
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Gets the AjaxForm embedded within the window.
+        /// </summary>
+        /// <returns></returns>
+        public AjaxForm<TModel> GetAjaxForm()
+        {
+            return this.ajaxForm;
+        }
+
         protected virtual void Dispose(bool disposing)
         {
             if (!this.disposed)
@@ -150,10 +159,7 @@ namespace KendoUIMvc.Controls
     
                     if (!kendoWindowDiv.data('kendoWindow')) {
                         $('#" + this.name + @"').kendoWindow({
-                            width: '" + this.width + @"',
-                            title: '" + this.title + @"',
-                            actions: ['Pin', 'Minimize', 'Maximize', 'Close'],
-                            visible: " + MvcHtmlHelper.GetJavascriptBoolean(this.showOnLoad) + @"
+                            " + GetAttributes() + @"
                         }).data('kendoWindow').center();
                     }");
            
@@ -162,6 +168,30 @@ namespace KendoUIMvc.Controls
                 });
             </script>");
             }
+        }
+
+        /// <summary>
+        /// Writes out the attributes based on the Window configuration settings.
+        /// </summary>
+        /// <returns></returns>
+        protected string GetAttributes()
+        {
+            StringBuilder attributes = new StringBuilder();
+
+            if (this.ajaxForm != null && this.ajaxForm.GetNotification() != null)
+            {
+                // Hide any error message when the window is closed.
+                attributes.Append(@"
+                            close: function () { " + this.ajaxForm.GetNotification().GetCallHideScript() + @" },");
+            }
+
+            attributes.Append(@"
+                            width: '" + this.width + @"',
+                            title: '" + this.title + @"',
+                            actions: ['Pin', 'Minimize', 'Maximize', 'Close'],
+                            visible: " + MvcHtmlHelper.GetJavascriptBoolean(this.showOnLoad) + @"");
+
+            return attributes.ToString();
         }
     }
 }
