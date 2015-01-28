@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "Kendo UI MVC Confirmation Dialog";
+}
+
+<h2>Confirmation Dialog</h2>
+
+@UI.Button("btnShow", "Show").SetOnClick("showDialog()")
+
+@UI.ConfirmationDialog("dlgConfirm", "Are you sure?", "Do you really want to do this?", "clickedYes()").SetShowCancel(true)
+
+
+<script type="text/javascript">
+    function showDialog() {
+        showdlgConfirm();
+    }
+
+    function clickedYes() {
+        alert('You clicked Yes.');
+        return true;
+    }
+</script>
