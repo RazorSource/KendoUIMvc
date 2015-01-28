@@ -110,10 +110,12 @@ namespace KendoUIMVCTest.Areas.Demo.Controllers
             };
         }
 
-        [HttpDelete]
-        public void Delete(int id)
+        [HttpPost]
+        public JsonResult Delete(int id)
         {
             DeleteDemoModel(id);
+
+            return Json(new { });
         }
 
         private List<DemoModel> GetDemoModels()

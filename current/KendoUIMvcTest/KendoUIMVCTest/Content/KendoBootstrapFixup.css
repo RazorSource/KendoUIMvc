@@ -1,4 +1,13 @@
-﻿.km-panel-action-footer
+﻿
+/* Not bootstrap 3.01 and later have this class defined. */
+.center-block {
+  float: none;
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.km-panel-action-footer
 {
     border-top: 1px solid #e7e7e7;
     padding-top: 0.5em;
@@ -12,6 +21,16 @@
     line-height: 1.2857em;
     margin: -5px -19px 0.8333em;
     padding: 0 19px 0.7222em;
+}
+
+.km-margin-bottom
+{
+    margin-bottom: 10px;
+}
+
+.km-margin-top
+{
+    margin-top: 10px;
 }
 
 .km-form-title

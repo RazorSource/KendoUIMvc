@@ -4,18 +4,41 @@
 
 <h2>Confirmation Dialog</h2>
 
-@UI.Button("btnShow", "Show").SetOnClick("showDialog()")
+<div class="form-group">
+    @UI.Button("btnShow", "Show Basic").SetOnClick("showdlgConfirm()")
+</div>
+<div class="form-group">
+    @UI.Button("btnShowWithCancel", "Show With Cancel").SetOnClick("showdlgWithCancel()")
+</div>
+<div class="form-group">
+    @UI.Button("btnShowWithNoAction", "Show With 'No' Action").SetOnClick("showdlgWithNoAction()")
+</div>
+<div class="form-group">
+    @UI.Button("btnShowWithCancelAction", "Show With 'Cancel' Action").SetOnClick("showdlgWithCancelAction()")
+</div>
+<div class="form-group">
+    @UI.Button("btnShowWithModifiedLabels", "Show With Different Labels").SetOnClick("showdlgModifiedLabels()")
+</div>
 
-@UI.ConfirmationDialog("dlgConfirm", "Are you sure?", "Do you really want to do this?", "clickedYes()").SetShowCancel(true)
-
+@UI.ConfirmationDialog("dlgConfirm", "Are you sure?", "Do you really want to do this?", "clickedYes()")
+@UI.ConfirmationDialog("dlgWithCancel", "Are you sure?", "Do you really want to do this?", "clickedYes()").SetShowCancel(true)
+@UI.ConfirmationDialog("dlgWithNoAction", "Are you sure?", "Do you really want to do this?", "clickedYes()").SetNoAction("clickedNo()")
+@UI.ConfirmationDialog("dlgWithCancelAction", "Are you sure?", "Do you really want to do this?", "clickedYes()").SetShowCancel(true).SetCancelAction("clickedCancel()")
+@UI.ConfirmationDialog("dlgModifiedLabels", "Are you sure?", "Do you really want to do this?", "clickedYes()").SetYesText("OK").SetNoText("Nevermind").SetCancelText("Forget It").SetShowCancel(true)
 
 <script type="text/javascript">
-    function showDialog() {
-        showdlgConfirm();
-    }
-
     function clickedYes() {
         alert('You clicked Yes.');
+        return true;
+    }
+
+    function clickedNo() {
+        alert('You clicked No.');
+        return true;
+    }
+
+    function clickedCancel() {
+        alert('You clicked Cancel.');
         return true;
     }
 </script>

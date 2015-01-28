@@ -129,7 +129,8 @@ namespace KendoUIMvc.Controls
 
             html.Append(@"
                 <div id=""" + this.name + @""" style=""display: none;"">
-                    <div>" + this.message + @"</div>");
+                    <div class=""km-margin-bottom"">" + this.message + @"</div>
+                    <div class=""center-block"">");
 
             // Add the Yes Button.
             Button<TModel> yesButton = new Button<TModel>(this.htmlHelper, this.name + "_buttonYes", this.yesText)
@@ -153,6 +154,7 @@ namespace KendoUIMvc.Controls
             }
 
             html.Append(@"
+                    </div>
                 </div>
                 <script type=""text/javascript"">
                     function show" + this.name + @"() {
@@ -228,10 +230,28 @@ namespace KendoUIMvc.Controls
             attributes.Append(@"
                             width: '" + this.width + @"',
                             title: '" + this.title + @"',
-                            //actions: ['Pin', 'Minimize', 'Maximize', 'Close'],
+                            modal: true,
                             visible: false");
 
             return attributes.ToString();
+        }
+
+        /// <summary>
+        /// Gets the javascript string used to invoke the genererated "show" javascript function.
+        /// </summary>
+        /// <returns>The javascript function call as a string.</returns>
+        public string GetCallShowScript()
+        {
+            return "show" + this.name + "();";
+        }
+
+        /// <summary>
+        /// Gets the javascript string used to invoke the genererated "hide" javascript function.
+        /// </summary>
+        /// <returns>The javascript function call as a string.</returns>
+        public string GetCallHideScript()
+        {
+            return "hide" + this.name + "();";
         }
 
         public override string ToString()

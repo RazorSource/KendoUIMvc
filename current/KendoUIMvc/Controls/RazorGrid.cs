@@ -11,6 +11,9 @@ namespace KendoUIMvc.Controls
 {
     public class RazorGrid<TModel>
     {
+        protected const string EDIT_COLUMN_ID = "_edit";
+        protected const string DELETE_COLUMN_ID = "_delete";
+
         protected HtmlHelper<TModel> htmlHelper;
         protected AjaxHelper<TModel> ajaxHelper;
         protected string name;
@@ -26,6 +29,10 @@ namespace KendoUIMvc.Controls
         protected string keyProperty;
         protected RazorGridWindow<TModel> editWindow;
         protected RazorGridWindow<TModel> addWindow;
+        protected string deleteConfirmationTitle = "Confirm Delete";
+        protected string deleteConfirmationMessage = "Are you sure you want to delete this item?";
+        protected string editTooltip = "edit";
+        protected string deleteTooltip = "delete";
 
         /// <summary>
         /// Constructor.
@@ -52,10 +59,13 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="name">Name of the property to bind from the model data.</param>
         /// <param name="label">Label to display on the column.</param>
+        /// <param name="width">Optional fixed column width to apply to the column.</param>
         /// <returns></returns>
-        public RazorGrid<TModel> AddColumn(string name, string label)
+        public RazorGrid<TModel> AddColumn(string name, string label, int? width = null)
         {
-            columns.Add(new BoundColumn(label, name));
+            BoundColumn boundColumn = new BoundColumn(label, name);
+            boundColumn.Width = width;
+            columns.Add(boundColumn);
 
             return this;
         }
@@ -66,10 +76,13 @@ namespace KendoUIMvc.Controls
         /// <param name="name">Name of the property to bind from the model data.</param>
         /// <param name="label">Label to display on the column.</param>
         /// <param name="format">Format for the date.  The default format is "MM/dd/yyyy"</param>
+        /// <param name="width">Optional fixed column width to apply to the column.</param>
         /// <returns></returns>
-        public RazorGrid<TModel> AddDateColumn(string name, string label, string format = "MM/dd/yyyy")
+        public RazorGrid<TModel> AddDateColumn(string name, string label, string format = "MM/dd/yyyy", int? width = null)
         {
-            columns.Add(new BoundColumn(label, "kendo.toString(kendo.parseDate(" + name + "), '" + format + "')"));
+            BoundColumn dateColumn = new BoundColumn(label, "kendo.toString(kendo.parseDate(" + name + "), '" + format + "')");
+            dateColumn.Width = width;
+            columns.Add(dateColumn);
 
             return this;
         }
@@ -91,13 +104,16 @@ namespace KendoUIMvc.Controls
         {
             string script = "bind" + this.name + @"Row('" + GetEditWindowName() + @"', '#: " + this.keyProperty + @" #')";
             ActionColumn editColumn = new ActionColumn(columnLabel, script, @"<span class=""k-icon k-i-pencil""></span>");
-            editColumn.ColumnId = "edit";
+            editColumn.ColumnId = EDIT_COLUMN_ID;
+            editColumn.Width = 15;
+            editColumn.Tooltip = editTooltip;
             columns.Add(editColumn);
 
             //TODO:  Do something to handle multiple edit columns, or only allow one
             this.remoteEditUrl = MvcHtmlHelper.GetActionUrl(this.htmlHelper, actionName, controllerName, areaName);
 
             editWindow = new RazorGridWindow<TModel>(this.htmlHelper, this.ajaxHelper, GetEditWindowName(), this)
+                    .SetModal(true)
                     .SetAjaxForm(new AjaxForm<TModel>(this.htmlHelper, this.ajaxHelper, this.name + "_editForm", actionName, controllerName)
                     .SetAjaxOptions(new AjaxOptions() { OnSuccess = this.name + "_saveSuccess", OnFailure = this.name + "_showError" })
                         .SetTitle(formHeader)
@@ -122,11 +138,23 @@ namespace KendoUIMvc.Controls
         {
             this.remoteDeleteUrl = MvcHtmlHelper.GetActionUrl(this.htmlHelper, actionName, controllerName, areaName);
 
-            //ActionColumn editColumn = new ActionColumn(columnLabel, script, @"<span class=""k-icon k-i-pencil""></span>");
-            //editColumn.ColumnId = "edit";
-            //columns.Add(editColumn);
+            ActionColumn deleteColumn = new ActionColumn(columnLabel, GetPromptDeleteFunctionName() + "('#: " + this.keyProperty + @" #')", @"<span class=""k-icon k-i-cancel""></span>");
+            deleteColumn.ColumnId = DELETE_COLUMN_ID;
+            deleteColumn.Width = 15;
+            deleteColumn.Tooltip = deleteTooltip;
+            columns.Add(deleteColumn);
 
             return this;
+        }
+
+        protected string GetPromptDeleteFunctionName()
+        {
+            return this.name + "_deletePrompt";
+        }
+
+        protected string GetConfirmedDeleteFunctionName()
+        {
+            return this.name + "_delete";
         }
 
         /// <summary>
@@ -195,6 +223,70 @@ namespace KendoUIMvc.Controls
         }
 
         /// <summary>
+        /// Sets the title to display on a delete confirmation.
+        /// </summary>
+        /// <param name="deleteConfirmationTitle">Text to display on the delete confirmation title.</param>
+        /// <returns></returns>
+        public RazorGrid<TModel> SetDeleteConfirmationTitle(string deleteConfirmationTitle)
+        {
+            this.deleteConfirmationTitle = deleteConfirmationTitle;
+
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the message to display on a delete confirmation.
+        /// </summary>
+        /// <param name="deleteConfirmationMessage">Message to display on the delete confirmation.</param>
+        /// <returns></returns>
+        public RazorGrid<TModel> SetDeleteConfirmationMessage(string deleteConfirmationMessage)
+        {
+            this.deleteConfirmationMessage = deleteConfirmationMessage;
+
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the tooltip to display on the edit action column.  Setting this value to null will cause the tooltip to not show.  The default
+        /// value for the tooltip is "edit".
+        /// </summary>
+        /// <param name="editTooltip">Text to display on the edit tooltip.  A value of null will cause the tooltip to not display.</param>
+        /// <returns></returns>
+        public RazorGrid<TModel> SetEditTooltip(string editTooltip)
+        {
+            this.editTooltip = editTooltip;
+
+            // Check to determine if the delete column has already been added, if it has, update the tooltip.
+            Column editColumn = columns.FirstOrDefault(c => c.GetId() == EDIT_COLUMN_ID);
+            if (editColumn != null)
+            {
+                editColumn.Tooltip = editTooltip;
+            }
+
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the tooltip to display on the delete action column.  Setting this value to null will cause the tooltip to not show.  The default
+        /// value for the tooltip is "delete".
+        /// </summary>
+        /// <param name="deleteTooltip">Text to display on the delete tooltip.  A value of null will cause the tooltip to not display.</param>
+        /// <returns></returns>
+        public RazorGrid<TModel> SetDeleteTooltip(string deleteTooltip)
+        {
+            this.deleteTooltip = deleteTooltip;
+
+            // Check to determine if the delete column has already been added, if it has, update the tooltip.
+            Column deleteColumn = columns.FirstOrDefault(c => c.GetId() == DELETE_COLUMN_ID);
+            if (deleteColumn != null)
+            {
+                deleteColumn.Tooltip = deleteTooltip;
+            }
+
+            return this;
+        }
+
+        /// <summary>
         /// Appends the HTML needed for the notification popup that is used to display any errors back to the user.
         /// </summary>
         /// <param name="html">StringBuilder to use for the HTML.</param>
@@ -222,6 +314,15 @@ namespace KendoUIMvc.Controls
             string actionMode = name + "_actionMode";
 
             string notificationName = AppendNotification(html);
+            ConfirmationDialog<TModel> deleteConfirmation = null;
+
+            if (this.remoteDeleteUrl != null)
+            {
+                // Add the delete confirmation dialog box if deleting is supported.
+                deleteConfirmation = new ConfirmationDialog<TModel>(this.htmlHelper, this.name + "deleteConfirmation", deleteConfirmationTitle, deleteConfirmationMessage,
+                    GetConfirmedDeleteFunctionName() + "()");
+                html.Append(deleteConfirmation.GetControlString());
+            }
 
             html.Append(@"
             <div id=""" + this.name + @"Container"" class=""container"">
@@ -253,7 +354,13 @@ namespace KendoUIMvc.Controls
             foreach (Column nextColumn in columns)
             {
                 html.Append(@"
-                                    <th class=""k-header"">" + nextColumn.Label + @"</th>");
+                                    <th class=""k-header""");
+                if (nextColumn.Width != null)
+                {
+                    html.Append(@" width=""" + nextColumn.Width.Value + @"px;""");
+                }
+                
+                html.Append(@">" + nextColumn.Label + @"</th>");
             }
 
             html.Append(@"
@@ -284,7 +391,14 @@ namespace KendoUIMvc.Controls
             foreach (Column nextColumn in columns)
             {
                 html.Append(@"
-                                    <td data-property=""" + nextColumn.GetId() + @""">" + nextColumn.RenderContent() + "</td>");
+                                    <td data-property=""" + nextColumn.GetId() + @"""");
+
+                if (nextColumn.Tooltip != null)
+                {
+                    html.Append(@" title=""" + nextColumn.Tooltip + @"""");
+                }
+
+                html.Append(@">" + nextColumn.RenderContent() + "</td>");
             }
 
             html.Append(@"
@@ -421,7 +535,7 @@ namespace KendoUIMvc.Controls
                 function " + this.name + @"_save() {
                     if (" + actionMode + @" == 'add') {
                         $('#" + GetEditWindowName() + @" form').submit();
-                        " + dataSourceName + @".read();                   
+                        " + dataSourceName + @".read();
                     } else {
                         " + dataSourceName + @".sync();
                     }                                       
@@ -458,12 +572,38 @@ namespace KendoUIMvc.Controls
             // Generate delete function if supported.
             if (this.remoteDeleteUrl != null)
             {
+                string currentDeleteKeyVariableName = this.name + "_currentDeleteKey";
 
+                html.Append(@"
+                var " + currentDeleteKeyVariableName + @";
+                function " + GetPromptDeleteFunctionName() + @"(key) {
+                    " + currentDeleteKeyVariableName + @" = key;
+                    " + deleteConfirmation.GetCallShowScript() + @"
+                }
+
+                function " + GetConfirmedDeleteFunctionName() + @"() {
+                    var succeeded;
+                    $.ajax({
+                        type: 'post',
+                        dataType: 'json',
+                        url: '" + this.remoteDeleteUrl + @"',
+                        data: { """ + this.keyProperty + @""" : " + currentDeleteKeyVariableName + @"},
+                        async: false,
+                        success: function (data) {
+                            succeeded = true;
+                            " + dataSourceName + @".read();
+                        },
+                        error: function (data) {
+                            succeeded = false;
+                        }
+                    })
+
+                    return succeeded;
+                }");
             }
 
             html.Append(@"
             </script>");
-
 
             return new MvcHtmlString(html.ToString());
         }
@@ -497,6 +637,8 @@ namespace KendoUIMvc.Controls
             }
             
             public string Label { get; set; }
+            public int? Width { get; set; }
+            public string Tooltip;
         }
 
         /// <summary>

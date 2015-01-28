@@ -20,6 +20,7 @@ namespace KendoUIMvc.Controls
         protected bool showOnLoad;
         protected string title;
         protected AjaxForm<TModel> ajaxForm;
+        protected bool modal;
 
         public Window(HtmlHelper<TModel> htmlHelper, AjaxHelper<TModel> ajaxHelper, string name)
         {
@@ -98,6 +99,17 @@ namespace KendoUIMvc.Controls
         public Window<TModel> SetAjaxForm(AjaxForm<TModel> ajaxForm)
         {
             this.ajaxForm = ajaxForm;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets a flag indicating if the window should open as a modal window.  The default value is false.
+        /// </summary>
+        /// <param name="modal">True if the window should open as a modal window and disable the page when opening.</param>
+        /// <returns></returns>
+        public Window<TModel> SetModal(bool modal)
+        {
+            this.modal = modal;
             return this;
         }
 
@@ -183,6 +195,12 @@ namespace KendoUIMvc.Controls
                 // Hide any error message when the window is closed.
                 attributes.Append(@"
                             close: function () { " + this.ajaxForm.GetNotification().GetCallHideScript() + @" },");
+            }
+
+            if (this.modal)
+            {
+                attributes.Append(@"
+                            modal: true,");
             }
 
             attributes.Append(@"
