@@ -35,6 +35,7 @@
       <HintPath>..\KendoUIMvcTest\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -48,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Controls\AjaxForm.cs" />
     <Compile Include="Controls\Button.cs" />
+    <Compile Include="Controls\Checkbox.cs" />
     <Compile Include="Controls\ConfirmationDialog.cs" />
     <Compile Include="Controls\ControlBase.cs" />
     <Compile Include="Controls\DatePicker.cs" />

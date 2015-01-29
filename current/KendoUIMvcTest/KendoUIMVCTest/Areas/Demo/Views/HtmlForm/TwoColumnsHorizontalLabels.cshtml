@@ -14,4 +14,6 @@
     @UI.TextBoxFor(model => model.Id)
     @UI.TextBoxFor(model => model.FavoriteDay)
     @UI.DatePickerFor(model => model.BirthDate)
+    @UI.CheckboxFor(model => model.Agree).SetShowLabelRight(true)
+    @UI.CheckboxFor(model => model.LikeThis).SetShowLabelRight(true)
 }

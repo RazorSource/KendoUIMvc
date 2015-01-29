@@ -184,7 +184,7 @@ namespace KendoUIMvc.Controls
             return attributes;
         }
 
-        protected string GetLabelString()
+        protected virtual string GetLabelString()
         {
             IDictionary<string, object> labelAttributes = GetLabelAttributes();
 

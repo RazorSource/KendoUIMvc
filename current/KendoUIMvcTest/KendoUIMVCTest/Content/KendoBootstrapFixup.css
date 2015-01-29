@@ -59,6 +59,23 @@
     box-sizing: content-box;
 }
 
+.k-checkbox-label
+{
+    /*height: 34px; */
+   /* height: 24px; */
+}
+
+.km-checkbox-container-right, .km-checkbox-container
+{
+    height: 34px;
+}
+
+.form-horizontal .km-checkbox-container-right
+{
+    padding-top: 10px;
+    height: 24px;
+}
+
 /* set a border-box model only to elements that need it */
 .form-control,  /* if this class is applied to a Kendo UI widget, its layout may change */
 .container,

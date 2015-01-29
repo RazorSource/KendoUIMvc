@@ -1,0 +1,9 @@
+﻿@model KendoUIMVCTest.Models.DemoModel
+
+@{
+    ViewBag.Title = "Kendo UI MVC Checkbox";
+}
+
+<h2>Checkbox</h2>
+@UI.CheckboxFor(model => model.Agree)
+@UI.CheckboxFor(model => model.LikeThis).SetCheckedByDefault(true)

@@ -10,7 +10,6 @@
            .SetTitle("Horizontal Labels")
            .SetFormLayout(KendoUIMvc.Models.ViewSettings.FormLayoutOption.Horizontal)
            //.SetFormColumnStyle("col-md-6") // Each column uses half the space
-           .SetDefaultGroupColumnStyle("col-md-6")
            .AddFooterActionButton(UI.Button("btnCancel", "Cancel").SetOnClick("handleCancel()"))
            .AddFooterActionButton(UI.SubmitButton("btnSave", "Save"))
            .RenderBegin())
@@ -18,6 +17,8 @@
     @UI.TextBoxFor(model => model.Id)
     @UI.TextBoxFor(model => model.FavoriteDay)
     @UI.DatePickerFor(model => model.BirthDate)
+    @UI.CheckboxFor(model => model.Agree)
+    @UI.CheckboxFor(model => model.LikeThis)
 }
 
 <script type="text/javascript">

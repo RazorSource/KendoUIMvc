@@ -11,8 +11,10 @@
     //.SetFormColumnStyle("col-md-12")
     // .AddFooterActionButton(UI.SubmitButton("btnSave", "Save"))
     .RenderBegin())
-{
-    @UI.TextBoxFor(model => model.Id)
-    @UI.TextBoxFor(model => model.FavoriteDay)
+{   
     @UI.DatePickerFor(model => model.BirthDate)
+    @UI.TextBoxFor(model => model.Id)
+    @UI.TextBoxFor(model => model.FavoriteDay)    
+    @UI.CheckboxFor(model => model.Agree).SetShowLabelRight(true)
+    @UI.CheckboxFor(model => model.LikeThis)
 }

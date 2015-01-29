@@ -43,6 +43,11 @@ namespace KendoUIMvc
             return new TextBox<TModel, TProperty>(this.htmlHelper, expression);
         }
 
+        public TextBox<TModel, TProperty> TextBox<TProperty>(string name, object value)
+        {
+            return new TextBox<TModel, TProperty>(this.htmlHelper, name, value);
+        }
+
         public HtmlForm<TModel> BeginForm(string formId, string actionName = null, string controllerName = null)
         {
             return new HtmlForm<TModel>(this.htmlHelper, formId, actionName, controllerName)
@@ -121,6 +126,21 @@ namespace KendoUIMvc
         public ConfirmationDialog<TModel> ConfirmationDialog(string name, string title, string message, string yesAction)
         {
             return new ConfirmationDialog<TModel>(this.htmlHelper, name, title, message, yesAction);
+        }
+
+        public Checkbox<TModel, bool> CheckboxFor(Expression<Func<TModel, bool>> expression)
+        {
+            return new Checkbox<TModel, bool>(this.htmlHelper, expression);
+        }
+
+        public Checkbox<TModel, bool?> CheckboxFor(Expression<Func<TModel, bool?>> expression)
+        {
+            return new Checkbox<TModel, bool?>(this.htmlHelper, expression);
+        }
+
+        public Checkbox<TModel, bool?> Checkbox(string name, bool? value)
+        {
+            return new Checkbox<TModel, bool?>(this.htmlHelper, name, value);
         }
     }
 }

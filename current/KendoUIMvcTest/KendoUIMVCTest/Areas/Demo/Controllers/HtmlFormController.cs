@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using KendoUIMVCTest.Models;
 
 namespace KendoUIMVCTest.Areas.Demo.Controllers
 {
@@ -10,6 +11,12 @@ namespace KendoUIMVCTest.Areas.Demo.Controllers
     {
         // GET: Demo/HtmlForm
         public ActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Index(DemoModel demoModel)
         {
             return View();
         }

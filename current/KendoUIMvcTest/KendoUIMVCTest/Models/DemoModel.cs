@@ -16,5 +16,7 @@ namespace KendoUIMVCTest.Models
         public int Id { get; set; }
         public DateTime BirthDate { get; set; }
         public int FavoriteDay { get; set; }
+        public bool Agree { get; set; }
+        public bool? LikeThis { get; set; }
     }
 }

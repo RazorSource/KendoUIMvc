@@ -7,10 +7,12 @@
 <h2>HTML Form</h2>
 
 @using (UI.BeginForm("frmSample", "Index", "HtmlForm"))
-{
+{    
     @UI.TextBoxFor(model => model.Id)
-    @UI.TextBoxFor(model => model.FavoriteDay)
+    @UI.TextBoxFor(model => model.FavoriteDay)    
     @UI.DatePickerFor(model => model.BirthDate)
+    @UI.CheckboxFor(model => model.Agree)
+    @UI.CheckboxFor(model => model.LikeThis)
     <div class="km-panel-action-footer">
         @UI.Button("btnCancel", "Cancel")
         @UI.SubmitButton("btnSave", "Save")
