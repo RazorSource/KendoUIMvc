@@ -165,6 +165,7 @@
     <Compile Include="Areas\Demo\Controllers\DatePickerController.cs" />
     <Compile Include="Areas\Demo\Controllers\DropDownListController.cs" />
     <Compile Include="Areas\Demo\Controllers\HtmlFormController.cs" />
+    <Compile Include="Areas\Demo\Controllers\MenuController.cs" />
     <Compile Include="Areas\Demo\Controllers\NotificationController.cs" />
     <Compile Include="Areas\Demo\Controllers\PanelController.cs" />
     <Compile Include="Areas\Demo\Controllers\RazorGridController.cs" />
@@ -966,6 +967,7 @@
     <Content Include="Areas\Demo\Views\Notification\Index.cshtml" />
     <Content Include="Areas\Demo\Views\ConfirmationDialog\Index.cshtml" />
     <Content Include="Areas\Demo\Views\Checkbox\Index.cshtml" />
+    <Content Include="Areas\Demo\Views\Menu\Index.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

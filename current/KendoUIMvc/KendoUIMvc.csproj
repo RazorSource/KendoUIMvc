@@ -56,6 +56,8 @@
     <Compile Include="Controls\DropDownList.cs" />
     <Compile Include="Controls\FormBase.cs" />
     <Compile Include="Controls\HtmlForm.cs" />
+    <Compile Include="Controls\Menu.cs" />
+    <Compile Include="Controls\MenuItem.cs" />
     <Compile Include="Controls\Notification.cs" />
     <Compile Include="Controls\Panel.cs" />
     <Compile Include="Controls\RazorGrid.cs" />

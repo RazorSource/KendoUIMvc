@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
+using KendoUIMvc.Util;
 
 namespace KendoUIMvc
 {
@@ -141,6 +142,21 @@ namespace KendoUIMvc
         public Checkbox<TModel, bool?> Checkbox(string name, bool? value)
         {
             return new Checkbox<TModel, bool?>(this.htmlHelper, name, value);
+        }
+
+        public Menu<TModel> Menu(string name)
+        {
+            return new Menu<TModel>(this.htmlHelper, name);
+        }
+
+        public MenuItem<TModel> MenuItem(string name, string text, string url, IList<MenuItem<TModel>> childMenuItems = null)
+        {
+            return new MenuItem<TModel>(this.htmlHelper, name, text, url, childMenuItems);
+        }
+
+        public MenuItem<TModel> MenuItem(string name, string text, string action, string controller, string area = null, IList<MenuItem<TModel>> childMenuItems = null)
+        {
+            return new MenuItem<TModel>(this.htmlHelper, name, text, MvcHtmlHelper.GetActionUrl(this.htmlHelper, action, controller, area), childMenuItems);
         }
     }
 }
