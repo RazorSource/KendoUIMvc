@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Mvc.Ajax;
+using System.Linq.Expressions;
 
 namespace KendoUIMvc.Controls
 {
@@ -71,6 +72,24 @@ namespace KendoUIMvc.Controls
         }
 
         /// <summary>
+        /// Adds a new column to the grid.
+        /// </summary>
+        /// <typeparam name="TProperty">Type of the property being bound.</typeparam>
+        /// <param name="expression">The expression to bind.</param>
+        /// <param name="width">Optional fixed column width to apply to the column.</param>
+        /// <param name="label">Optonal label override for the expression.  If the label override is not provided, the label
+        /// will be extracted from the bound model property.</param>
+        /// <returns></returns>
+        public RazorGrid<TModel> AddColumnFor<TProperty>(Expression<Func<TModel, TProperty>> expression, int? width = null, string label = null)
+        {
+            AddColumn(MvcHtmlHelper.GetExpressionPropertyId(this.htmlHelper, expression),
+                label != null ? label : MvcHtmlHelper.GetDisplayText(this.htmlHelper, expression),
+                width);
+
+            return this;
+        }
+
+        /// <summary>
         /// Adds a date column to the grid.  The column will be formatted using the provided format.
         /// </summary>
         /// <param name="name">Name of the property to bind from the model data.</param>
@@ -83,6 +102,44 @@ namespace KendoUIMvc.Controls
             BoundColumn dateColumn = new BoundColumn(label, "kendo.toString(kendo.parseDate(" + name + "), '" + format + "')");
             dateColumn.Width = width;
             columns.Add(dateColumn);
+
+            return this;
+        }
+
+        /// <summary>
+        /// Adds a date column to the grid.  The column will be formatted using the provided format.
+        /// </summary>
+        /// <param name="expression">The expression to bind.</param>
+        /// <param name="format">Format for the date.  The default format is "MM/dd/yyyy"</param>
+        /// <param name="width">Optional fixed column width to apply to the column.</param>
+        /// <param name="label">Optonal label override for the expression.  If the label override is not provided, the label
+        /// will be extracted from the bound model property.</param>
+        /// <returns></returns>
+        public RazorGrid<TModel> AddDateColumnFor(Expression<Func<TModel, DateTime>> expression, string format = "MM/dd/yyyy", int? width = null,
+            string label = null)
+        {
+            AddDateColumn(MvcHtmlHelper.GetExpressionPropertyId(this.htmlHelper, expression),
+                          label != null ? label : MvcHtmlHelper.GetDisplayText(this.htmlHelper, expression),
+                          format, width);
+
+            return this;
+        }
+
+        /// <summary>
+        /// Adds a date column to the grid.  The column will be formatted using the provided format.
+        /// </summary>
+        /// <param name="expression">The expression to bind.</param>
+        /// <param name="format">Format for the date.  The default format is "MM/dd/yyyy"</param>
+        /// <param name="width">Optional fixed column width to apply to the column.</param>
+        /// <param name="label">Optonal label override for the expression.  If the label override is not provided, the label
+        /// will be extracted from the bound model property.</param>
+        /// <returns></returns>
+        public RazorGrid<TModel> AddDateColumnFor(Expression<Func<TModel, DateTime?>> expression, string format = "MM/dd/yyyy", int? width = null,
+            string label = null)
+        {
+            AddDateColumn(MvcHtmlHelper.GetExpressionPropertyId(this.htmlHelper, expression),
+                          label != null ? label : MvcHtmlHelper.GetDisplayText(this.htmlHelper, expression),
+                          format, width);
 
             return this;
         }

@@ -4,10 +4,10 @@
 @using KendoUIMVCTest.Models
 
 @{
-    ViewBag.Title = "Kendo UI MVC Razor Grid";
+    ViewBag.Title = "Kendo UI MVC Bound Razor Grid";
 }
 
-<h2>Razor Grid</h2>
+<h2>Bound Razor Grid</h2>
 
 @{  RazorGrid<DemoModel> grid = UI.RazorGrid("gridSample", "Id")
         .SetRemoteDataSource("GetData", "RazorGrid", "Demo")
@@ -18,8 +18,8 @@
         .SetContainerColumnStyle("col-md-6")
         .AddWindowEditColumn("", "Maintain Demo Data", "Demo Data", "Edit", "RazorGrid")
         .AddDeleteColumn("", "Delete", "RazorGrid")
-        .AddColumn("FavoriteDay", "Favorite Day")
-        .AddDateColumn("BirthDate", "Birth Date");}
+        .AddColumnFor(model => model.FavoriteDay)
+        .AddDateColumnFor(model => model.BirthDate);}
 
 @grid.Render()
 

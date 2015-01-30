@@ -20,6 +20,11 @@ namespace KendoUIMVCTest.Areas.Demo.Controllers
             return View();
         }
 
+        public ActionResult BoundIndex()
+        {
+            return View();
+        }
+
         public ActionResult GetData(int? take, int? skip)
         {
             // Uncomment to delay to view progress functionality.

@@ -44,9 +44,9 @@ namespace KendoUIMvc
             return new TextBox<TModel, TProperty>(this.htmlHelper, expression);
         }
 
-        public TextBox<TModel, TProperty> TextBox<TProperty>(string name, object value)
+        public TextBox<TModel, object> TextBox(string name, object value)
         {
-            return new TextBox<TModel, TProperty>(this.htmlHelper, name, value);
+            return new TextBox<TModel, object>(this.htmlHelper, name, value);
         }
 
         public HtmlForm<TModel> BeginForm(string formId, string actionName = null, string controllerName = null)
@@ -76,9 +76,9 @@ namespace KendoUIMvc
             return new DropDownList<TModel, TProperty>(this.htmlHelper, expression);
         }
 
-        public DropDownList<TModel, TProperty> DropDownList<TProperty>(string name, object value = null)
+        public DropDownList<TModel, object> DropDownList(string name, object value = null)
         {
-            return new DropDownList<TModel, TProperty>(this.htmlHelper, name, value);
+            return new DropDownList<TModel, object>(this.htmlHelper, name, value);
         }
 
         public TabStrip<TModel> TabStrip(string name)
@@ -157,6 +157,16 @@ namespace KendoUIMvc
         public MenuItem<TModel> MenuItem(string name, string text, string action, string controller, string area = null, IList<MenuItem<TModel>> childMenuItems = null)
         {
             return new MenuItem<TModel>(this.htmlHelper, name, text, MvcHtmlHelper.GetActionUrl(this.htmlHelper, action, controller, area), childMenuItems);
+        }
+
+        public Hidden<TModel, TProperty> HiddenFor<TProperty>(Expression<Func<TModel, TProperty>> expression)
+        {
+            return new Hidden<TModel, TProperty>(this.htmlHelper, expression);
+        }
+
+        public Hidden<TModel, object> Hidden(string name, object value)
+        {
+            return new Hidden<TModel, object>(this.htmlHelper, name, value);
         }
     }
 }

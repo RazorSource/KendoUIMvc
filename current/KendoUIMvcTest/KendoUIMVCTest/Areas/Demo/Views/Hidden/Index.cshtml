@@ -1,0 +1,10 @@
+﻿@model KendoUIMVCTest.Models.DemoModel
+
+@{
+    ViewBag.Title = "Kendo UI MVC Hidden";
+}
+
+<h2>Hidden</h2>
+@UI.HiddenFor(model => model.Id)
+
+@UI.Hidden("hdnUnbound", "2")
