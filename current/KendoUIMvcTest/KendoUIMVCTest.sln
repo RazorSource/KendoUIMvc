@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2013 for Web
-VisualStudioVersion = 12.0.30723.0
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KendoUIMVCTest", "KendoUIMVCTest\KendoUIMVCTest.csproj", "{1B100595-A72A-4E02-A9F6-7BEF11C57A5A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KendoUIMvc", "..\KendoUIMvc\KendoUIMvc.csproj", "{A159D048-43E4-46C2-BECB-04B49AE3182A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonMvc", "..\CommonMvc\CommonMvc.csproj", "{2E374CCB-A135-4F9E-B3DF-F8204FACE553}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{A159D048-43E4-46C2-BECB-04B49AE3182A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A159D048-43E4-46C2-BECB-04B49AE3182A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A159D048-43E4-46C2-BECB-04B49AE3182A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E374CCB-A135-4F9E-B3DF-F8204FACE553}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E374CCB-A135-4F9E-B3DF-F8204FACE553}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E374CCB-A135-4F9E-B3DF-F8204FACE553}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E374CCB-A135-4F9E-B3DF-F8204FACE553}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

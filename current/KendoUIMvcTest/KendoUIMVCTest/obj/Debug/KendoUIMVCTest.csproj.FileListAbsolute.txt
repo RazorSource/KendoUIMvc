@@ -167,3 +167,5 @@ C:\Projects\KendoUIMvc\current\KendoUIMvcTest\KendoUIMVCTest\bin\Microsoft.Owin.
 C:\Projects\KendoUIMvc\current\KendoUIMvcTest\KendoUIMVCTest\obj\Debug\KendoUIMVCTest.csprojResolveAssemblyReference.cache
 C:\Projects\KendoUIMvc\current\KendoUIMvcTest\KendoUIMVCTest\obj\Debug\KendoUIMVCTest.dll
 C:\Projects\KendoUIMvc\current\KendoUIMvcTest\KendoUIMVCTest\obj\Debug\KendoUIMVCTest.pdb
+C:\Projects\KendoUIMvc\current\KendoUIMvcTest\KendoUIMVCTest\bin\CommonMvc.dll
+C:\Projects\KendoUIMvc\current\KendoUIMvcTest\KendoUIMVCTest\bin\CommonMvc.pdb

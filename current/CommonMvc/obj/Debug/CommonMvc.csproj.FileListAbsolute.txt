@@ -1,0 +1,10 @@
+C:\Projects\KendoUIMvc\current\CommonMvc\CommonMvc\bin\Debug\CommonMvc.dll
+C:\Projects\KendoUIMvc\current\CommonMvc\CommonMvc\bin\Debug\CommonMvc.pdb
+C:\Projects\KendoUIMvc\current\CommonMvc\CommonMvc\obj\Debug\CommonMvc.csprojResolveAssemblyReference.cache
+C:\Projects\KendoUIMvc\current\CommonMvc\CommonMvc\obj\Debug\CommonMvc.dll
+C:\Projects\KendoUIMvc\current\CommonMvc\CommonMvc\obj\Debug\CommonMvc.pdb
+C:\Projects\KendoUIMvc\current\CommonMvc\obj\Debug\CommonMvc.dll
+C:\Projects\KendoUIMvc\current\CommonMvc\obj\Debug\CommonMvc.pdb
+C:\Projects\KendoUIMvc\current\CommonMvc\bin\Debug\CommonMvc.dll
+C:\Projects\KendoUIMvc\current\CommonMvc\bin\Debug\CommonMvc.pdb
+C:\Projects\KendoUIMvc\current\CommonMvc\obj\Debug\CommonMvc.csprojResolveAssemblyReference.cache

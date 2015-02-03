@@ -7,6 +7,24 @@
   margin-right: auto;
 }
 
+.km-razor-grid-wrapper
+{
+    position: relative;
+}
+
+/*
+.km-razor-grid-wrapper tbody
+{
+    height: 500px;    
+}
+
+.km-razor-grid-wrapper tr
+{
+    display: table-row;
+    height: 40px;
+}
+*/
+
 .km-panel-action-footer
 {
     border-top: 1px solid #e7e7e7;

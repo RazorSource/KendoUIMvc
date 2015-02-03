@@ -17,7 +17,7 @@ namespace KendoUIMVCTest.Areas.Demo
             context.MapRoute(
                 "Demo_default",
                 "Demo/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional }
+                new { controller="DemoHome", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

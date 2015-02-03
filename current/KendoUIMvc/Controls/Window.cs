@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using System.Web.Mvc.Ajax;
+using CommonMvc.Razor.Controls;
 
 namespace KendoUIMvc.Controls
 {
-    public class Window<TModel> : IDisposable
+    public class Window<TModel> : IWindow<TModel>
     {
         protected bool disposed;
         protected HtmlHelper<TModel> htmlHelper;
@@ -38,7 +39,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="width">Width of the window in pixels.</param>
         /// <returns></returns>
-        public Window<TModel> SetWidth(int width)
+        public IWindow<TModel> SetWidth(int width)
         {
             this.width = width;
 
@@ -50,7 +51,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="title">Title to display.</param>
         /// <returns></returns>
-        public Window<TModel> SetTitle(string title)
+        public IWindow<TModel> SetTitle(string title)
         {
             this.title = title;
 
@@ -63,7 +64,7 @@ namespace KendoUIMvc.Controls
         /// <param name="showOnLoad">True if the window should be displayed when the page initially loads.  The
         /// default value is false.</param>
         /// <returns></returns>
-        public Window<TModel> SetShowOnLoad(bool showOnLoad)
+        public IWindow<TModel> SetShowOnLoad(bool showOnLoad)
         {
             this.showOnLoad = showOnLoad;
 
@@ -78,7 +79,7 @@ namespace KendoUIMvc.Controls
         /// <param name="controllerName">The controller used to post data.  If null, the current controller is used.</param>
         /// <param name="ajaxOptions">AjaxOptions to add to the auto-included AjaxForm on the window.</param>
         /// <returns></returns>
-        public Window<TModel> SetAjaxActions(string actionName, string controllerName = null, AjaxOptions ajaxOptions = null)
+        public IWindow<TModel> SetAjaxActions(string actionName, string controllerName = null, AjaxOptions ajaxOptions = null)
         {
             this.ajaxForm = new AjaxForm<TModel>(this.htmlHelper, this.ajaxHelper, this.name + "Form", actionName, controllerName);
 
@@ -96,7 +97,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="ajaxForm">The AjaxForm to embed in the window.</param>
         /// <returns></returns>
-        public Window<TModel> SetAjaxForm(AjaxForm<TModel> ajaxForm)
+        public IWindow<TModel> SetAjaxForm(AjaxForm<TModel> ajaxForm)
         {
             this.ajaxForm = ajaxForm;
             return this;
@@ -107,13 +108,13 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="modal">True if the window should open as a modal window and disable the page when opening.</param>
         /// <returns></returns>
-        public Window<TModel> SetModal(bool modal)
+        public IWindow<TModel> SetModal(bool modal)
         {
             this.modal = modal;
             return this;
         }
 
-        public Window<TModel> RenderBegin()
+        public IWindow<TModel> RenderBegin()
         {
             StringBuilder html = new StringBuilder();
 
@@ -210,6 +211,24 @@ namespace KendoUIMvc.Controls
                             visible: " + MvcHtmlHelper.GetJavascriptBoolean(this.showOnLoad) + @"");
 
             return attributes.ToString();
+        }
+
+        public IWindow<TModel> SetHtmlHelper(HtmlHelper<TModel> htmlHelper)
+        {
+            this.htmlHelper = htmlHelper;
+            return this;
+        }
+
+        public IWindow<TModel> SetAjaxHelper(AjaxHelper<TModel> ajaxHelper)
+        {
+            this.ajaxHelper = ajaxHelper;
+            return this;
+        }
+
+        public IWindow<TModel> SetName(string name)
+        {
+            this.name = name;
+            return this;
         }
     }
 }

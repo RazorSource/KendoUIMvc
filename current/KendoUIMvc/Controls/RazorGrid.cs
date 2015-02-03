@@ -7,10 +7,25 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Mvc.Ajax;
 using System.Linq.Expressions;
+using CommonMvc.Razor.Controls;
 
 namespace KendoUIMvc.Controls
 {
-    public class RazorGrid<TModel>
+    public class RazorGrid<TModel, TKeyProperty> : RazorGrid<TModel>
+    {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="htmlHelper">MVC HTML Helper used to generate controls.</param>
+        /// <param name="name">Name of the grid.</param>
+        /// <param name="keyProperty">The key property on the model.</param>
+        public RazorGrid(HtmlHelper<TModel> htmlHelper, AjaxHelper<TModel> ajaxHelper, string name, Expression<Func<TModel, TKeyProperty>> keyExpression)
+            : base(htmlHelper, ajaxHelper, name, MvcHtmlHelper.GetExpressionPropertyId(htmlHelper, keyExpression))
+        {
+        }
+    }
+
+    public class RazorGrid<TModel> : IGrid<TModel>
     {
         protected const string EDIT_COLUMN_ID = "_edit";
         protected const string DELETE_COLUMN_ID = "_delete";
@@ -26,7 +41,7 @@ namespace KendoUIMvc.Controls
         protected bool pageData;
         protected int pageSize;
         protected bool serverPaging;
-        protected string containerColumnStyle;
+        protected string containerCssClass;
         protected string keyProperty;
         protected RazorGridWindow<TModel> editWindow;
         protected RazorGridWindow<TModel> addWindow;
@@ -51,7 +66,7 @@ namespace KendoUIMvc.Controls
             this.pageData = true;
             this.pageSize = 10;
             this.serverPaging = true;
-            this.containerColumnStyle = "col-md-12";
+            this.containerCssClass = "col-md-12";
             this.keyProperty = keyProperty;
         }
 
@@ -62,7 +77,7 @@ namespace KendoUIMvc.Controls
         /// <param name="label">Label to display on the column.</param>
         /// <param name="width">Optional fixed column width to apply to the column.</param>
         /// <returns></returns>
-        public RazorGrid<TModel> AddColumn(string name, string label, int? width = null)
+        public IGrid<TModel> AddColumn(string name, string label, int? width = null)
         {
             BoundColumn boundColumn = new BoundColumn(label, name);
             boundColumn.Width = width;
@@ -80,7 +95,7 @@ namespace KendoUIMvc.Controls
         /// <param name="label">Optonal label override for the expression.  If the label override is not provided, the label
         /// will be extracted from the bound model property.</param>
         /// <returns></returns>
-        public RazorGrid<TModel> AddColumnFor<TProperty>(Expression<Func<TModel, TProperty>> expression, int? width = null, string label = null)
+        public IGrid<TModel> AddColumnFor<TProperty>(Expression<Func<TModel, TProperty>> expression, int? width = null, string label = null)
         {
             AddColumn(MvcHtmlHelper.GetExpressionPropertyId(this.htmlHelper, expression),
                 label != null ? label : MvcHtmlHelper.GetDisplayText(this.htmlHelper, expression),
@@ -97,7 +112,7 @@ namespace KendoUIMvc.Controls
         /// <param name="format">Format for the date.  The default format is "MM/dd/yyyy"</param>
         /// <param name="width">Optional fixed column width to apply to the column.</param>
         /// <returns></returns>
-        public RazorGrid<TModel> AddDateColumn(string name, string label, string format = "MM/dd/yyyy", int? width = null)
+        public IGrid<TModel> AddDateColumn(string name, string label, string format = "MM/dd/yyyy", int? width = null)
         {
             BoundColumn dateColumn = new BoundColumn(label, "kendo.toString(kendo.parseDate(" + name + "), '" + format + "')");
             dateColumn.Width = width;
@@ -115,7 +130,7 @@ namespace KendoUIMvc.Controls
         /// <param name="label">Optonal label override for the expression.  If the label override is not provided, the label
         /// will be extracted from the bound model property.</param>
         /// <returns></returns>
-        public RazorGrid<TModel> AddDateColumnFor(Expression<Func<TModel, DateTime>> expression, string format = "MM/dd/yyyy", int? width = null,
+        public IGrid<TModel> AddDateColumnFor(Expression<Func<TModel, DateTime>> expression, string format = "MM/dd/yyyy", int? width = null,
             string label = null)
         {
             AddDateColumn(MvcHtmlHelper.GetExpressionPropertyId(this.htmlHelper, expression),
@@ -134,7 +149,7 @@ namespace KendoUIMvc.Controls
         /// <param name="label">Optonal label override for the expression.  If the label override is not provided, the label
         /// will be extracted from the bound model property.</param>
         /// <returns></returns>
-        public RazorGrid<TModel> AddDateColumnFor(Expression<Func<TModel, DateTime?>> expression, string format = "MM/dd/yyyy", int? width = null,
+        public IGrid<TModel> AddDateColumnFor(Expression<Func<TModel, DateTime?>> expression, string format = "MM/dd/yyyy", int? width = null,
             string label = null)
         {
             AddDateColumn(MvcHtmlHelper.GetExpressionPropertyId(this.htmlHelper, expression),
@@ -152,11 +167,14 @@ namespace KendoUIMvc.Controls
         /// <summary>
         /// Adds an edit column that is used to show an edit form associated with the grid data.
         /// </summary>
-        /// <param name="columnLabel"></param>
-        /// <param name="actionName"></param>
-        /// <param name="controllerName"></param>
+        /// <param name="columnLabel">Label for the column header.</param>
+        /// <param name="windowTitle">Title to display on the edit window.</param>
+        /// <param name="formHeader">Header caption to display on the form for the edit window.</param>
+        /// <param name="actionName">Name of the action to invoke to save an edit.</param>
+        /// <param name="controllerName">Name of the controller to invoke to save an edit.</param>
+        /// <param name="areaName">Name of the area for the controller to invoke to save an edit.</param>
         /// <returns></returns>
-        public RazorGrid<TModel> AddWindowEditColumn(string columnLabel, string windowTitle, string formHeader,
+        public IGrid<TModel> AddWindowEditColumn(string columnLabel, string windowTitle, string formHeader,
             string actionName, string controllerName = null, string areaName = null)
         {
             string script = "bind" + this.name + @"Row('" + GetEditWindowName() + @"', '#: " + this.keyProperty + @" #')";
@@ -169,21 +187,32 @@ namespace KendoUIMvc.Controls
             //TODO:  Do something to handle multiple edit columns, or only allow one
             this.remoteEditUrl = MvcHtmlHelper.GetActionUrl(this.htmlHelper, actionName, controllerName, areaName);
 
-            editWindow = new RazorGridWindow<TModel>(this.htmlHelper, this.ajaxHelper, GetEditWindowName(), this)
-                    .SetModal(true)
-                    .SetAjaxForm(new AjaxForm<TModel>(this.htmlHelper, this.ajaxHelper, this.name + "_editForm", actionName, controllerName)
+            // TODO:  Chain calls again when AjaxForm interface is refactored.
+            editWindow = new RazorGridWindow<TModel>(this.htmlHelper, this.ajaxHelper, GetEditWindowName(), this);
+            editWindow.SetModal(true);
+
+
+            editWindow.SetAjaxForm(new AjaxForm<TModel>(this.htmlHelper, this.ajaxHelper, this.name + "_editForm", actionName, controllerName)
                     .SetAjaxOptions(new AjaxOptions() { OnSuccess = this.name + "_saveSuccess", OnFailure = this.name + "_showError" })
                         .SetTitle(formHeader)
                         .SetIncludePanel(false)
                         .AddFooterActionButton(new Button<TModel>(this.htmlHelper, this.name + "_cancelButton", "Cancel").SetOnClick(this.name + "_cancel()"))
                         .AddFooterActionButton(new Button<TModel>(this.htmlHelper, this.name + "_saveButton", "Save").SetOnClick(this.name + "_save()"))
-                    )
-                    .SetTitle(windowTitle) as RazorGridWindow<TModel>;
+                    );
+            
+            editWindow.SetTitle(windowTitle);
 
             return this;
         }
 
-        public RazorGrid<TModel> SetWindowAddButton(string actionName, string controllerName = null, string areaName = null)
+        /// <summary>
+        /// Adds an add button to the grid to add new records.
+        /// </summary>
+        // <param name="actionName">Name of the action to invoke to save a new record.</param>
+        /// <param name="controllerName">Name of the controller to invoke to save a new record.</param>
+        /// <param name="areaName">Name of the area for the controller to invoke to save a new record.</param>
+        /// <returns></returns>
+        public IGrid<TModel> SetWindowAddButton(string actionName, string controllerName = null, string areaName = null)
         {
             this.remoteCreateUrl = MvcHtmlHelper.GetActionUrl(this.htmlHelper, actionName, controllerName, areaName);
 
@@ -191,7 +220,15 @@ namespace KendoUIMvc.Controls
             return this;
         }
 
-        public RazorGrid<TModel> AddDeleteColumn(string columnLabel, string actionName, string controllerName = null, string areaName = null)
+        /// <summary>
+        /// Adds a delete column that is used to delete a record.
+        /// </summary>
+        /// <param name="columnLabel">Label for the column header.</param>
+        /// <param name="actionName">Name of the action to invoke the delete.</param>
+        /// <param name="controllerName">Name of the controller to invoke the delete.</param>
+        /// <param name="areaName">Name of the area for the controller to invoke the delete.</param>
+        /// <returns></returns>
+        public IGrid<TModel> AddDeleteColumn(string columnLabel, string actionName, string controllerName = null, string areaName = null)
         {
             this.remoteDeleteUrl = MvcHtmlHelper.GetActionUrl(this.htmlHelper, actionName, controllerName, areaName);
 
@@ -221,7 +258,7 @@ namespace KendoUIMvc.Controls
         /// <param name="controller">Optional controller name.  If not specified the current controller name is used.</param>
         /// <param name="area">Optional area name.  If not specified the current area name is used.</param>
         /// <returns></returns>
-        public RazorGrid<TModel> SetRemoteDataSource(string action, string controller = null, string area = null)
+        public IGrid<TModel> SetRemoteDataSource(string action, string controller = null, string area = null)
         {
             this.remoteDataSourceUrl = MvcHtmlHelper.GetActionUrl(this.htmlHelper, action, controller, area);
 
@@ -233,7 +270,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="pageData">Flag indicating if data should be paged.</param>
         /// <returns></returns>
-        public RazorGrid<TModel> SetPageData(bool pageData)
+        public IGrid<TModel> SetPageData(bool pageData)
         {
             this.pageData = pageData;
 
@@ -245,7 +282,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="pageSize">The number of records to display on a page.</param>
         /// <returns></returns>
-        public RazorGrid<TModel> SetPageSize(int pageSize)
+        public IGrid<TModel> SetPageSize(int pageSize)
         {
             this.pageSize = pageSize;
 
@@ -256,11 +293,11 @@ namespace KendoUIMvc.Controls
         /// Sets the container column style that is used to determine the bootstrap layout for the grids container.  This can be used to effectively set the width of the grid.
         /// The default container column style is col-md-12.
         /// </summary>
-        /// <param name="containerColumnStyle">The bootstrap column style to apply to the container.</param>
+        /// <param name="containerCssClass">The bootstrap column style to apply to the container.</param>
         /// <returns></returns>
-        public RazorGrid<TModel> SetContainerColumnStyle(string containerColumnStyle)
+        public IGrid<TModel> SetGridContainerClass(string containerCssClass)
         {
-            this.containerColumnStyle = containerColumnStyle;
+            this.containerCssClass = containerCssClass;
 
             return this;
         }
@@ -272,7 +309,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="serverPaging">True if paging will occur server side.</param>
         /// <returns></returns>
-        public RazorGrid<TModel> SetServerPaging(bool serverPaging)
+        public IGrid<TModel> SetServerPaging(bool serverPaging)
         {
             this.serverPaging = serverPaging;
 
@@ -284,7 +321,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="deleteConfirmationTitle">Text to display on the delete confirmation title.</param>
         /// <returns></returns>
-        public RazorGrid<TModel> SetDeleteConfirmationTitle(string deleteConfirmationTitle)
+        public IGrid<TModel> SetDeleteConfirmationTitle(string deleteConfirmationTitle)
         {
             this.deleteConfirmationTitle = deleteConfirmationTitle;
 
@@ -296,7 +333,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="deleteConfirmationMessage">Message to display on the delete confirmation.</param>
         /// <returns></returns>
-        public RazorGrid<TModel> SetDeleteConfirmationMessage(string deleteConfirmationMessage)
+        public IGrid<TModel> SetDeleteConfirmationMessage(string deleteConfirmationMessage)
         {
             this.deleteConfirmationMessage = deleteConfirmationMessage;
 
@@ -309,7 +346,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="editTooltip">Text to display on the edit tooltip.  A value of null will cause the tooltip to not display.</param>
         /// <returns></returns>
-        public RazorGrid<TModel> SetEditTooltip(string editTooltip)
+        public IGrid<TModel> SetEditTooltip(string editTooltip)
         {
             this.editTooltip = editTooltip;
 
@@ -329,7 +366,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="deleteTooltip">Text to display on the delete tooltip.  A value of null will cause the tooltip to not display.</param>
         /// <returns></returns>
-        public RazorGrid<TModel> SetDeleteTooltip(string deleteTooltip)
+        public IGrid<TModel> SetDeleteTooltip(string deleteTooltip)
         {
             this.deleteTooltip = deleteTooltip;
 
@@ -362,6 +399,43 @@ namespace KendoUIMvc.Controls
             return notificationName;
         }
 
+        /// <summary>
+        /// Gets the edit window control for the grid.
+        /// </summary>
+        /// <returns></returns>
+        public IWindow<TModel> GetEditWindow()
+        {
+            return this.editWindow;
+        }
+
+        public IGrid<TModel> SetHtmlHelper(HtmlHelper<TModel> htmlHelper)
+        {
+            this.htmlHelper = htmlHelper;
+            return this;
+        }
+
+        public IGrid<TModel> SetAjaxHelper(AjaxHelper<TModel> ajaxHelper)
+        {
+            this.ajaxHelper = ajaxHelper;
+            return this;
+        }
+
+        public IGrid<TModel> SetName(string name)
+        {
+            this.name = name;
+            return this;
+        }
+
+        public IGrid<TModel> SetKeyProperty(string keyProperty)
+        {
+            this.keyProperty = keyProperty;
+            return this;
+        }
+
+        /// <summary>
+        /// Builds the HTML necessary to render the control.
+        /// </summary>
+        /// <returns>An MvcHtmlString that contains all HTML and script necessary to render the grid control.</returns>
         public MvcHtmlString Render()
         {
             StringBuilder html = new StringBuilder();
@@ -383,8 +457,8 @@ namespace KendoUIMvc.Controls
 
             html.Append(@"
             <div id=""" + this.name + @"Container"" class=""container"">
-                <div class=""row"">
-                    <div class=""" + this.containerColumnStyle + @""" id=""" + this.name + @"Wrapper"" style=""position: relative;"">
+                <div class=""row " + this.containerCssClass + @""">
+                    <div class=""km-razor-grid-wrapper"" id=""" + this.name + @"Wrapper"">
                         <table id=""" + this.name + @""" class=""table table-striped table-bordered table-hover"">
                             <thead>
                                 <tr>
@@ -769,15 +843,6 @@ namespace KendoUIMvc.Controls
             {
                 return this.ColumnId;
             }
-        }
-
-        /// <summary>
-        /// Gets the edit window control for the grid.
-        /// </summary>
-        /// <returns></returns>
-        public Window<TModel> GetEditWindow()
-        {
-            return this.editWindow;
-        }
+        }        
     }
 }

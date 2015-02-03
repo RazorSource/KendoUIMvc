@@ -1,7 +1,7 @@
 ﻿@model KendoUIMVCTest.Models.DemoModel
 
-@using KendoUIMvc.Controls
 @using KendoUIMVCTest.Models
+@using CommonMvc.Razor.Controls
 
 @{
     ViewBag.Title = "Kendo UI MVC Bound Razor Grid";
@@ -9,13 +9,13 @@
 
 <h2>Bound Razor Grid</h2>
 
-@{  RazorGrid<DemoModel> grid = UI.RazorGrid("gridSample", "Id")
+@{  IGrid<DemoModel> grid = UI.Grid("gridSample", "Id")
         .SetRemoteDataSource("GetData", "RazorGrid", "Demo")
         .SetWindowAddButton("Add", "RazorGrid")
         .SetPageSize(4)
         .SetPageData(true)
         .SetServerPaging(true)
-        .SetContainerColumnStyle("col-md-6")
+        .SetGridContainerClass("col-md-6")
         .AddWindowEditColumn("", "Maintain Demo Data", "Demo Data", "Edit", "RazorGrid")
         .AddDeleteColumn("", "Delete", "RazorGrid")
         .AddColumnFor(model => model.FavoriteDay)
