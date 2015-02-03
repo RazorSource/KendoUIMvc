@@ -99,9 +99,9 @@ namespace KendoUIMvc.Controls
         }
 
         /// <summary>
-        /// Sets the label column style that is used to determine the bootstrap layout for the label.
+        /// Sets the control style that is used to determine the bootstrap layout for the label.
         /// </summary>
-        /// <param name="controlStyle">The bootstrap label column style.  The default column style for the column
+        /// <param name="controlStyle">The bootstrap label style.  The default style for the column
         /// is col-md-10.</param>
         /// <returns></returns>
         public TControl SetControlStyle(string controlStyle)
@@ -114,7 +114,7 @@ namespace KendoUIMvc.Controls
         /// Sets the group column style that is used to determine the bootstrap layout for the form group element,
         /// which contains the label, control and any related validation.
         /// </summary>
-        /// <param name="controlStyle">The bootstrap label column style.  A default column style for the group does not exist.</param>
+        /// <param name="groupStyle">The group style.  A default style for the group does not exist.</param>
         /// <returns></returns>
         public TControl SetGroupStyle(string groupStyle)
         {

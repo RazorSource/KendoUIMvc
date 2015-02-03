@@ -6,10 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
+using CommonMvc.Razor.Controls;
 
 namespace KendoUIMvc.Controls
 {
-    public class DropDownList<TModel, TProperty> : ControlBase<TModel, TProperty, DropDownList<TModel, TProperty>>
+    public class DropDownList<TModel, TProperty> : ControlBase<TModel, TProperty, IDropDownList<TModel, TProperty>>, IDropDownList<TModel, TProperty>
     {
         protected IList<SelectListItem> selectListDataSource;
 
@@ -35,7 +36,12 @@ namespace KendoUIMvc.Controls
             }
         }
 
-        public DropDownList<TModel, TProperty> SetDataSource(IList<SelectListItem> dataSource)
+        /// <summary>
+        /// Sets the server side data source to use to populate the drop down list options.
+        /// </summary>
+        /// <param name="dataSource">List of select list items to use for the drop down options.</param>
+        /// <returns></returns>
+        public IDropDownList<TModel, TProperty> SetDataSource(IList<SelectListItem> dataSource)
         {
             this.selectListDataSource = dataSource;
 

@@ -9,7 +9,7 @@ using KendoUIMvc.Util;
 
 namespace KendoUIMvc.Controls
 {
-    public class ConfirmationDialog<TModel>
+    public class ConfirmationDialog<TModel> : IConfirmationDialog<TModel>
     {
         protected const string YES = "yes";
         protected const string NO = "no";
@@ -49,7 +49,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="noAction">Javascript function to call.</param>
         /// <returns></returns>
-        public ConfirmationDialog<TModel> SetNoAction(string noAction)
+        public IConfirmationDialog<TModel> SetNoAction(string noAction)
         {
             this.noAction = noAction;
             return this;
@@ -63,7 +63,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="cancelAction">Cancel function to call.</param>
         /// <returns></returns>
-        public ConfirmationDialog<TModel> SetCancelAction(string cancelAction)
+        public IConfirmationDialog<TModel> SetCancelAction(string cancelAction)
         {
             this.cancelAction = cancelAction;
             return this;
@@ -74,7 +74,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="showCancel">True if the cancel button should be shown.</param>
         /// <returns></returns>
-        public ConfirmationDialog<TModel> SetShowCancel(bool showCancel)
+        public IConfirmationDialog<TModel> SetShowCancel(bool showCancel)
         {
             this.showCancel = showCancel;
             return this;
@@ -85,7 +85,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="width">Width in pixels.</param>
         /// <returns></returns>
-        public ConfirmationDialog<TModel> SetWidth(int width)
+        public IConfirmationDialog<TModel> SetWidth(int width)
         {
             this.width = width;
             return this;
@@ -96,7 +96,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="yesText">Text to display on Yes button.</param>
         /// <returns></returns>
-        public ConfirmationDialog<TModel> SetYesText(string yesText)
+        public IConfirmationDialog<TModel> SetYesText(string yesText)
         {
             this.yesText = yesText;
             return this;
@@ -107,7 +107,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="noText">Text to display on No button.</param>
         /// <returns></returns>
-        public ConfirmationDialog<TModel> SetNoText(string noText)
+        public IConfirmationDialog<TModel> SetNoText(string noText)
         {
             this.noText = noText;
             return this;
@@ -118,12 +118,16 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="cancelText">Text to display on Cancel button.</param>
         /// <returns></returns>
-        public ConfirmationDialog<TModel> SetCancelText(string cancelText)
+        public IConfirmationDialog<TModel> SetCancelText(string cancelText)
         {
             this.cancelText = cancelText;
             return this;
         }
 
+        /// <summary>
+        /// Gets the HTML necessary to render the control.
+        /// </summary>
+        /// <returns>The HTML as a string.</returns>
         public string GetControlString()
         {
             StringBuilder html = new StringBuilder();

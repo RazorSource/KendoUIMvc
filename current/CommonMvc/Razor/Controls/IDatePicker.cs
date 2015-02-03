@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CommonMvc.Razor.Controls
 {
-    public interface IDatePicker<TModel, TProperty>
+    public interface IDatePicker<TModel, TProperty> : IFormControl<TModel, TProperty, IDatePicker<TModel, TProperty>>
     {
 
     }

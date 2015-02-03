@@ -7,7 +7,7 @@ using CommonMvc.Models;
 
 namespace CommonMvc.Razor.Controls
 {
-    public interface IForm<TModel, TControl> : IDisposable
+    public interface IForm<TModel, TControl> : IDisposable where TControl : class
     {
         /// <summary>
         /// Sets the form layout to use for controls on the form.  Vertical will place labels above the form.  Horizontal will

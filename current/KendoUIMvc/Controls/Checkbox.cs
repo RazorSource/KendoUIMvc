@@ -10,10 +10,11 @@ using KendoUIMvc.Models;
 using KendoUIMvc.Util;
 using CommonMvc.Util;
 using CommonMvc.Models;
+using CommonMvc.Razor.Controls;
 
 namespace KendoUIMvc.Controls
 {
-    public class Checkbox<TModel, TProperty> : ControlBase<TModel, TProperty, Checkbox<TModel, TProperty>>
+    public class Checkbox<TModel, TProperty> : ControlBase<TModel, TProperty, ICheckbox<TModel, TProperty>>, ICheckbox<TModel, TProperty>
     {
         protected bool checkedByDefault;
         protected bool showLabelRight;
@@ -33,7 +34,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="checkedByDefault">True if the checkbox should initially be checked.</param>
         /// <returns></returns>
-        public Checkbox<TModel, TProperty> SetCheckedByDefault(bool checkedByDefault)
+        public ICheckbox<TModel, TProperty> SetCheckedByDefault(bool checkedByDefault)
         {
             this.checkedByDefault = checkedByDefault;
             return this;
@@ -44,7 +45,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="showLabelRight">True if the label should be shown to the right of the checkbox.</param>
         /// <returns></returns>
-        public Checkbox<TModel, TProperty> SetShowLabelRight(bool showLabelRight)
+        public ICheckbox<TModel, TProperty> SetShowLabelRight(bool showLabelRight)
         {
             this.showLabelRight = showLabelRight;
             return this;

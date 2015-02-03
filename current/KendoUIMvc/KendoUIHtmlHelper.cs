@@ -30,7 +30,7 @@ namespace KendoUIMvc
         /// </summary>
         /// <param name="expression">Expression used to bind a control to a property.</param>
         /// <returns></returns>
-        public DatePicker<TModel, DateTime?> DatePickerFor(Expression<Func<TModel, DateTime?>> expression)
+        public IDatePicker<TModel, DateTime?> DatePickerFor(Expression<Func<TModel, DateTime?>> expression)
         {
             return new DatePicker<TModel, DateTime?>(this.htmlHelper, expression);
         }
@@ -40,7 +40,7 @@ namespace KendoUIMvc
         /// </summary>
         /// <param name="expression">Expression used to bind a control to a property.</param>
         /// <returns></returns>
-        public DatePicker<TModel, DateTime> DatePickerFor(Expression<Func<TModel, DateTime>> expression)
+        public IDatePicker<TModel, DateTime> DatePickerFor(Expression<Func<TModel, DateTime>> expression)
         {
             return new DatePicker<TModel, DateTime>(this.htmlHelper, expression);
         }
@@ -51,7 +51,7 @@ namespace KendoUIMvc
         /// <param name="name">Name of the control.</param>
         /// <param name="value">Initial value of the control.</param>
         /// <returns></returns>
-        public DatePicker<TModel, DateTime> DatePicker(string name, DateTime? value = null)
+        public IDatePicker<TModel, DateTime> DatePicker(string name, DateTime? value = null)
         {
             return new DatePicker<TModel, DateTime>(this.htmlHelper, name, value);
         }
@@ -140,7 +140,7 @@ namespace KendoUIMvc
         /// <typeparam name="TProperty">The data type of the property being bound.</typeparam>
         /// <param name="expression">Expression used to bind a control to a property.</param>
         /// <returns></returns>
-        public DropDownList<TModel, TProperty> DropDownListFor<TProperty>(Expression<Func<TModel, TProperty>> expression)
+        public IDropDownList<TModel, TProperty> DropDownListFor<TProperty>(Expression<Func<TModel, TProperty>> expression)
         {
             return new DropDownList<TModel, TProperty>(this.htmlHelper, expression);
         }
@@ -151,9 +151,9 @@ namespace KendoUIMvc
         /// <param name="name">Name of the control.</param>
         /// <param name="value">Initial value of the control.</param>
         /// <returns></returns>
-        public DropDownList<TModel, object> DropDownList(string name, object value = null)
+        public IDropDownList<TModel, TProperty> DropDownList<TProperty>(string name, TProperty value = default(TProperty))
         {
-            return new DropDownList<TModel, object>(this.htmlHelper, name, value);
+            return new DropDownList<TModel, TProperty>(this.htmlHelper, name, value);
         }
 
         /// <summary>
@@ -267,7 +267,7 @@ namespace KendoUIMvc
         /// <param name="message">Message to display.</param>
         /// <param name="yesAction">Javascript to invoke if the yes option is selected.</param>
         /// <returns></returns>
-        public ConfirmationDialog<TModel> ConfirmationDialog(string name, string title, string message, string yesAction)
+        public IConfirmationDialog<TModel> ConfirmationDialog(string name, string title, string message, string yesAction)
         {
             return new ConfirmationDialog<TModel>(this.htmlHelper, name, title, message, yesAction);
         }
@@ -277,7 +277,7 @@ namespace KendoUIMvc
         /// </summary>
         /// <param name="expression">Expression used to bind a control to a property.</param>
         /// <returns></returns>
-        public Checkbox<TModel, bool> CheckboxFor(Expression<Func<TModel, bool>> expression)
+        public ICheckbox<TModel, bool> CheckboxFor(Expression<Func<TModel, bool>> expression)
         {
             return new Checkbox<TModel, bool>(this.htmlHelper, expression);
         }
@@ -287,7 +287,7 @@ namespace KendoUIMvc
         /// </summary>
         /// <param name="expression">Expression used to bind a control to a property.</param>
         /// <returns></returns>
-        public Checkbox<TModel, bool?> CheckboxFor(Expression<Func<TModel, bool?>> expression)
+        public ICheckbox<TModel, bool?> CheckboxFor(Expression<Func<TModel, bool?>> expression)
         {
             return new Checkbox<TModel, bool?>(this.htmlHelper, expression);
         }
@@ -298,7 +298,7 @@ namespace KendoUIMvc
         /// <param name="name">Name of the control.</param>
         /// <param name="value">Initial value of the control.</param>
         /// <returns></returns>
-        public Checkbox<TModel, bool?> Checkbox(string name, bool? value)
+        public ICheckbox<TModel, bool?> Checkbox(string name, bool? value)
         {
             return new Checkbox<TModel, bool?>(this.htmlHelper, name, value);
         }

@@ -7,10 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
+using CommonMvc.Razor.Controls;
 
 namespace KendoUIMvc.Controls
 {
-    public class DatePicker<TModel, TProperty> : ControlBase<TModel, TProperty, DatePicker<TModel, TProperty>>
+    public class DatePicker<TModel, TProperty> : ControlBase<TModel, TProperty, IDatePicker<TModel, TProperty>>, IDatePicker<TModel, TProperty>
     {
         public DatePicker(HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression) :
             base(htmlHelper, expression)

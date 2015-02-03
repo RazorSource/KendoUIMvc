@@ -50,6 +50,7 @@
     <Compile Include="Razor\Controls\IDatePicker.cs" />
     <Compile Include="Razor\Controls\IDropDownList.cs" />
     <Compile Include="Razor\Controls\IForm.cs" />
+    <Compile Include="Razor\Controls\IFormControl.cs" />
     <Compile Include="Razor\Controls\IGrid.cs" />
     <Compile Include="Razor\Controls\IHidden.cs" />
     <Compile Include="Razor\Controls\IHtmlForm.cs" />
