@@ -8,6 +8,8 @@ using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using KendoUIMvc.Models;
 using KendoUIMvc.Util;
+using CommonMvc.Util;
+using CommonMvc.Models;
 
 namespace KendoUIMvc.Controls
 {

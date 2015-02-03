@@ -20,7 +20,7 @@ namespace KendoUIMvc.Controls
         protected int width;
         protected bool showOnLoad;
         protected string title;
-        protected AjaxForm<TModel> ajaxForm;
+        protected IAjaxForm<TModel> ajaxForm;
         protected bool modal;
 
         public Window(HtmlHelper<TModel> htmlHelper, AjaxHelper<TModel> ajaxHelper, string name)
@@ -97,7 +97,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="ajaxForm">The AjaxForm to embed in the window.</param>
         /// <returns></returns>
-        public IWindow<TModel> SetAjaxForm(AjaxForm<TModel> ajaxForm)
+        public IWindow<TModel> SetAjaxForm(IAjaxForm<TModel> ajaxForm)
         {
             this.ajaxForm = ajaxForm;
             return this;
@@ -142,7 +142,7 @@ namespace KendoUIMvc.Controls
         /// Gets the AjaxForm embedded within the window.
         /// </summary>
         /// <returns></returns>
-        public AjaxForm<TModel> GetAjaxForm()
+        public IAjaxForm<TModel> GetAjaxForm()
         {
             return this.ajaxForm;
         }
@@ -191,11 +191,11 @@ namespace KendoUIMvc.Controls
         {
             StringBuilder attributes = new StringBuilder();
 
-            if (this.ajaxForm != null && this.ajaxForm.GetNotification() != null)
+            if (this.ajaxForm != null && this.ajaxForm.GetMessageDisplay() != null)
             {
                 // Hide any error message when the window is closed.
                 attributes.Append(@"
-                            close: function () { " + this.ajaxForm.GetNotification().GetCallHideScript() + @" },");
+                            close: function () { " + this.ajaxForm.GetMessageDisplay().GetCallHideScript() + @" },");
             }
 
             if (this.modal)

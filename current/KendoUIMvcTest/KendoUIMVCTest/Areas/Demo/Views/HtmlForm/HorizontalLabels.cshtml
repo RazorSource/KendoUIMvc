@@ -8,8 +8,8 @@
 
 @using (UI.Form("frmSample", "Index", "HtmlForm")
            .SetTitle("Horizontal Labels")
-           .SetFormLayout(KendoUIMvc.Models.ViewSettings.FormLayoutOption.Horizontal)
-           //.SetFormColumnStyle("col-md-6") // Each column uses half the space
+           .SetFormLayout(CommonMvc.Models.ViewSettings.FormLayoutOption.Horizontal)
+           //.SetFormStyle("col-md-6") // Each column uses half the space
            .AddFooterActionButton(UI.Button("btnCancel", "Cancel").SetOnClick("handleCancel()"))
            .AddFooterActionButton(UI.SubmitButton("btnSave", "Save"))
            .RenderBegin())

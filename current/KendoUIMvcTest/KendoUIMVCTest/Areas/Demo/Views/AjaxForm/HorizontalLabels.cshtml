@@ -7,7 +7,7 @@
 <h2>AJAX Form - Horizontal</h2>
 
 @using (UI.AjaxForm("frmSample", "Index", "AjaxForm")
-           .SetFormLayout(KendoUIMvc.Models.ViewSettings.FormLayoutOption.Horizontal)
+           .SetFormLayout(CommonMvc.Models.ViewSettings.FormLayoutOption.Horizontal)
            .RenderBegin())
 {
     @UI.TextBoxFor(model => model.Id)

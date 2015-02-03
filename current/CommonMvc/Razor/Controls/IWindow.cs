@@ -69,13 +69,13 @@ namespace CommonMvc.Razor.Controls
         /// </summary>
         /// <param name="ajaxForm">The AjaxForm to embed in the window.</param>
         /// <returns></returns>
-        //!!IWindow<TModel> SetAjaxForm(AjaxForm<TModel> ajaxForm);
+        IWindow<TModel> SetAjaxForm(IAjaxForm<TModel> ajaxForm);
 
         /// <summary>
         /// Gets the AjaxForm embedded within the window.
         /// </summary>
         /// <returns></returns>
-        //!!public AjaxForm<TModel> GetAjaxForm()
+        IAjaxForm<TModel> GetAjaxForm();
 
         /// <summary>
         /// Sets a flag indicating if the window should open as a modal window.  The default value is false.

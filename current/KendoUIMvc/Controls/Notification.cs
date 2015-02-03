@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using CommonMvc.Razor.Controls;
 using KendoUIMvc.Util;
 
 namespace KendoUIMvc.Controls
 {
-    public class Notification<TModel>
+    public class Notification<TModel> : IMessageDisplay<TModel>
     {
         protected HtmlHelper<TModel> htmlHelper;
         protected string name;

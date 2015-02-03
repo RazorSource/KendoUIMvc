@@ -7,8 +7,8 @@
 <h2>AJAX Form - Two Columns Horizontal Labels</h2>
 
 @using (UI.AjaxForm("frmSample", "Index", "AjaxForm")
-    .SetDefaultGroupColumnStyle("col-md-6")  // Set the column groups to be 6 of the 12 columns
-    .SetFormLayout(KendoUIMvc.Models.ViewSettings.FormLayoutOption.Horizontal)
+    .SetDefaultGroupStyle("col-md-6")  // Set the column groups to be 6 of the 12 columns
+    .SetFormLayout(CommonMvc.Models.ViewSettings.FormLayoutOption.Horizontal)
     .RenderBegin())
 {
     @UI.TextBoxFor(model => model.Id)

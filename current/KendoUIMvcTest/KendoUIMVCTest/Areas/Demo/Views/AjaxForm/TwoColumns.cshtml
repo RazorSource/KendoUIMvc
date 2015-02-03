@@ -7,7 +7,7 @@
 <h2>AJAX Form - Two Columns</h2>
 
 @using (UI.AjaxForm("frmSample", "Index", "AjaxForm")
-    .SetDefaultGroupColumnStyle("col-md-6")  // Set the column groups to be 6 of the 12 columns
+    .SetDefaultGroupStyle("col-md-6")  // Set the column groups to be 6 of the 12 columns
     .RenderBegin())
 {
     @UI.TextBoxFor(model => model.Id)

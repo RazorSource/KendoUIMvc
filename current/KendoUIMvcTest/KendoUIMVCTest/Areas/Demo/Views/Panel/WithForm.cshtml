@@ -11,8 +11,8 @@
           .RenderBegin())
 {
     using (UI.Form("frmPanel", "WithForm", "Panel")
-            .SetFormLayout(KendoUIMvc.Models.ViewSettings.FormLayoutOption.Horizontal)
-            .SetDefaultGroupColumnStyle("col-md-6")
+            .SetFormLayout(CommonMvc.Models.ViewSettings.FormLayoutOption.Horizontal)
+            .SetDefaultGroupStyle("col-md-6")
             .RenderBegin())
     {
         @UI.TextBoxFor(model => model.Id)

@@ -12,15 +12,14 @@ namespace KendoUIMvc.Filters
     public class KendoUIMvcExceptionFilter : HandleErrorAttribute
     {
         public override void OnException(ExceptionContext exceptionContext)
-        {
-            // Flag the exception as handled.
-            exceptionContext.ExceptionHandled = true;
-            exceptionContext.HttpContext.Response.TrySkipIisCustomErrors = true;
-
+        {           
             bool isAjaxRequest = exceptionContext.RequestContext.HttpContext.Request.IsAjaxRequest();
 
             if (isAjaxRequest)
             {
+                // Flag the exception as handled.
+                exceptionContext.ExceptionHandled = true;
+                exceptionContext.HttpContext.Response.TrySkipIisCustomErrors = true;
                 HandleAjaxException(exceptionContext.HttpContext.Response, exceptionContext.Exception);
             }
 

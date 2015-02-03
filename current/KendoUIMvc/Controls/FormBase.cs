@@ -5,8 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
+using CommonMvc.Models;
+using CommonMvc.Razor.Controls;
 using KendoUIMvc.Models;
 using KendoUIMvc.Util;
+using CommonMvc.Util;
 
 namespace KendoUIMvc.Controls
 {
@@ -19,8 +22,8 @@ namespace KendoUIMvc.Controls
         protected string actionName;
         protected string controllerName;
         protected ViewSettings.FormLayoutOption? formLayout;
-        protected string formColumnStyle;
-        protected IList<Button<TModel>> footerActionButtons = new List<Button<TModel>>();
+        protected string formStyle;
+        protected IList<IButton<TModel>> footerActionButtons = new List<IButton<TModel>>();
         protected bool includePanel;
         protected string title;
         protected Panel<TModel> panel;
@@ -71,45 +74,45 @@ namespace KendoUIMvc.Controls
         /// <param name="defaultControlColumnStyle">Default column style to apply to controls.  The default value
         /// is col-md-10.</param>
         /// <returns></returns>
-        public TControl SetDefaultControlColumnStyle(string defaultControlColumnStyle)
+        public TControl SetDefaultControlStyle(string defaultControlStyle)
         {
-            this.htmlHelper.ViewData.GetViewSettings().DefaultControlColumnStyle = defaultControlColumnStyle;
+            this.htmlHelper.ViewData.GetViewSettings().DefaultControlStyle = defaultControlStyle;
             return this as TControl;
         }
 
         /// <summary>
-        /// Sets the default label column style to apply to child elements.
+        /// Sets the default style to apply to child label elements.
         /// </summary>
-        /// <param name="defaultLabelColumnStyle">Default column style to apply to labels.  The default value
+        /// <param name="defaultLabelColumnStyle">Default style to apply to labels.  The default value
         /// is col-md-2.</param>
         /// <returns></returns>
-        public TControl SetDefaultLabelColumnStyle(string defaultLabelColumnStyle)
+        public TControl SetDefaultLabelStyle(string defaultLabelStyle)
         {
-            this.htmlHelper.ViewData.GetViewSettings().DefaultLabelColumnStyle = defaultLabelColumnStyle;
+            this.htmlHelper.ViewData.GetViewSettings().DefaultLabelStyle = defaultLabelStyle;
             return this as TControl;
         }
 
         /// <summary>
-        /// Sets the default group column style to apply to child elements.  The group contains the label and the control.
+        /// Sets the default style to apply to child group elements.  The group contains the label and the control.
         /// </summary>
-        /// <param name="defaultLabelColumnStyle">Default column style to apply to control groups.  The default value
+        /// <param name="defaultLabelStyle">Default style to apply to control groups.  The default value
         /// is to not have a column style on the control group (null).</param>
         /// <returns></returns>
-        public TControl SetDefaultGroupColumnStyle(string defaultGroupColumnStyle)
+        public TControl SetDefaultGroupStyle(string defaultGroupStyle)
         {
-            this.htmlHelper.ViewData.GetViewSettings().DefaultGroupColumnStyle = defaultGroupColumnStyle;
+            this.htmlHelper.ViewData.GetViewSettings().DefaultGroupStyle = defaultGroupStyle;
             return this as TControl;
         }
 
         /// <summary>
-        /// Sets the column style to use for the form.  This can be used to adjust the width of the entire form.
+        /// Sets the style to use for the form.  This can be used to adjust the width of the entire form.
         /// </summary>
-        /// <param name="formColumnStyle">The column style to apply to the form.  The default value
+        /// <param name="formStyle">The style to apply to the form.  The default value
         /// is to not have a column style on the form (null).</param>
         /// <returns></returns>
-        public TControl SetFormColumnStyle(string formColumnStyle)
+        public TControl SetFormStyle(string formStyle)
         {
-            this.formColumnStyle = formColumnStyle;
+            this.formStyle = formStyle;
             return this as TControl;
         }
 
@@ -119,7 +122,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="button">The button to add.</param>
         /// <returns></returns>
-        public TControl AddFooterActionButton(Button<TModel> button)
+        public TControl AddFooterActionButton(IButton<TModel> button)
         {
             this.footerActionButtons.Add(button);
             return this as TControl;
@@ -148,6 +151,11 @@ namespace KendoUIMvc.Controls
             return this as TControl;
         }
 
+        /// <summary>
+        /// Renders the opening tags for the form.  This call should typically be used within a using block to ensure proper closing
+        /// tags are emitted when the form is disposed.
+        /// </summary>
+        /// <returns></returns>
         public TControl RenderBegin()
         {
             ViewSettings viewSettings = this.htmlHelper.ViewData.GetViewSettings();
@@ -158,9 +166,9 @@ namespace KendoUIMvc.Controls
 
             // If a bootstrap column style has been specified for the form, add the class, unless a panel
             // is included,  If a panel is included, the specified style is applied to the panel.
-            if (formColumnStyle != null && !includePanel)
+            if (formStyle != null && !includePanel)
             {
-                classes.Add(formColumnStyle);
+                classes.Add(formStyle);
             }
 
             if (this.formLayout != null && this.formLayout.Value == ViewSettings.FormLayoutOption.Horizontal)
@@ -185,7 +193,7 @@ namespace KendoUIMvc.Controls
                 // If a panel if included, render the start to the panel.  The panel
                 // will be close out in the dispose method.
                 this.panel = new Panel<TModel>(this.htmlHelper, this.formId + "Panel")
-                    .SetPanelColumnStyle(this.formColumnStyle) // Make the panels column style the same as the forms.
+                    .SetPanelColumnStyle(this.formStyle) // Make the panels column style the same as the forms.
                     .RenderBegin();
             }
 
@@ -262,7 +270,7 @@ namespace KendoUIMvc.Controls
         /// Gets the Notification used to display messages related to the form.
         /// </summary>
         /// <returns></returns>
-        public Notification<TModel> GetNotification()
+        public IMessageDisplay<TModel> GetMessageDisplay()
         {
             return notification;
         }

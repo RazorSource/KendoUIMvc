@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using KendoUIMvc.Util;
+using CommonMvc.Razor.Controls;
 
 namespace KendoUIMvc.Controls
 {
-    public class HtmlForm<TModel> : FormBase<TModel, HtmlForm<TModel>>
+    public class HtmlForm<TModel> : FormBase<TModel, IHtmlForm<TModel>>, IHtmlForm<TModel>
     {
         public HtmlForm(HtmlHelper<TModel> htmlHelper, string formId, string actionName, string controllerName)
             : base(htmlHelper, formId, actionName, controllerName)

@@ -468,7 +468,7 @@ namespace KendoUIMvc.Controls
             // Add the add record button.
             if (addWindow != null)
             {
-                Button<TModel> addButton = new Button<TModel>(this.htmlHelper, this.name + "_addButton", "Add")
+                IButton<TModel> addButton = new Button<TModel>(this.htmlHelper, this.name + "_addButton", "Add")
                         .SetIcon("plus")
                         .AddClass("pull-right")
                         .SetOnClick("bind" + this.name + @"Row('" + GetEditWindowName() + @"')");
@@ -648,10 +648,10 @@ namespace KendoUIMvc.Controls
                     }");
 
                 if (this.editWindow != null && this.editWindow.GetAjaxForm() != null &&
-                    this.editWindow.GetAjaxForm().GetNotification() != null)
+                    this.editWindow.GetAjaxForm().GetMessageDisplay() != null)
                 {
                     html.Append(@"
-                    " + this.editWindow.GetAjaxForm().GetNotification().GetCallShowScript("message"));
+                    " + this.editWindow.GetAjaxForm().GetMessageDisplay().GetCallShowScript("message"));
                 }
                 else
                 {

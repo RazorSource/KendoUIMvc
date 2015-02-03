@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\ViewSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Razor\Controls\IAjaxForm.cs" />
     <Compile Include="Razor\Controls\IButton.cs" />
@@ -48,6 +49,7 @@
     <Compile Include="Razor\Controls\IConfirmationDialog.cs" />
     <Compile Include="Razor\Controls\IDatePicker.cs" />
     <Compile Include="Razor\Controls\IDropDownList.cs" />
+    <Compile Include="Razor\Controls\IForm.cs" />
     <Compile Include="Razor\Controls\IGrid.cs" />
     <Compile Include="Razor\Controls\IHidden.cs" />
     <Compile Include="Razor\Controls\IHtmlForm.cs" />
@@ -59,6 +61,7 @@
     <Compile Include="Razor\Controls\ITextBox.cs" />
     <Compile Include="Razor\Controls\IWindow.cs" />
     <Compile Include="Razor\IRazorHtmlHelper.cs" />
+    <Compile Include="Util\ViewDataExtension.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

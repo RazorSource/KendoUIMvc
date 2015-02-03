@@ -86,7 +86,7 @@ namespace KendoUIMvc
         /// <param name="actionName">Action to invoke when the form is submitted.</param>
         /// <param name="controllerName">Name of the controller containing the action.</param>
         /// <returns></returns>
-        public HtmlForm<TModel> BeginForm(string formId, string actionName = null, string controllerName = null)
+        public IHtmlForm<TModel> BeginForm(string formId, string actionName = null, string controllerName = null)
         {
             return new HtmlForm<TModel>(this.htmlHelper, formId, actionName, controllerName)
                 .RenderBegin();
@@ -101,7 +101,7 @@ namespace KendoUIMvc
         /// <param name="actionName">Action to invoke when the form is submitted.</param>
         /// <param name="controllerName">Name of the controller containing the action.</param>
         /// <returns></returns>
-        public HtmlForm<TModel> Form(string formId, string actionName = null, string controllerName = null)
+        public IHtmlForm<TModel> Form(string formId, string actionName = null, string controllerName = null)
         {
             return new HtmlForm<TModel>(this.htmlHelper, formId, actionName, controllerName);
         }
@@ -114,7 +114,7 @@ namespace KendoUIMvc
         /// <param name="actionName">Action to invoke when the form is submitted.</param>
         /// <param name="controllerName">Name of the controller containing the action.</param>
         /// <returns></returns>
-        public AjaxForm<TModel> BeginAjaxForm(string formId, string actionName = null, string controllerName = null)
+        public IAjaxForm<TModel> BeginAjaxForm(string formId, string actionName = null, string controllerName = null)
         {
             return new AjaxForm<TModel>(this.htmlHelper, this.ajaxHelper, formId, actionName, controllerName)
                 .RenderBegin();
@@ -129,7 +129,7 @@ namespace KendoUIMvc
         /// <param name="actionName">Action to invoke when the form is submitted.</param>
         /// <param name="controllerName">Name of the controller containing the action.</param>
         /// <returns></returns>
-        public AjaxForm<TModel> AjaxForm(string formId, string actionName = null, string controllerName = null)
+        public IAjaxForm<TModel> AjaxForm(string formId, string actionName = null, string controllerName = null)
         {
             return new AjaxForm<TModel>(this.htmlHelper, this.ajaxHelper, formId, actionName, controllerName);
         }
@@ -219,7 +219,7 @@ namespace KendoUIMvc
         /// <param name="name">Name of the button.</param>
         /// <param name="label">Text to display on the label.</param>
         /// <returns></returns>
-        public Button<TModel> Button(string name, string label)
+        public IButton<TModel> Button(string name, string label)
         {
             return new Button<TModel>(this.htmlHelper, name, label);
         }
@@ -230,7 +230,7 @@ namespace KendoUIMvc
         /// <param name="name">Name of the button.</param>
         /// <param name="label">Text to display on the label.</param>
         /// <returns></returns>
-        public Button<TModel> SubmitButton(string name, string label)
+        public IButton<TModel> SubmitButton(string name, string label)
         {
             return new Button<TModel>(this.htmlHelper, name, label)
                 .SetSubmit(true)

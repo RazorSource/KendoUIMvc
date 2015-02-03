@@ -7,9 +7,9 @@
 <h2>HTML Form - With Panel</h2>
 
 @using (UI.Form("frmSample", "Index", "HtmlForm")
-    .SetFormLayout(KendoUIMvc.Models.ViewSettings.FormLayoutOption.Horizontal)
+    .SetFormLayout(CommonMvc.Models.ViewSettings.FormLayoutOption.Horizontal)
     .SetIncludePanel(false) // Manually add multiple panels to the form below
-    .SetDefaultGroupColumnStyle("col-md-6")  // Set the column groups to be 6 of the 12 columns
+    .SetDefaultGroupStyle("col-md-6")  // Set the column groups to be 6 of the 12 columns
     .RenderBegin())
 {
     using (UI.Panel("pnlSample")

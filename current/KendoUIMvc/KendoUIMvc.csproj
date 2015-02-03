@@ -74,10 +74,8 @@
     <Compile Include="Models\KendoError.cs" />
     <Compile Include="Models\KendoErrorCollection.cs" />
     <Compile Include="Models\PageOfData.cs" />
-    <Compile Include="Models\ViewSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\MvcHtmlHelper.cs" />
-    <Compile Include="Util\ViewDataExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using CommonMvc.Razor.Controls;
 using KendoUIMvc.Util;
 
 namespace KendoUIMvc.Controls
 {
-    public class Button<TModel>
+    public class Button<TModel> : IButton<TModel>
     {
         protected HtmlHelper<TModel> htmlHelper;
         protected string name;
@@ -38,7 +39,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="acceptsReturn">True if the return key invoke the button action.</param>
         /// <returns></returns>
-        public Button<TModel> SetAcceptsReturn(bool acceptsReturn)
+        public IButton<TModel> SetAcceptsReturn(bool acceptsReturn)
         {
             this.acceptsReturn = acceptsReturn;
             return this;
@@ -49,7 +50,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="submit">True if the button should be marked as a submit button for a form.</param>
         /// <returns></returns>
-        public Button<TModel> SetSubmit(bool submit)
+        public IButton<TModel> SetSubmit(bool submit)
         {
             this.submit = submit;
             return this;
@@ -60,7 +61,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="onClick">Function to call.  As an example DoAction()</param>
         /// <returns></returns>
-        public Button<TModel> SetOnClick(string onClick)
+        public IButton<TModel> SetOnClick(string onClick)
         {
             this.onClick = onClick;
             return this;
@@ -71,7 +72,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="primary">True if the button should be displayed as a primary button.</param>
         /// <returns></returns>
-        public Button<TModel> SetPrimary(bool primary)
+        public IButton<TModel> SetPrimary(bool primary)
         {
             this.primary = primary;
             return this;
@@ -82,7 +83,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="cssClass">CSS class to add.</param>
         /// <returns></returns>
-        public Button<TModel> AddClass(string cssClass)
+        public IButton<TModel> AddClass(string cssClass)
         {
             additionalClasses.Add(cssClass);
             return this;
@@ -93,7 +94,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="icon">Name of the Kendo Icon (i.e. "plus")</param>
         /// <returns></returns>
-        public Button<TModel> SetIcon(string icon)
+        public IButton<TModel> SetIcon(string icon)
         {
             this.icon = icon;
             return this;
@@ -180,6 +181,28 @@ namespace KendoUIMvc.Controls
             MvcHtmlHelper.WriteUnencodedContent(this.htmlHelper, GetControlString());
 
             return "";
+        }
+
+        /// <summary>
+        /// Sets the name of the button.
+        /// </summary>
+        /// <param name="name">Name for the control instance.</param>
+        /// <returns></returns>
+        public IButton<TModel> SetName(string name)
+        {
+            this.name = name;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the text to display on the button.
+        /// </summary>
+        /// <param name="label">Text to display.</param>
+        /// <returns></returns>
+        public IButton<TModel> SetLabel(string label)
+        {
+            this.label = label;
+            return this;
         }
     }
 }

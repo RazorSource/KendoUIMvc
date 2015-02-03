@@ -7,10 +7,11 @@ using System.Web.Mvc;
 using System.Web.Mvc.Ajax;
 using System.Web.Mvc.Html;
 using System.Web.Routing;
+using CommonMvc.Razor.Controls;
 
 namespace KendoUIMvc.Controls
 {
-    public class AjaxForm<TModel> : FormBase<TModel, AjaxForm<TModel>>
+    public class AjaxForm<TModel> : FormBase<TModel, IAjaxForm<TModel>>, IAjaxForm<TModel>
     {
         protected AjaxHelper<TModel> ajaxHelper;
         protected AjaxOptions ajaxOptions;
@@ -28,7 +29,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="ajaxOptions">AjaxOptions instance.</param>
         /// <returns></returns>
-        public AjaxForm<TModel> SetAjaxOptions(AjaxOptions ajaxOptions)
+        public IAjaxForm<TModel> SetAjaxOptions(AjaxOptions ajaxOptions)
         {
             this.ajaxOptions = ajaxOptions;
             return this;
@@ -39,7 +40,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="routeValues">Dictionary of route values.</param>
         /// <returns></returns>
-        public AjaxForm<TModel> SetRouteValues(RouteValueDictionary routeValues)
+        public IAjaxForm<TModel> SetRouteValues(RouteValueDictionary routeValues)
         {
             this.routeValues = routeValues;
             return this;

@@ -8,6 +8,8 @@ using System.Web.Mvc.Html;
 using KendoUIMvc.Util;
 using KendoUIMvc.Models;
 using System.Linq.Expressions;
+using CommonMvc.Models;
+using CommonMvc.Util;
 
 namespace KendoUIMvc.Controls
 {
@@ -26,9 +28,9 @@ namespace KendoUIMvc.Controls
         protected IList<string> labelClasses = new List<string>();
         protected IList<string> controlClasses = new List<string>();
         protected string labelText;
-        protected string labelColumnStyle;
-        protected string controlColumnStyle;
-        protected string groupColumnStyle;
+        protected string labelStyle;
+        protected string controlStyle;
+        protected string groupStyle;
 
         protected abstract MvcHtmlString GetControlHtml();
 
@@ -36,9 +38,9 @@ namespace KendoUIMvc.Controls
         {
             this.htmlHelper = htmlHelper;
             ViewSettings viewSettings = htmlHelper.ViewData.GetViewSettings();
-            this.labelColumnStyle = viewSettings.DefaultLabelColumnStyle;
-            this.controlColumnStyle = viewSettings.DefaultControlColumnStyle;
-            this.groupColumnStyle = viewSettings.DefaultGroupColumnStyle;
+            this.labelStyle = viewSettings.DefaultLabelStyle;
+            this.controlStyle = viewSettings.DefaultControlStyle;
+            this.groupStyle = viewSettings.DefaultGroupStyle;
         }
 
         public ControlBase(HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression)
@@ -85,26 +87,26 @@ namespace KendoUIMvc.Controls
         }
 
         /// <summary>
-        /// Sets the label column style that is used to determine the bootstrap layout for the label.
+        /// Sets the label style that is used to determine the bootstrap layout for the label.
         /// </summary>
-        /// <param name="labelColumnStyle">The bootstrap label column style.  The default column style for the label
+        /// <param name="labelStyle">The bootstrap label column style.  The default column style for the label
         /// is col-md-2.</param>
         /// <returns></returns>
-        public TControl SetLabelColumnStyle(string labelColumnStyle)
+        public TControl SetLabelStyle(string labelStyle)
         {
-            this.labelColumnStyle = labelColumnStyle;
+            this.labelStyle = labelStyle;
             return this as TControl;
         }
 
         /// <summary>
         /// Sets the label column style that is used to determine the bootstrap layout for the label.
         /// </summary>
-        /// <param name="controlColumnStyle">The bootstrap label column style.  The default column style for the column
+        /// <param name="controlStyle">The bootstrap label column style.  The default column style for the column
         /// is col-md-10.</param>
         /// <returns></returns>
-        public TControl SetControlColumnStyle(string controlColumnStyle)
+        public TControl SetControlStyle(string controlStyle)
         {
-            this.controlColumnStyle = controlColumnStyle;
+            this.controlStyle = controlStyle;
             return this as TControl;
         }
 
@@ -112,11 +114,11 @@ namespace KendoUIMvc.Controls
         /// Sets the group column style that is used to determine the bootstrap layout for the form group element,
         /// which contains the label, control and any related validation.
         /// </summary>
-        /// <param name="controlColumnStyle">The bootstrap label column style.  A default column style for the group does not exist.</param>
+        /// <param name="controlStyle">The bootstrap label column style.  A default column style for the group does not exist.</param>
         /// <returns></returns>
-        public TControl SetGroupColumnStyle(string groupColumnStyle)
+        public TControl SetGroupStyle(string groupStyle)
         {
-            this.groupColumnStyle = groupColumnStyle;
+            this.groupStyle = groupStyle;
             return this as TControl;
         }
 
@@ -144,7 +146,7 @@ namespace KendoUIMvc.Controls
             if (viewSettings.FormLayout == ViewSettings.FormLayoutOption.Horizontal)
             {
                 AddLabelClass(BootstrapCssClass.control_label);
-                AddLabelClass(this.labelColumnStyle);
+                AddLabelClass(this.labelStyle);
             }
 
             if (this.labelClasses.Count > 0)
@@ -221,9 +223,9 @@ namespace KendoUIMvc.Controls
         {
             ViewSettings viewSettings = this.htmlHelper.ViewData.GetViewSettings();
 
-            if (this.groupColumnStyle != null)
+            if (this.groupStyle != null)
             {
-                WriteContent(@"<div class=""" + this.groupColumnStyle + @""">");
+                WriteContent(@"<div class=""" + this.groupStyle + @""">");
             }
 
             // Write out opening form-group div.
@@ -235,7 +237,7 @@ namespace KendoUIMvc.Controls
             bool useOuterControlDiv = UseOuterControlDiv(viewSettings);
             if (useOuterControlDiv)
             {
-                WriteContent(LEVEL_1_SPACER + @"<div class=""" + this.controlColumnStyle + @""">");
+                WriteContent(LEVEL_1_SPACER + @"<div class=""" + this.controlStyle + @""">");
             }
 
             // Write out the raw HTML directly to avoid HTML encoding.
@@ -253,7 +255,7 @@ namespace KendoUIMvc.Controls
             // Write out closing form-group div.
             WriteContent(LEVEL_1_SPACER + "</div>");
 
-            if (this.groupColumnStyle != null)
+            if (this.groupStyle != null)
             {
                 // Write out closing group column style div.
                 WriteContent(LEVEL_1_SPACER + "</div>");

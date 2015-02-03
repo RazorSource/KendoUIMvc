@@ -9,9 +9,9 @@
 @*@using (UI.AjaxForm("frmHelloWindow2", "WithForm", "Window")
                   .SetAjaxOptions(new AjaxOptions() { OnSuccess = "FormSuccess", OnFailure = "FormFailure" })
                   .SetFormLayout(KendoUIMvc.Models.ViewSettings.FormLayoutOption.Horizontal)
-                  .SetDefaultGroupColumnStyle("col-md-6")
-                  .SetDefaultLabelColumnStyle("col-md-3")
-                  .SetDefaultControlColumnStyle("col-md-9")
+                  .SetDefaultGroupStyle("col-md-6")
+                  .SetDefaultLabelStyle("col-md-3")
+                  .SetDefaultControlStyle("col-md-9")
                   .RenderBegin())
 {
     <div class="row">
@@ -33,10 +33,10 @@
     .SetAjaxForm(
         UI.AjaxForm("frmHelloWindow", "WithForm", "Window")
             .SetAjaxOptions(new AjaxOptions() { OnSuccess = "FormSuccess", OnFailure = "FormFailure" })
-            .SetFormLayout(KendoUIMvc.Models.ViewSettings.FormLayoutOption.Horizontal)
-            .SetDefaultGroupColumnStyle("col-md-6")
-            .SetDefaultLabelColumnStyle("col-md-3")
-            .SetDefaultControlColumnStyle("col-md-9")
+            .SetFormLayout(CommonMvc.Models.ViewSettings.FormLayoutOption.Horizontal)
+            .SetDefaultGroupStyle("col-md-6")
+            .SetDefaultLabelStyle("col-md-3")
+            .SetDefaultControlStyle("col-md-9")
             .SetTitle("Demo Data")
             .SetIncludePanel(false)
             .AddFooterActionButton(UI.Button("btnCancel", "Cancel").SetOnClick("handleCancel()"))

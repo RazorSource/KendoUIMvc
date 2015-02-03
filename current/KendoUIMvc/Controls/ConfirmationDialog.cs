@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using CommonMvc.Razor.Controls;
 using KendoUIMvc.Util;
 
 namespace KendoUIMvc.Controls
@@ -133,13 +134,13 @@ namespace KendoUIMvc.Controls
                     <div class=""center-block"">");
 
             // Add the Yes Button.
-            Button<TModel> yesButton = new Button<TModel>(this.htmlHelper, this.name + "_buttonYes", this.yesText)
+            IButton<TModel> yesButton = new Button<TModel>(this.htmlHelper, this.name + "_buttonYes", this.yesText)
                 .SetOnClick(GetWrappedActionFunctionName(YES) + "()");
             html.Append(@"
                 " + yesButton.GetControlString());
 
             // Add the No Button.
-            Button<TModel> noButton = new Button<TModel>(this.htmlHelper, this.name + "_buttonNo", this.noText)
+            IButton<TModel> noButton = new Button<TModel>(this.htmlHelper, this.name + "_buttonNo", this.noText)
                 .SetOnClick(this.noAction != null ? (GetWrappedActionFunctionName(NO) + "()") : ("hide" + this.name + @"()"));
             html.Append(@"
                 " + noButton.GetControlString());
@@ -147,7 +148,7 @@ namespace KendoUIMvc.Controls
             if (showCancel)
             {
                 // Add the Cancel Button.
-                Button<TModel> cancelButton = new Button<TModel>(this.htmlHelper, this.name + "_buttonCancel", this.cancelText)
+                IButton<TModel> cancelButton = new Button<TModel>(this.htmlHelper, this.name + "_buttonCancel", this.cancelText)
                     .SetOnClick(this.cancelAction != null ? (GetWrappedActionFunctionName(CANCEL) + "()") : ("hide" + this.name + @"()"));
                 html.Append(@"
                 " + cancelButton.GetControlString());
