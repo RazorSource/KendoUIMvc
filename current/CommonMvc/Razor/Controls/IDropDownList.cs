@@ -14,6 +14,6 @@ namespace CommonMvc.Razor.Controls
         /// </summary>
         /// <param name="dataSource">List of select list items to use for the drop down options.</param>
         /// <returns></returns>
-        IDropDownList<TModel, TProperty> SetDataSource(IList<SelectListItem> dataSource);
+        IDropDownList<TModel, TProperty> SetDataSource(IEnumerable<SelectListItem> dataSource);
     }
 }

@@ -49,6 +49,7 @@ namespace KendoUIMvc.Controls
         protected string deleteConfirmationMessage = "Are you sure you want to delete this item?";
         protected string editTooltip = "edit";
         protected string deleteTooltip = "delete";
+        protected string title;
 
         /// <summary>
         /// Constructor.
@@ -400,6 +401,18 @@ namespace KendoUIMvc.Controls
         }
 
         /// <summary>
+        /// Sets the title to display on the grid.
+        /// </summary>
+        /// <param name="title">Text for the title.</param>
+        /// <returns></returns>
+        public IGrid<TModel> SetTitle(string title)
+        {
+            this.title = title;
+
+            return this;
+        }
+
+        /// <summary>
         /// Gets the edit window control for the grid.
         /// </summary>
         /// <returns></returns>
@@ -463,7 +476,7 @@ namespace KendoUIMvc.Controls
                             <thead>
                                 <tr>
                                     <th colspan=""" + this.columns.Count() + @""" class=""k-header"">
-                                        <div class=""col-md-9"">The Title</div>");
+                                        <div class=""col-md-9"">" + this.title + @"</div>");
             
             // Add the add record button.
             if (addWindow != null)
@@ -495,9 +508,9 @@ namespace KendoUIMvc.Controls
             }
 
             html.Append(@"
-                                </tr>
+                                </tr>                                
                             </thead>
-                            <tbody data-bind=""source: " + dataSourceName + @""" data-template=""" + dataTemplateName + @""">
+                            <tbody data-bind=""source: " + dataSourceName + @""" data-template=""" + dataTemplateName + @""">                                
                             </tbody>
                         </table>");
 
@@ -517,7 +530,7 @@ namespace KendoUIMvc.Controls
             html.Append(@"
             <script type=""text/x-kendo-template"" id=""" + dataTemplateName + @""">
                                 <tr key-value=""#: " + this.keyProperty + @" #"">");
-
+            
             // Render column data templates
             foreach (Column nextColumn in columns)
             {
@@ -586,7 +599,12 @@ namespace KendoUIMvc.Controls
                             read: {
                                 url: '" + this.remoteDataSourceUrl + @"',
                                 cache: false,
-                                dataType: 'json'
+                                dataType: 'json',
+                                complete: function(jqXHR, textStatus) { 
+                                    if (jqXHR.responseJSON.data.length == 0) {
+                                        $('#" + this.name + @" tbody').html('<td class=""km-razor-grid-no-data"" colspan=""" + columns.Count + @""">No Data Found</td>');
+                                    }
+                                }
                             }                            
                         },
                         schema: {
@@ -622,6 +640,11 @@ namespace KendoUIMvc.Controls
 
                 function " + this.name + @"_saveSuccess() {
                     $('#" + GetEditWindowName() + @"').data('kendoWindow').close();
+
+                    // If in add mode, refresh the grid after the confirmed save.
+                    if (" + actionMode + @" == 'add') {
+                        " + dataSourceName + @".read();
+                    }
                 }
 
                 function " + this.name + @"_showError(response) {
@@ -657,7 +680,6 @@ namespace KendoUIMvc.Controls
                 function " + this.name + @"_save() {
                     if (" + actionMode + @" == 'add') {
                         $('#" + GetEditWindowName() + @" form').submit();
-                        " + dataSourceName + @".read();
                     } else {
                         " + dataSourceName + @".sync();
                     }                                       
@@ -781,7 +803,7 @@ namespace KendoUIMvc.Controls
 
             public override string RenderContent()
             {
-                return "#: " + this.Property + @" #";
+                return "#: " + this.Property + @" != null ? " + this.Property + @" : '' #";
             }
 
             public override string GetId()

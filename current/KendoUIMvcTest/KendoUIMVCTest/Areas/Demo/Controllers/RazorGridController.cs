@@ -173,5 +173,24 @@ namespace KendoUIMVCTest.Areas.Demo.Controllers
                 demoModels.Remove(toDelete);
             }
         }
+
+        public ActionResult NoData()
+        {
+            return View();
+        }
+
+        public ActionResult GetNoData(int? take, int? skip)
+        {
+            List<DemoModel> demoModels = new List<DemoModel>();
+
+            PageOfData<DemoModel> pageOfDemoModels = new PageOfData<DemoModel>(FilterDemoModels(demoModels, take, skip), demoModels.Count);
+
+            return new ContentResult
+            {
+                Content = JsonConvert.SerializeObject(pageOfDemoModels),
+                ContentType = "application/json",
+                ContentEncoding = Encoding.UTF8
+            };
+        }
     }
 }

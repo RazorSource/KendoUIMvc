@@ -199,6 +199,13 @@ namespace CommonMvc.Razor.Controls
         IGrid<TModel> SetDeleteTooltip(string deleteTooltip);
 
         /// <summary>
+        /// Sets the title to display on the grid.
+        /// </summary>
+        /// <param name="title">Text for the title.</param>
+        /// <returns></returns>
+        IGrid<TModel> SetTitle(string title);
+
+        /// <summary>
         /// Gets the edit window control for the grid.
         /// </summary>
         /// <returns>The edit window instance.</returns>

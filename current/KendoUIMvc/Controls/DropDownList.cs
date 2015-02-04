@@ -12,7 +12,7 @@ namespace KendoUIMvc.Controls
 {
     public class DropDownList<TModel, TProperty> : ControlBase<TModel, TProperty, IDropDownList<TModel, TProperty>>, IDropDownList<TModel, TProperty>
     {
-        protected IList<SelectListItem> selectListDataSource;
+        protected IEnumerable<SelectListItem> selectListDataSource;
 
         public DropDownList(HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression) :
             base(htmlHelper, expression)
@@ -41,7 +41,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="dataSource">List of select list items to use for the drop down options.</param>
         /// <returns></returns>
-        public IDropDownList<TModel, TProperty> SetDataSource(IList<SelectListItem> dataSource)
+        public IDropDownList<TModel, TProperty> SetDataSource(IEnumerable<SelectListItem> dataSource)
         {
             this.selectListDataSource = dataSource;
 
@@ -83,7 +83,7 @@ namespace KendoUIMvc.Controls
             foreach (SelectListItem nextSelectListItem in selectListDataSource)
             {
                 script.AppendLine(@"{ Text: """ + nextSelectListItem.Text + @""", Value: """ + nextSelectListItem.Value + @""" }" +
-                    (++itemsAddedCt < selectListDataSource.Count ? "," : ""));
+                    (++itemsAddedCt < selectListDataSource.Count() ? "," : ""));
             }
 
             script.AppendLine(@"

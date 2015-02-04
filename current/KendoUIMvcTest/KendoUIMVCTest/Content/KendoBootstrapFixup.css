@@ -12,18 +12,12 @@
     position: relative;
 }
 
-/*
-.km-razor-grid-wrapper tbody
+.km-razor-grid-no-data
 {
-    height: 500px;    
+    height: 100px;
+    text-align: center;
+    font-style: italic;
 }
-
-.km-razor-grid-wrapper tr
-{
-    display: table-row;
-    height: 40px;
-}
-*/
 
 .km-panel-action-footer
 {

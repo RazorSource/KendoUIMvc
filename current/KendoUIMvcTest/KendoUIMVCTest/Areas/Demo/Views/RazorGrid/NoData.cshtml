@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewBag.Title = "No Data";
+}
+
+<h2>No Data</h2>
+
+@(UI.Grid("gridSample", "Id")
+        .SetRemoteDataSource("GetNoData", "RazorGrid", "Demo")
+        .SetWindowAddButton("Add", "RazorGrid")
+        .SetPageSize(4)
+        .SetPageData(true)
+        .SetServerPaging(true)
+        .SetGridContainerClass("col-md-6")
+        .AddWindowEditColumn("", "Maintain Demo Data", "Demo Data", "Edit", "RazorGrid")
+        .AddDeleteColumn("", "Delete", "RazorGrid")
+        .AddColumn("FavoriteDay", "Favorite Day")
+        .AddDateColumn("BirthDate", "Birth Date"))

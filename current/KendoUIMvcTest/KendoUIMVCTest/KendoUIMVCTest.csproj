@@ -973,6 +973,7 @@
     <Content Include="Areas\Demo\Views\Hidden\Index.cshtml" />
     <Content Include="Areas\Demo\Views\RazorGrid\BoundIndex.cshtml" />
     <Content Include="Areas\Demo\Views\DemoHome\Index.cshtml" />
+    <Content Include="Areas\Demo\Views\RazorGrid\NoData.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
