@@ -1,4 +1,4 @@
-﻿@using KendoUIMvc.Controls
+﻿@using CommonMvc.Razor.Controls
 
 @{
     ViewBag.Title = "Kendo UI MVC Menu";
@@ -6,19 +6,19 @@
 
 <h2>Menu</h2>
 @(UI.Menu("demoMenu")
-    .AddParentMenuItem("mnuControls", "Controls", 
-        new MenuItem<object>[] {
+    .AddMenuItem("mnuControls", "Controls", 
+        new IMenuItem<object>[] {
             UI.MenuItem("mnuAjaxForm", "AJAX Form", "Index", "AjaxForm"),
             UI.MenuItem("mnuButton", "Button", "Index", "Button"),
             UI.MenuItem("mnuHtmlForm", "HTML Form", null, 
-                    new MenuItem<object>[] {
+                    new IMenuItem<object>[] {
                         UI.MenuItem("mnuHtmlForm", "Basic", "Index", "HtmlForm"),
                         UI.MenuItem("mnuHtmlForm", "Horizontal Labels", "HorizontalLabels", "HtmlForm"),
                         UI.MenuItem("mnuHtmlForm", "Two Columns", "TwoColumns", "HtmlForm"),
                     })
         })
-    .AddParentMenuItem("mnuWebSearch", "Web Search",
-        new MenuItem<object>[] {
+    .AddMenuItem("mnuWebSearch", "Web Search",
+        new IMenuItem<object>[] {
             UI.MenuItem("mnuGoogle", "Google", "http://www.google.com"),
             UI.MenuItem("mnuGoogle", "Yahoo", "http://www.yahoo.com")
         })

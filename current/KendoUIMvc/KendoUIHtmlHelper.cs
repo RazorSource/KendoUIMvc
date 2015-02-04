@@ -308,7 +308,7 @@ namespace KendoUIMvc
         /// </summary>
         /// <param name="name">Name of the menu.</param>
         /// <returns></returns>
-        public Menu<TModel> Menu(string name)
+        public IMenu<TModel> Menu(string name)
         {
             return new Menu<TModel>(this.htmlHelper, name);
         }
@@ -321,7 +321,7 @@ namespace KendoUIMvc
         /// <param name="url">URL that should be loaded when the menu item is selected.</param>
         /// <param name="childMenuItems">Collection of child menu items.</param>
         /// <returns></returns>
-        public MenuItem<TModel> MenuItem(string name, string text, string url, IList<MenuItem<TModel>> childMenuItems = null)
+        public IMenuItem<TModel> MenuItem(string name, string text, string url, IList<IMenuItem<TModel>> childMenuItems = null)
         {
             return new MenuItem<TModel>(this.htmlHelper, name, text, url, childMenuItems);
         }
@@ -336,7 +336,7 @@ namespace KendoUIMvc
         /// <param name="area">Area containing the controller.</param>
         /// <param name="childMenuItems">Collection of child menu items.</param>
         /// <returns></returns>
-        public MenuItem<TModel> MenuItem(string name, string text, string action, string controller, string area = null, IList<MenuItem<TModel>> childMenuItems = null)
+        public IMenuItem<TModel> MenuItem(string name, string text, string action, string controller, string area = null, IList<IMenuItem<TModel>> childMenuItems = null)
         {
             return new MenuItem<TModel>(this.htmlHelper, name, text, MvcHtmlHelper.GetActionUrl(this.htmlHelper, action, controller, area), childMenuItems);
         }
@@ -347,7 +347,7 @@ namespace KendoUIMvc
         /// <typeparam name="TProperty">The data type of the property being bound.</typeparam>
         /// <param name="expression">Expression used to bind a control to a property.</param>
         /// <returns></returns>
-        public Hidden<TModel, TProperty> HiddenFor<TProperty>(Expression<Func<TModel, TProperty>> expression)
+        public IHidden<TModel, TProperty> HiddenFor<TProperty>(Expression<Func<TModel, TProperty>> expression)
         {
             return new Hidden<TModel, TProperty>(this.htmlHelper, expression);
         }
@@ -358,7 +358,7 @@ namespace KendoUIMvc
         /// <param name="name">Name of the control.</param>
         /// <param name="value">Initial value of the control.</param>
         /// <returns></returns>
-        public Hidden<TModel, object> Hidden(string name, object value)
+        public IHidden<TModel, object> Hidden(string name, object value)
         {
             return new Hidden<TModel, object>(this.htmlHelper, name, value);
         }

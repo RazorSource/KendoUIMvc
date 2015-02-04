@@ -4,23 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using CommonMvc.Razor.Controls;
 
 namespace KendoUIMvc.Controls
 {
     /// <summary>
     /// Represents on menu item within the menu.
     /// </summary>
-    public class MenuItem<TModel>
+    public class MenuItem<TModel> : IMenuItem<TModel>
     {
         protected HtmlHelper<TModel> htmlHelper;
-        protected List<MenuItem<TModel>> childMenus = new List<MenuItem<TModel>>();
+        protected List<IMenuItem<TModel>> childMenus = new List<IMenuItem<TModel>>();
 
         public MenuItem(HtmlHelper<TModel> htmlHelper)
         {
             this.htmlHelper = htmlHelper;
         }
 
-        public MenuItem(HtmlHelper<TModel> htmlHelper, string name, string text, string url, IList<MenuItem<TModel>> childMenuItems)
+        public MenuItem(HtmlHelper<TModel> htmlHelper, string name, string text, string url, IList<IMenuItem<TModel>> childMenuItems)
         {
             this.htmlHelper = htmlHelper;
             this.Name = name;
@@ -52,7 +53,7 @@ namespace KendoUIMvc.Controls
         /// Adds a child menu item.
         /// </summary>
         /// <param name="menuItem"></param>
-        public MenuItem<TModel> AddMenuItem(MenuItem<TModel> menuItem)
+        public IMenuItem<TModel> AddMenuItem(IMenuItem<TModel> menuItem)
         {
             this.childMenus.Add(menuItem);
             return this;

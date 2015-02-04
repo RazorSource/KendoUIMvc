@@ -6,11 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
+using CommonMvc.Razor.Controls;
 using KendoUIMvc.Util;
 
 namespace KendoUIMvc.Controls
 {
-    public class Hidden<TModel, TProperty>
+    public class Hidden<TModel, TProperty> : IHidden<TModel, TProperty>
     {
         protected HtmlHelper<TModel> htmlHelper;
         protected Expression<Func<TModel, TProperty>> expression;
@@ -33,6 +34,10 @@ namespace KendoUIMvc.Controls
             this.controlId = name;
         }
 
+        /// <summary>
+        /// Gets the HTML necessary to render the control.
+        /// </summary>
+        /// <returns>The HTML as a string.</returns>
         public string GetControlString()
         {
             if (expression != null)
