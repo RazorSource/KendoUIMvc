@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using KendoUIMvc.Util;
+using CommonMvc.Razor.Controls;
 
 namespace KendoUIMvc.Controls
 {
-    public class TextBox<TModel, TProperty> : ControlBase<TModel, TProperty, TextBox<TModel, TProperty>>
+    public class TextBox<TModel, TProperty> : ControlBase<TModel, TProperty, ITextBox<TModel, TProperty>>, ITextBox<TModel, TProperty>
     {
         public TextBox(HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression) :
             base(htmlHelper, expression)

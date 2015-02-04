@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CommonMvc.Razor.Controls
 {
-    public interface ITextBox<TModel, TProperty>
+    public interface ITextBox<TModel, TProperty> : IFormControl<TModel, TProperty, ITextBox<TModel, TProperty>>
     {
     }
 }

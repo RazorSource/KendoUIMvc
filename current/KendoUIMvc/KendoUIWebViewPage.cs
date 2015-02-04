@@ -4,28 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using CommonMvc.Razor;
 
 namespace KendoUIMvc
 {
     public abstract class KendoUIWebViewPage<TModel> : WebViewPage<TModel>
     {
-        private KendoUIHtmlHelper<TModel> kendoUIHtmlHelper;
+        private IRazorHtmlHelper<TModel> razorHtmlHelper;
 
-        public KendoUIHtmlHelper<TModel> UI
+        public IRazorHtmlHelper<TModel> UI
         {
             get
             {
-                if (this.kendoUIHtmlHelper == null)
+                if (this.razorHtmlHelper == null)
                 {
-                    this.kendoUIHtmlHelper = new KendoUIHtmlHelper<TModel>(Model, Html, Ajax);
+                    this.razorHtmlHelper = new KendoUIHtmlHelper<TModel>(Model, Html, Ajax);
                 }
 
-                return this.kendoUIHtmlHelper;
+                return this.razorHtmlHelper;
             }
         }
     }
-
-    //public abstract class KendoUIWebViewPage : KendoUIWebViewPage<dynamic>
-    //{
-    //}
 }

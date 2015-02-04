@@ -108,7 +108,7 @@ namespace CommonMvc.Razor
         /// <param name="name">Name of the control.</param>
         /// <param name="value">Initial value of the control.</param>
         /// <returns></returns>
-        IDropDownList<TModel, object> DropDownList(string name, object value = null);
+        IDropDownList<TModel, TProperty> DropDownList<TProperty>(string name, TProperty value = default(TProperty));
 
         /// <summary>
         /// Renders a tab strip container.

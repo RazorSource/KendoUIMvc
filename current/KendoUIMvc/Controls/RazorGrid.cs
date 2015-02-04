@@ -573,16 +573,6 @@ namespace KendoUIMvc.Controls
                             },");
             }
 
-            // Add create option if the add button is shown.
-//            if (this.remoteCreateUrl != null)
-//            {
-//                html.Append(@"
-//                            create: {
-//                                url: '" + this.remoteCreateUrl + @"',
-//                                type: 'post'
-//                            },");
-//            }
-
             if (this.remoteDeleteUrl != null)
             {
                 html.Append(@"
@@ -595,6 +585,7 @@ namespace KendoUIMvc.Controls
             html.Append(@"
                             read: {
                                 url: '" + this.remoteDataSourceUrl + @"',
+                                cache: false,
                                 dataType: 'json'
                             }                            
                         },

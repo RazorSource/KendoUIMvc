@@ -9,10 +9,11 @@ using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using KendoUIMvc.Util;
 using CommonMvc.Razor.Controls;
+using CommonMvc.Razor;
 
 namespace KendoUIMvc
 {
-    public class KendoUIHtmlHelper<TModel>
+    public class KendoUIHtmlHelper<TModel> : IRazorHtmlHelper<TModel>
     {
         protected HtmlHelper<TModel> htmlHelper;
         protected AjaxHelper<TModel> ajaxHelper;
@@ -62,7 +63,7 @@ namespace KendoUIMvc
         /// <typeparam name="TProperty">The data type of the property being bound.</typeparam>
         /// <param name="expression">Expression used to bind a control to a property.</param>
         /// <returns></returns>
-        public TextBox<TModel, TProperty> TextBoxFor<TProperty>(Expression<Func<TModel, TProperty>> expression)
+        public ITextBox<TModel, TProperty> TextBoxFor<TProperty>(Expression<Func<TModel, TProperty>> expression)
         {
             return new TextBox<TModel, TProperty>(this.htmlHelper, expression);
         }
@@ -73,7 +74,7 @@ namespace KendoUIMvc
         /// <param name="name">Name of the control.</param>
         /// <param name="value">Initial value of the control.</param>
         /// <returns></returns>
-        public TextBox<TModel, object> TextBox(string name, object value)
+        public ITextBox<TModel, object> TextBox(string name, object value)
         {
             return new TextBox<TModel, object>(this.htmlHelper, name, value);
         }
@@ -185,7 +186,7 @@ namespace KendoUIMvc
         /// </summary>
         /// <param name="name">Name of the window.</param>
         /// <returns></returns>
-        public Window<TModel> Window(string name)
+        public IWindow<TModel> Window(string name)
         {
             return new Window<TModel>(this.htmlHelper, this.ajaxHelper, name);
         }
@@ -208,7 +209,7 @@ namespace KendoUIMvc
         /// <param name="name">Name of the grid.</param>
         /// <param name="keyExpression">Expression that represents the key field.</param>
         /// <returns></returns>
-        IGrid<TModel> Grid<TProperty>(string name, Expression<Func<TModel, TProperty>> keyExpression)
+        public IGrid<TModel> Grid<TProperty>(string name, Expression<Func<TModel, TProperty>> keyExpression)
         {
             return new RazorGrid<TModel, TProperty>(this.htmlHelper, this.ajaxHelper, name, keyExpression);
         }
@@ -244,7 +245,7 @@ namespace KendoUIMvc
         /// </summary>
         /// <param name="name">Name of the panel.</param>
         /// <returns></returns>
-        public Panel<TModel> Panel(string name)
+        public IPanel<TModel> Panel(string name)
         {
             return new Panel<TModel>(this.htmlHelper, name);
         }
