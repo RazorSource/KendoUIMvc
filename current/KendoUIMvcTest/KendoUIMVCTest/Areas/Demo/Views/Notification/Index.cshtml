@@ -4,12 +4,12 @@
 
 <h2>Notification</h2>
 
-@(UI.Notification("errorDisplay")
-    .SetNotificationType(KendoUIMvc.Controls.Notification.NotificationType.error)
+@(UI.MessageDisplay("errorDisplay")
+    .SetMessageType(CommonMvc.Razor.Controls.MessageType.error)
     .SetAppendTo("#btnContainer")
     .SetAutoHideAfter(0)
     .SetWidth("400")
-    .SetStacking(KendoUIMvc.Controls.Notification.StackingType.up)
+    .SetStacking(CommonMvc.Razor.Controls.StackingType.up)
     .SetCanGrow(false))
 
 <div id="btnContainer">

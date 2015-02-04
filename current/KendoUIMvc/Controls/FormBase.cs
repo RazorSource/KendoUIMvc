@@ -26,8 +26,8 @@ namespace KendoUIMvc.Controls
         protected IList<IButton<TModel>> footerActionButtons = new List<IButton<TModel>>();
         protected bool includePanel;
         protected string title;
-        protected Panel<TModel> panel;
-        protected Notification<TModel> notification;
+        protected IPanel<TModel> panel;
+        protected IMessageDisplay<TModel> notification;
 
         protected abstract MvcForm RenderBeginForm(IDictionary<string, object> layoutAttributes);
 
@@ -45,7 +45,7 @@ namespace KendoUIMvc.Controls
 
             // Initialize the notification control.
             notification = new Notification<TModel>(this.htmlHelper, this.formId + "_errorDisplay")
-                        .SetNotificationType(KendoUIMvc.Controls.Notification.NotificationType.error)
+                        .SetMessageType(MessageType.error)
                         .SetAppendTo("#" + this.formId)
                         .SetAutoHideAfter(0);
         }
@@ -193,7 +193,7 @@ namespace KendoUIMvc.Controls
                 // If a panel if included, render the start to the panel.  The panel
                 // will be close out in the dispose method.
                 this.panel = new Panel<TModel>(this.htmlHelper, this.formId + "Panel")
-                    .SetPanelColumnStyle(this.formStyle) // Make the panels column style the same as the forms.
+                    .SetPanelStyle(this.formStyle) // Make the panels style the same as the forms.
                     .RenderBegin();
             }
 

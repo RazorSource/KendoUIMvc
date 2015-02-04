@@ -388,11 +388,11 @@ namespace KendoUIMvc.Controls
         protected string AppendNotification(StringBuilder html)
         {
             string notificationName = this.name + "_errorDisplay";
-            Notification<TModel> notification = new Notification<TModel>(this.htmlHelper, notificationName)
-                .SetNotificationType(KendoUIMvc.Controls.Notification.NotificationType.error)
+            IMessageDisplay<TModel> notification = new Notification<TModel>(this.htmlHelper, notificationName)
+                .SetMessageType(MessageType.error)
                 .SetAppendTo("#" + this.name + "Wrapper")
                 .SetAutoHideAfter(0)
-                .SetStacking(KendoUIMvc.Controls.Notification.StackingType.up);
+                .SetStacking(StackingType.up);
 
             html.Append(notification.GetControlString());
 

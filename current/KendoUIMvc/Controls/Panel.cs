@@ -4,17 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using CommonMvc.Razor.Controls;
 using KendoUIMvc.Util;
 
 namespace KendoUIMvc.Controls
 {
-    public class Panel<TModel> : IDisposable
+    public class Panel<TModel> : IPanel<TModel>
     {
         protected bool disposed;
         protected HtmlHelper<TModel> htmlHelper;
         protected string name;
         protected string title;
-        protected string panelColumnStyle;
+        protected string panelStyle;
 
         public Panel(HtmlHelper<TModel> htmlHelper, string name)
         {
@@ -27,7 +28,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="title">Title to display.</param>
         /// <returns></returns>
-        public Panel<TModel> SetTitle(string title)
+        public IPanel<TModel> SetTitle(string title)
         {
             this.title = title;
             return this;
@@ -36,16 +37,21 @@ namespace KendoUIMvc.Controls
         /// <summary>
         /// Sets the column style to use for the panel.  This can be used to adjust the width of the entire panel.
         /// </summary>
-        /// <param name="panelColumnStyle">The column style to apply to the panel.  The default value
+        /// <param name="panelStyle">The column style to apply to the panel.  The default value
         /// is to not have a column style on the panel (null).</param>
         /// <returns></returns>
-        public Panel<TModel> SetPanelColumnStyle(string panelColumnStyle)
+        public IPanel<TModel> SetPanelStyle(string panelStyle)
         {
-            this.panelColumnStyle = panelColumnStyle;
+            this.panelStyle = panelStyle;
             return this;
         }
 
-        public Panel<TModel> RenderBegin()
+        /// <summary>
+        /// Renders the opening tags for the panel.  This call should typically be used within a using block to ensure proper closing
+        /// tags are emitted when the panel is disposed.
+        /// </summary>
+        /// <returns></returns>
+        public IPanel<TModel> RenderBegin()
         {
             StringBuilder html = new StringBuilder();
             List<string> classes = new List<string>();
@@ -54,9 +60,9 @@ namespace KendoUIMvc.Controls
             classes.Add("clearfix");
 
             // Add the bootstrap column style if it is supplied.
-            if (this.panelColumnStyle != null)
+            if (this.panelStyle != null)
             {
-                classes.Add(this.panelColumnStyle);
+                classes.Add(this.panelStyle);
             }
 
             html.Append(@"

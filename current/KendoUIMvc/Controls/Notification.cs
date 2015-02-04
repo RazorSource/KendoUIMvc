@@ -14,10 +14,10 @@ namespace KendoUIMvc.Controls
         protected HtmlHelper<TModel> htmlHelper;
         protected string name;
         protected string appendTo;
-        protected KendoUIMvc.Controls.Notification.NotificationType notificationType;
+        protected MessageType messageType;
         protected int? autoHideAfter;
         protected string width;
-        protected KendoUIMvc.Controls.Notification.StackingType? stackingType;
+        protected StackingType? stackingType;
         protected bool canGrow;
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace KendoUIMvc.Controls
             this.htmlHelper = htmlHelper;
             this.name = name;
 
-            this.notificationType = KendoUIMvc.Controls.Notification.NotificationType.info;
+            this.messageType = MessageType.info;
             this.canGrow = true;
         }
 
@@ -39,7 +39,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="appendTo">HTML ID of the element to append the notification to.</param>
         /// <returns></returns>
-        public Notification<TModel> SetAppendTo(string appendTo)
+        public IMessageDisplay<TModel> SetAppendTo(string appendTo)
         {
             this.appendTo = appendTo;
             return this;
@@ -49,11 +49,11 @@ namespace KendoUIMvc.Controls
         /// Sets the default notification type, which controls the styling of the notification control.  The default notification type is info.
         /// The notification type can also be overridden in the generated show method.
         /// </summary>
-        /// <param name="notificationType">Notification type.</param>
+        /// <param name="messageType">Notification type.</param>
         /// <returns></returns>
-        public Notification<TModel> SetNotificationType(KendoUIMvc.Controls.Notification.NotificationType notificationType)
+        public IMessageDisplay<TModel> SetMessageType(MessageType messageType)
         {
-            this.notificationType = notificationType;
+            this.messageType = messageType;
             return this;
         }
 
@@ -63,7 +63,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="autoHideAfter">The time in milliseconds to wait before the notification automatically hides.  Setting the value to zero disables the auto-hide functionality.</param>
         /// <returns></returns>
-        public Notification<TModel> SetAutoHideAfter(int autoHideAfter)
+        public IMessageDisplay<TModel> SetAutoHideAfter(int autoHideAfter)
         {
             this.autoHideAfter = autoHideAfter;
             return this;
@@ -74,7 +74,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="stackingType">Stacking type value.</param>
         /// <returns></returns>
-        public Notification<TModel> SetStacking(KendoUIMvc.Controls.Notification.StackingType stackingType)
+        public IMessageDisplay<TModel> SetStacking(StackingType stackingType)
         {
             this.stackingType = stackingType;
             return this;
@@ -85,7 +85,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="width">The width of the notification.</param>
         /// <returns></returns>
-        public Notification<TModel> SetWidth(string width)
+        public IMessageDisplay<TModel> SetWidth(string width)
         {
             this.width = width;
             return this;
@@ -96,7 +96,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="canGrow">True if the notification can grow.</param>
         /// <returns></returns>
-        public Notification<TModel> SetCanGrow(bool canGrow)
+        public IMessageDisplay<TModel> SetCanGrow(bool canGrow)
         {
             this.canGrow = canGrow;
             return this;
@@ -181,18 +181,18 @@ namespace KendoUIMvc.Controls
         /// javascript variables.
         /// </summary>
         /// <param name="message">The message to display.</param>
-        /// <param name="notificationType">Notification type.  This is used to style the notification.  The parameter default value of
-        /// undefined will cause the default notification type to be used.</param>
+        /// <param name="messageType">Message type.  This is used to style the message display.  The parameter default value of
+        /// undefined will cause the default message type to be used.</param>
         /// <returns>The javascript function call as a string.</returns>
-        public string GetCallShowScript(string message, string notificationType = "undefined")
+        public string GetCallShowScript(string message, string messageType = "undefined")
         {
-            return "show" + this.name + "(" + message + ", " + notificationType + ");";
+            return "show" + this.name + "(" + message + ", " + messageType + ");";
         }
 
         /// <summary>
         /// Gets the HTML used to render the control.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The HTML as a string.</returns>
         public string GetControlString()
         {
             StringBuilder html = new StringBuilder();
@@ -234,7 +234,7 @@ namespace KendoUIMvc.Controls
 
                     function show" + this.name + @"(message, notificationType) {
                         if (notificationType == undefined) {
-                            notificationType = '" + Notification.GetNotificationTypeAsString(this.notificationType) + @"';
+                            notificationType = '" + Notification.GetNotificationTypeAsString(this.messageType) + @"';
                         }
 
                         " + popupVariableName + @".show(" + messageParam + @", notificationType);
@@ -274,31 +274,15 @@ namespace KendoUIMvc.Controls
 
     public class Notification
     {
-        public enum NotificationType
-        {
-            info,
-            success,
-            warning,
-            error
-        }
-
-        public enum StackingType
-        {
-            up,
-            right,
-            down,
-            left
-        }
-
-        public static string GetNotificationTypeAsString(NotificationType notificationType)
+        public static string GetNotificationTypeAsString(MessageType notificationType)
         {
             switch (notificationType)
             {
-                case NotificationType.success:
+                case MessageType.success:
                     return "success";
-                case NotificationType.warning:
+                case MessageType.warning:
                     return "warning";
-                case NotificationType.error:
+                case MessageType.error:
                     return "error";
                 default:
                     return "info";

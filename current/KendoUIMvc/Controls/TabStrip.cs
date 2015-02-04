@@ -6,10 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
+using CommonMvc.Razor.Controls;
 
 namespace KendoUIMvc.Controls
 {
-    public class TabStrip<TModel>
+    public class TabStrip<TModel> : ITabStrip<TModel>
     {
         protected HtmlHelper<TModel> htmlHelper;
         protected string name;
@@ -22,6 +23,10 @@ namespace KendoUIMvc.Controls
             this.name = name;
         }
 
+        /// <summary>
+        /// Builds the HTML necessary to render the control.
+        /// </summary>
+        /// <returns>An MvcHtmlString that contains all HTML and script necessary to render the grid control.</returns>
         public MvcHtmlString Render()
         {
             StringBuilder html = new StringBuilder();
@@ -78,7 +83,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="activeTabName"></param>
         /// <returns></returns>
-        public TabStrip<TModel> SetActiveTabName(string activeTabName)
+        public ITabStrip<TModel> SetActiveTabName(string activeTabName)
         {
             this.activeTabName = activeTabName;
 
@@ -90,7 +95,7 @@ namespace KendoUIMvc.Controls
         /// </summary>
         /// <param name="partialPageTab"></param>
         /// <returns></returns>
-        public TabStrip<TModel> AddPartialPageTab(PartialPageTab partialPageTab)
+        public ITabStrip<TModel> AddPartialPageTab(IPartialPageTab partialPageTab)
         {
             return AddPartialPageTab(partialPageTab.Name, partialPageTab.Label,
                 partialPageTab.PartialPageName, partialPageTab.Model, partialPageTab.ViewData);
@@ -106,7 +111,7 @@ namespace KendoUIMvc.Controls
         /// <param name="model">Model to pass to the partial view.</param>
         /// <param name="viewData">ViewData to pass to the partial view.</param>
         /// <returns></returns>
-        public TabStrip<TModel> AddPartialPageTab(string name, string label, string partialPageName, object model = null,
+        public ITabStrip<TModel> AddPartialPageTab(string name, string label, string partialPageName, object model = null,
                 ViewDataDictionary viewData = null)
         {
             AddHtmlTab(new HtmlTab(name, label,
@@ -115,7 +120,14 @@ namespace KendoUIMvc.Controls
             return this;
         }
 
-        public TabStrip<TModel> AddTab(string name, string label, string htmlContent)
+        /// <summary>
+        /// Adds a tab to the tab strip.
+        /// </summary>
+        /// <param name="name">Name of the tab strip.</param>
+        /// <param name="label">Label text that is displayed.</param>
+        /// <param name="htmlContent">The HTML content contained on the tab.</param>
+        /// <returns></returns>
+        public ITabStrip<TModel> AddTab(string name, string label, string htmlContent)
         {
             AddHtmlTab(new HtmlTab(name, label, htmlContent));
             return this;
@@ -188,7 +200,7 @@ namespace KendoUIMvc.Controls
         /// <summary>
         /// Represents a partial page to display on a tab within a tab strip.
         /// </summary>
-        public class PartialPageTab
+        public class PartialPageTab : IPartialPageTab
         {
             /// <summary>
             /// Constructor.

@@ -58,6 +58,7 @@
     <Compile Include="Razor\Controls\IMenuItem.cs" />
     <Compile Include="Razor\Controls\IMessageDisplay.cs" />
     <Compile Include="Razor\Controls\IPanel.cs" />
+    <Compile Include="Razor\Controls\IPartialPageTab.cs" />
     <Compile Include="Razor\Controls\ITabStrip.cs" />
     <Compile Include="Razor\Controls\ITextBox.cs" />
     <Compile Include="Razor\Controls\IWindow.cs" />

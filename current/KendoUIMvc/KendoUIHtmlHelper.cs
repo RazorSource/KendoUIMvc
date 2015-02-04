@@ -161,7 +161,7 @@ namespace KendoUIMvc
         /// </summary>
         /// <param name="name">Name of the tab strip.</param>
         /// <returns></returns>
-        public TabStrip<TModel> TabStrip(string name)
+        public ITabStrip<TModel> TabStrip(string name)
         {
             return new TabStrip<TModel>(this.htmlHelper, name);
         }
@@ -252,9 +252,9 @@ namespace KendoUIMvc
         /// <summary>
         /// Renders a control that is used to display messages.
         /// </summary>
-        /// <param name="name">Name of the display message.</param>
+        /// <param name="name">Name of the message display.</param>
         /// <returns></returns>
-        public Notification<TModel> Notification(string name)
+        public IMessageDisplay<TModel> MessageDisplay(string name)
         {
             return new Notification<TModel>(this.htmlHelper, name);
         }
