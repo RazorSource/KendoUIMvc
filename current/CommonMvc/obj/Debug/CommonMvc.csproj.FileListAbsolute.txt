@@ -7,4 +7,6 @@ C:\Projects\KendoUIMvc\current\CommonMvc\obj\Debug\CommonMvc.dll
 C:\Projects\KendoUIMvc\current\CommonMvc\obj\Debug\CommonMvc.pdb
 C:\Projects\KendoUIMvc\current\CommonMvc\bin\Debug\CommonMvc.dll
 C:\Projects\KendoUIMvc\current\CommonMvc\bin\Debug\CommonMvc.pdb
+C:\Projects\KendoUIMvc\current\CommonMvc\bin\Debug\Newtonsoft.Json.dll
+C:\Projects\KendoUIMvc\current\CommonMvc\bin\Debug\Newtonsoft.Json.xml
 C:\Projects\KendoUIMvc\current\CommonMvc\obj\Debug\CommonMvc.csprojResolveAssemblyReference.cache

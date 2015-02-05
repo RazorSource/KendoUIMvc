@@ -19,7 +19,9 @@
         .AddWindowEditColumn("", "Maintain Demo Data", "Demo Data", "Edit", "RazorGrid")
         .AddDeleteColumn("", "Delete", "RazorGrid")
         .AddColumnFor(model => model.FavoriteDay)
-        .AddDateColumnFor(model => model.BirthDate);}
+        .AddLookupColumnFor(model => model.FavoriteDay, (IEnumerable<SelectListItem>)ViewBag.FavoriteDayList)
+        .AddDateColumnFor(model => model.BirthDate);
+}
 
 @grid.Render()
 

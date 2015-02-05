@@ -7,6 +7,7 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using KendoUIMvc.Models;
+using KendoUIMVCTest.Dao;
 
 namespace KendoUIMVCTest.Areas.Demo.Controllers
 {
@@ -17,11 +18,13 @@ namespace KendoUIMVCTest.Areas.Demo.Controllers
 
         public ActionResult Index()
         {
+            ViewBag.FavoriteDayList = DaysOfTheWeekDao.GetDaysOfTheWeek();
             return View();
         }
 
         public ActionResult BoundIndex()
         {
+            ViewBag.FavoriteDayList = DaysOfTheWeekDao.GetDaysOfTheWeek();
             return View();
         }
 

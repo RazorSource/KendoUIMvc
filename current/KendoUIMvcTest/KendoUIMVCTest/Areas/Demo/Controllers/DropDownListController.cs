@@ -1,4 +1,5 @@
-﻿using KendoUIMVCTest.Models;
+﻿using KendoUIMVCTest.Dao;
+using KendoUIMVCTest.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,21 +24,7 @@ namespace KendoUIMVCTest.Areas.Demo.Controllers
 
         private void InitViewBag()
         {
-            ViewBag.DaysOfTheWeek = GetDaysOfTheWeek();
-        }
-
-        public IList<SelectListItem> GetDaysOfTheWeek()
-        {
-            List<SelectListItem> daysOfTheWeek = new List<SelectListItem>();
-            daysOfTheWeek.Add(new SelectListItem() { Text = "Sunday", Value = "1" });
-            daysOfTheWeek.Add(new SelectListItem() { Text = "Monday", Value = "2" });
-            daysOfTheWeek.Add(new SelectListItem() { Text = "Tuesday", Value = "3" });
-            daysOfTheWeek.Add(new SelectListItem() { Text = "Wednesday", Value = "4" });
-            daysOfTheWeek.Add(new SelectListItem() { Text = "Thursday", Value = "5" });
-            daysOfTheWeek.Add(new SelectListItem() { Text = "Friday", Value = "6" });
-            daysOfTheWeek.Add(new SelectListItem() { Text = "Saturday", Value = "7" });
-
-            return daysOfTheWeek;
+            ViewBag.DaysOfTheWeek = DaysOfTheWeekDao.GetDaysOfTheWeek();
         }
     }
 }

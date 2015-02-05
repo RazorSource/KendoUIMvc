@@ -97,6 +97,31 @@ namespace CommonMvc.Razor.Controls
             string label = null);
 
         /// <summary>
+        /// Adds a lookup column to the grid.  Lookup columns can be used to allow the grid to replace key lookup values with their
+        /// corresponding lookup values in the UI layer.
+        /// </summary>
+        /// <param name="name">Name of the property to bind from the model data.</param>
+        /// <param name="label">Label to display on the column.</param>
+        /// <param name="lookupOptions">List of SelectListItems that are used to find the corresponding value to display.</param>
+        /// <param name="width">Optional fixed column width to apply to the column.</param>
+        /// <returns></returns>
+        IGrid<TModel> AddLookupColumn(string name, string label, IEnumerable<SelectListItem> lookupOptions, int? width = null);
+
+        /// <summary>
+        /// Adds a lookup column to the grid.  Lookup columns can be used to allow the grid to replace key lookup values with their
+        /// corresponding lookup values in the UI layer.
+        /// </summary>
+        /// <typeparam name="TProperty">Type of the property being bound.  This should correspond to the key value.</typeparam>
+        /// <param name="expression">The expression to bind.</param>
+        /// <param name="lookupOptions">List of SelectListItems that are used to find the corresponding value to display.</param>
+        /// <param name="width">Optional fixed column width to apply to the column.</param>
+        /// <param name="label">Optonal label override for the expression.  If the label override is not provided, the label
+        /// will be extracted from the bound model property.</param>
+        /// <returns></returns>
+        IGrid<TModel> AddLookupColumnFor<TProperty>(Expression<Func<TModel, TProperty>> expression,
+            IEnumerable<SelectListItem> lookupOptions, int? width = null, string label = null);
+
+        /// <summary>
         /// Adds an edit column that is used to show an edit form associated with the grid data.
         /// </summary>
         /// <param name="columnLabel">Label for the column header.</param>

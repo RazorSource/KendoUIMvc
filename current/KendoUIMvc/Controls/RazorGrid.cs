@@ -8,6 +8,8 @@ using System.Web.Mvc;
 using System.Web.Mvc.Ajax;
 using System.Linq.Expressions;
 using CommonMvc.Razor.Controls;
+using CommonMvc.Util;
+using Newtonsoft.Json;
 
 namespace KendoUIMvc.Controls
 {
@@ -87,6 +89,8 @@ namespace KendoUIMvc.Controls
             return this;
         }
 
+
+
         /// <summary>
         /// Adds a new column to the grid.
         /// </summary>
@@ -101,6 +105,50 @@ namespace KendoUIMvc.Controls
             AddColumn(MvcHtmlHelper.GetExpressionPropertyId(this.htmlHelper, expression),
                 label != null ? label : MvcHtmlHelper.GetDisplayText(this.htmlHelper, expression),
                 width);
+
+            return this;
+        }
+
+        /// <summary>
+        /// Adds a lookup column to the grid.  Lookup columns can be used to allow the grid to replace key lookup values with their
+        /// corresponding lookup values in the UI layer.
+        /// </summary>
+        /// <param name="name">Name of the property to bind from the model data.</param>
+        /// <param name="label">Label to display on the column.</param>
+        /// <param name="lookupOptions">List of SelectListItems that are used to find the corresponding value to display.</param>
+        /// <param name="width">Optional fixed column width to apply to the column.</param>
+        /// <returns></returns>
+        public IGrid<TModel> AddLookupColumn(string name, string label, IEnumerable<SelectListItem> lookupOptions, int? width = null)
+        {
+            BoundLookupColumn boundLookupColumn = new BoundLookupColumn(label, name, lookupOptions);
+
+            boundLookupColumn.Width = width;
+            columns.Add(boundLookupColumn);
+
+            return this;
+        }
+
+        /// <summary>
+        /// Adds a lookup column to the grid.  Lookup columns can be used to allow the grid to replace key lookup values with their
+        /// corresponding lookup values in the UI layer.
+        /// </summary>
+        /// <typeparam name="TProperty">Type of the property being bound.  This should correspond to the key value.</typeparam>
+        /// <param name="expression">The expression to bind.</param>
+        /// <param name="lookupOptions">List of SelectListItems that are used to find the corresponding value to display.</param>
+        /// <param name="width">Optional fixed column width to apply to the column.</param>
+        /// <param name="label">Optonal label override for the expression.  If the label override is not provided, the label
+        /// will be extracted from the bound model property.</param>
+        /// <returns></returns>
+        public IGrid<TModel> AddLookupColumnFor<TProperty>(Expression<Func<TModel, TProperty>> expression,
+            IEnumerable<SelectListItem> lookupOptions, int? width = null, string label = null)
+        {
+            BoundLookupColumn boundLookupColumn = new BoundLookupColumn(
+                label != null ? label : MvcHtmlHelper.GetDisplayText(this.htmlHelper, expression),
+                MvcHtmlHelper.GetExpressionPropertyId(this.htmlHelper, expression),
+                lookupOptions);
+
+            boundLookupColumn.Width = width;
+            columns.Add(boundLookupColumn);
 
             return this;
         }
@@ -352,7 +400,7 @@ namespace KendoUIMvc.Controls
             this.editTooltip = editTooltip;
 
             // Check to determine if the delete column has already been added, if it has, update the tooltip.
-            Column editColumn = columns.FirstOrDefault(c => c.GetId() == EDIT_COLUMN_ID);
+            Column editColumn = columns.FirstOrDefault(c => c.Id == EDIT_COLUMN_ID);
             if (editColumn != null)
             {
                 editColumn.Tooltip = editTooltip;
@@ -372,7 +420,7 @@ namespace KendoUIMvc.Controls
             this.deleteTooltip = deleteTooltip;
 
             // Check to determine if the delete column has already been added, if it has, update the tooltip.
-            Column deleteColumn = columns.FirstOrDefault(c => c.GetId() == DELETE_COLUMN_ID);
+            Column deleteColumn = columns.FirstOrDefault(c => c.Id == DELETE_COLUMN_ID);
             if (deleteColumn != null)
             {
                 deleteColumn.Tooltip = deleteTooltip;
@@ -535,7 +583,7 @@ namespace KendoUIMvc.Controls
             foreach (Column nextColumn in columns)
             {
                 html.Append(@"
-                                    <td data-property=""" + nextColumn.GetId() + @"""");
+                                    <td data-property=""" + nextColumn.Id + @"""");
 
                 if (nextColumn.Tooltip != null)
                 {
@@ -746,6 +794,15 @@ namespace KendoUIMvc.Controls
                 }");
             }
 
+            // Generate any script helper functions for lookup columns.
+            foreach (Column nextColumn in columns)
+            {
+                if (nextColumn is ILookupColumn)
+                {
+                    html.Append( ((ILookupColumn)nextColumn).GetLookupScript());
+                }
+            }
+
             html.Append(@"
             </script>");
 
@@ -759,17 +816,30 @@ namespace KendoUIMvc.Controls
             return "";
         }
 
+        protected interface ILookupColumn : IColumn
+        {
+            string GetLookupScript();
+        }
+
+        protected interface IColumn
+        {
+            string Id { get; }
+            string Label { get; set; }
+            int? Width { get; set; }
+            string Tooltip { get; set; }
+        }
+
         /// <summary>
         /// Represents a column in the grid.
         /// </summary>
-        public abstract class Column
+        public abstract class Column : IColumn
         {
             /// <summary>
             /// Renders the content for one cell in the grid for the column.
             /// </summary>
             /// <returns></returns>
             public abstract string RenderContent();
-            public abstract string GetId();
+            public abstract string Id { get; }
 
             public Column()
             {
@@ -782,7 +852,7 @@ namespace KendoUIMvc.Controls
             
             public string Label { get; set; }
             public int? Width { get; set; }
-            public string Tooltip;
+            public string Tooltip { get; set; }
         }
 
         /// <summary>
@@ -806,9 +876,12 @@ namespace KendoUIMvc.Controls
                 return "#: " + this.Property + @" != null ? " + this.Property + @" : '' #";
             }
 
-            public override string GetId()
+            public override string Id
             {
-                return this.Property;
+                get
+                {
+                    return this.Property;
+                }
             }
         }       
 
@@ -848,14 +921,78 @@ namespace KendoUIMvc.Controls
             public override string RenderContent()
             {                
                 return @"<a href=""\\#"" onclick=""return " + this.Script + @";"">" + this.ActionLabel + @"</a>";
-                //return @"<a href=""javascript: " + this.Script + @"();"">" + this.ActionLabel + @"</a>";
-                //return @"<button onclick=""return " + this.Script + @"();"">" + this.ActionLabel + @"</button>";
             }
 
-            public override string GetId()
+            public override string Id
             {
-                return this.ColumnId;
+                get
+                {
+                    return this.ColumnId;
+                }
             }
-        }        
+        }
+
+        public class BoundLookupColumn : BoundColumn, ILookupColumn
+        {
+            protected IEnumerable<SelectListItem> lookupOptions;
+
+            public BoundLookupColumn(string label, string property, IEnumerable<SelectListItem> lookupOptions)
+                : base(label, property)
+            {
+                this.lookupOptions = lookupOptions;
+            }
+
+            /// <summary>
+            /// Generates script necessary to resolve lookup values client side when data binding.
+            /// </summary>
+            /// <returns></returns>
+            public string GetLookupScript()
+            {
+                // Only specify the text and value properties to serialize to minimize the serialized data size.
+                JsonSerializerSettings jsonSerializerSettings = new Newtonsoft.Json.JsonSerializerSettings()
+                {
+                    ContractResolver = new PropertyContractResolver(
+                        new string[] { "Text", "Value" })
+                };
+
+                // Define a global variable for the lookup values.
+                return @"
+                var " + this.Id + "LookupValues = " +
+                    Newtonsoft.Json.JsonConvert.SerializeObject(this.lookupOptions, jsonSerializerSettings) + @";
+                
+                function " + GetLookupFunctionName() + @"(value) {
+                    var lookupValue = " + this.Id + @"LookupValues[value];
+                    if (lookupValue != undefined) {
+                        return lookupValue.Text;
+                    } else {
+                        return '';
+                    }
+                }";
+            }
+
+            /// <summary>
+            /// Gets the javascript necessary to invoke the lookup function.
+            /// </summary>
+            /// <param name="parameter">Parameter variable to pass into the function.</param>
+            /// <returns>Javascript to call as a string.</returns>
+            public string GetCallLookupScript(string parameter)
+            {
+                return GetLookupFunctionName() + "(" + parameter + ")";
+            }
+
+            protected string GetLookupFunctionName()
+            {
+                return this.Id + "_LookupValue";
+            }
+
+            /// <summary>
+            /// Renders the content necessary to display the corresponding lookup value for a column.
+            /// </summary>
+            /// <returns></returns>
+            public override string RenderContent()
+            {
+                return "#: " + GetCallLookupScript(this.Property) + " #";
+            }
+        }
     }
 }
