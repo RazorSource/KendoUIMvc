@@ -10,6 +10,7 @@ using System.Linq.Expressions;
 using CommonMvc.Razor.Controls;
 using CommonMvc.Util;
 using Newtonsoft.Json;
+using System.Web;
 
 namespace KendoUIMvc.Controls
 {
@@ -957,26 +958,30 @@ namespace KendoUIMvc.Controls
             /// <returns></returns>
             public string GetLookupScript()
             {
-                // Only specify the text and value properties to serialize to minimize the serialized data size.
-                JsonSerializerSettings jsonSerializerSettings = new Newtonsoft.Json.JsonSerializerSettings()
-                {
-                    ContractResolver = new PropertyContractResolver(
-                        new string[] { "Text", "Value" })
-                };
+                StringBuilder script = new StringBuilder();
 
                 // Define a global variable for the lookup values.
-                return @"
-                var " + this.Id + "LookupValues = " +
-                    Newtonsoft.Json.JsonConvert.SerializeObject(this.lookupOptions, jsonSerializerSettings) + @";
+                script.Append(@"
+                var "  + this.Id + @"LookupValues = {};");
+
+                foreach (SelectListItem nextSelectListItem in this.lookupOptions)
+                {
+                    script.Append(@"
+                " + this.Id + @"LookupValues['" + HttpUtility.JavaScriptStringEncode(nextSelectListItem.Value) + "'] = '" + 
+                        HttpUtility.JavaScriptStringEncode(nextSelectListItem.Text) + @"';");
+                }
                 
+                script.Append(@"
                 function " + GetLookupFunctionName() + @"(value) {
                     var lookupValue = " + this.Id + @"LookupValues[value];
                     if (lookupValue != undefined) {
-                        return lookupValue.Text;
+                        return lookupValue;
                     } else {
                         return '';
                     }
-                }";
+                }");
+
+                return script.ToString();
             }
 
             /// <summary>
