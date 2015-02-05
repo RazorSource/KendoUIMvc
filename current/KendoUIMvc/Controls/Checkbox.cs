@@ -106,7 +106,7 @@ namespace KendoUIMvc.Controls
         {
             if (this.showLabelRight)
             {
-                ViewSettings viewSettings = this.htmlHelper.ViewData.GetViewSettings();
+                ViewSettings viewSettings = RequestHelper.ViewSettings;
 
                 if (viewSettings.FormLayout == ViewSettings.FormLayoutOption.Vertical)
                 {

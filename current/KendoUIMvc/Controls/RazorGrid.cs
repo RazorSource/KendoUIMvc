@@ -504,6 +504,7 @@ namespace KendoUIMvc.Controls
             string dataSourceName = name + "_dataSource";
             // Used to track the current action for the record.  Either add or edit.
             string actionMode = name + "_actionMode";
+            string lastDataSourceActionName = "last" + this.name + "_dataSourceAction";
 
             string notificationName = AppendNotification(html);
             ConfirmationDialog<TModel> deleteConfirmation = null;
@@ -600,6 +601,7 @@ namespace KendoUIMvc.Controls
                 var " + dataSourceName + @";
                 var " + dataSourceName + @"Collection;
                 var " + actionMode + @";
+                var " + lastDataSourceActionName + @";
 
                 $(document).ready(function() {
                     var wrapper = $('#" + this.name + @"Wrapper');
@@ -649,7 +651,9 @@ namespace KendoUIMvc.Controls
                                 cache: false,
                                 dataType: 'json',
                                 complete: function(jqXHR, textStatus) { 
-                                    if (jqXHR.responseJSON.data.length == 0) {
+                                    if (jqXHR.responseJSON != null &&
+                                        jqXHR.responseJSON.data != null &&
+                                        jqXHR.responseJSON.data.length == 0) {
                                         $('#" + this.name + @" tbody').html('<td class=""km-razor-grid-no-data"" colspan=""" + columns.Count + @""">No Data Found</td>');
                                     }
                                 }
@@ -663,6 +667,7 @@ namespace KendoUIMvc.Controls
                             }
                         },
                         requestStart: function (e) {
+                            lastDataSourceActionName = e.type;
                             kendo.ui.progress(wrapper, true);
                         },
                         requestEnd: function (e) {
@@ -713,7 +718,11 @@ namespace KendoUIMvc.Controls
                     this.editWindow.GetAjaxForm().GetMessageDisplay() != null)
                 {
                     html.Append(@"
-                    " + this.editWindow.GetAjaxForm().GetMessageDisplay().GetCallShowScript("message"));
+                    if (lastDataSourceActionName == 'read') {
+                        show" + notificationName + @"(message);
+                    } else {
+                        " + this.editWindow.GetAjaxForm().GetMessageDisplay().GetCallShowScript("message") + @"
+                    }");
                 }
                 else
                 {

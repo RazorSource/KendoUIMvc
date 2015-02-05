@@ -67,7 +67,7 @@
     <Compile Include="Razor\Controls\IWindow.cs" />
     <Compile Include="Razor\IRazorHtmlHelper.cs" />
     <Compile Include="Util\PropertyContractResolver.cs" />
-    <Compile Include="Util\ViewDataExtension.cs" />
+    <Compile Include="Util\RequestHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

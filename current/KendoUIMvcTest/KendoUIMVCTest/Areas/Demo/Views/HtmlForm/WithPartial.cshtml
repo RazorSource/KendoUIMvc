@@ -1,0 +1,12 @@
+﻿@model KendoUIMVCTest.Models.DemoModel
+
+@{
+    ViewBag.Title = "Kendo UI MVC HTML Form with Partial";
+}
+
+<h2>HTML Form with Partial</h2>
+
+@using (UI.BeginForm("frmSample", "Index", "HtmlForm"))
+{
+    @Html.Partial("PartialFormControls")
+}

@@ -975,6 +975,8 @@
     <Content Include="Areas\Demo\Views\RazorGrid\BoundIndex.cshtml" />
     <Content Include="Areas\Demo\Views\DemoHome\Index.cshtml" />
     <Content Include="Areas\Demo\Views\RazorGrid\NoData.cshtml" />
+    <Content Include="Areas\Demo\Views\HtmlForm\WithPartial.cshtml" />
+    <Content Include="Areas\Demo\Views\HtmlForm\PartialFormControls.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

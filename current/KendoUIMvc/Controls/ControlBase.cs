@@ -37,7 +37,7 @@ namespace KendoUIMvc.Controls
         private ControlBase(HtmlHelper<TModel> htmlHelper)
         {
             this.htmlHelper = htmlHelper;
-            ViewSettings viewSettings = htmlHelper.ViewData.GetViewSettings();
+            ViewSettings viewSettings = RequestHelper.ViewSettings;
             this.labelStyle = viewSettings.DefaultLabelStyle;
             this.controlStyle = viewSettings.DefaultControlStyle;
             this.groupStyle = viewSettings.DefaultGroupStyle;
@@ -139,7 +139,7 @@ namespace KendoUIMvc.Controls
 
         protected virtual IDictionary<string, object> GetLabelAttributes()
         {
-            ViewSettings viewSettings = this.htmlHelper.ViewData.GetViewSettings();
+            ViewSettings viewSettings = RequestHelper.ViewSettings;
             IDictionary<string, object> attributes = new Dictionary<string, object>();
 
             // For horizontal layout the corresponding width needs set for the label.
@@ -169,7 +169,7 @@ namespace KendoUIMvc.Controls
 
         protected virtual IDictionary<string, object> GetControlAttributes()
         {
-            ViewSettings viewSettings = this.htmlHelper.ViewData.GetViewSettings();
+            ViewSettings viewSettings = RequestHelper.ViewSettings;
 
             IDictionary<string, object> attributes = new Dictionary<string, object>();
 
@@ -221,7 +221,7 @@ namespace KendoUIMvc.Controls
 
         public override string ToString()
         {
-            ViewSettings viewSettings = this.htmlHelper.ViewData.GetViewSettings();
+            ViewSettings viewSettings = RequestHelper.ViewSettings;
 
             if (this.groupStyle != null)
             {

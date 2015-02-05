@@ -40,5 +40,10 @@ namespace KendoUIMVCTest.Areas.Demo.Controllers
         {
             return View();
         }
+
+        public ActionResult WithPartial()
+        {
+            return View();
+        }
     }
 }

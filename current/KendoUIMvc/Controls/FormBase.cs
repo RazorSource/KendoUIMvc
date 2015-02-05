@@ -52,7 +52,7 @@ namespace KendoUIMvc.Controls
 
         protected virtual void RestoreDefaultViewSettings()
         {
-            ViewSettings viewSettings = this.htmlHelper.ViewData.GetViewSettings();
+            ViewSettings viewSettings = RequestHelper.ViewSettings;
             viewSettings.RestoreDefaultViewSettings();
         }
 
@@ -76,7 +76,7 @@ namespace KendoUIMvc.Controls
         /// <returns></returns>
         public TControl SetDefaultControlStyle(string defaultControlStyle)
         {
-            this.htmlHelper.ViewData.GetViewSettings().DefaultControlStyle = defaultControlStyle;
+            RequestHelper.ViewSettings.DefaultControlStyle = defaultControlStyle;
             return this as TControl;
         }
 
@@ -88,7 +88,7 @@ namespace KendoUIMvc.Controls
         /// <returns></returns>
         public TControl SetDefaultLabelStyle(string defaultLabelStyle)
         {
-            this.htmlHelper.ViewData.GetViewSettings().DefaultLabelStyle = defaultLabelStyle;
+            RequestHelper.ViewSettings.DefaultLabelStyle = defaultLabelStyle;
             return this as TControl;
         }
 
@@ -100,7 +100,7 @@ namespace KendoUIMvc.Controls
         /// <returns></returns>
         public TControl SetDefaultGroupStyle(string defaultGroupStyle)
         {
-            this.htmlHelper.ViewData.GetViewSettings().DefaultGroupStyle = defaultGroupStyle;
+            RequestHelper.ViewSettings.DefaultGroupStyle = defaultGroupStyle;
             return this as TControl;
         }
 
@@ -158,7 +158,7 @@ namespace KendoUIMvc.Controls
         /// <returns></returns>
         public TControl RenderBegin()
         {
-            ViewSettings viewSettings = this.htmlHelper.ViewData.GetViewSettings();
+            ViewSettings viewSettings = RequestHelper.ViewSettings;
             List<string> classes = new List<string>();
 
             IDictionary<string, object> attributes = new Dictionary<string, object>();
