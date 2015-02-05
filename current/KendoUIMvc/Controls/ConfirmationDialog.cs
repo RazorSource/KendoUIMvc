@@ -27,6 +27,7 @@ namespace KendoUIMvc.Controls
         protected string yesText;
         protected string noText;
         protected string cancelText;
+        protected IMessageDisplay<TModel> messageDisplay;
 
         public ConfirmationDialog(HtmlHelper<TModel> htmlHelper, string name, string title, string message, string yesAction)
         {
@@ -39,6 +40,10 @@ namespace KendoUIMvc.Controls
             this.noText = "No";
             this.cancelText = "Cancel";
             this.width = 400;
+            this.messageDisplay = new Notification<TModel>(this.htmlHelper, this.name + "_messageDisplay")
+                .SetAppendTo("#" + this.name + "_messages")
+                .SetAutoHideAfter(0)
+                .SetMessageType(MessageType.error);
         }
 
         /// <summary>
@@ -125,6 +130,15 @@ namespace KendoUIMvc.Controls
         }
 
         /// <summary>
+        /// Gets the internal message display that is used to display messages on the confirmation dialog.
+        /// </summary>
+        /// <returns>The IMessageDisplay embedded in the confirmation dialog.</returns>
+        public IMessageDisplay<TModel> GetMessageDisplay()
+        {
+            return this.messageDisplay;
+        }
+
+        /// <summary>
         /// Gets the HTML necessary to render the control.
         /// </summary>
         /// <returns>The HTML as a string.</returns>
@@ -135,7 +149,7 @@ namespace KendoUIMvc.Controls
             html.Append(@"
                 <div id=""" + this.name + @""" style=""display: none;"">
                     <div class=""km-margin-bottom"">" + this.message + @"</div>
-                    <div class=""center-block"">");
+                    <div id=""" + this.name + @"_actionButtons"" class=""center-block"">");
 
             // Add the Yes Button.
             IButton<TModel> yesButton = new Button<TModel>(this.htmlHelper, this.name + "_buttonYes", this.yesText)
@@ -157,6 +171,13 @@ namespace KendoUIMvc.Controls
                 html.Append(@"
                 " + cancelButton.GetControlString());
             }
+
+            html.Append(@"
+                    </div>
+                    <div id=""" + this.name + @"_messages"">");
+
+            // Render out the message display.
+            html.Append(this.messageDisplay.GetControlString());
 
             html.Append(@"
                     </div>
@@ -236,6 +257,7 @@ namespace KendoUIMvc.Controls
                             width: '" + this.width + @"',
                             title: '" + this.title + @"',
                             modal: true,
+                            close: function() {" + this.messageDisplay.GetCallHideScript() + @"; },
                             visible: false");
 
             return attributes.ToString();

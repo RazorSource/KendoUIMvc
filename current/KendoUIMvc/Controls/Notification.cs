@@ -164,7 +164,7 @@ namespace KendoUIMvc.Controls
         /// <returns>The javascript function call as a string.</returns>
         public string GetCallShowAjaxResponseScript(string response, string defaultMessage = "Error Completing Request.")
         {            
-            return this.name + @"_showAjaxResponse(" + response + @", " + defaultMessage + @");";
+            return this.name + @"_showAjaxResponse(" + response + @", '" + defaultMessage + @"');";
         }
 
         /// <summary>

@@ -80,5 +80,11 @@ namespace CommonMvc.Razor.Controls
         /// </summary>
         /// <returns>The javascript function call as a string.</returns>
         string GetCallHideScript();
+
+        /// <summary>
+        /// Gets the internal message display that is used to display messages on the confirmation dialog.
+        /// </summary>
+        /// <returns>The IMessageDisplay embedded in the confirmation dialog.</returns>
+        IMessageDisplay<TModel> GetMessageDisplay();
     }
 }

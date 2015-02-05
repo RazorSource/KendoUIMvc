@@ -797,6 +797,7 @@ namespace KendoUIMvc.Controls
                         },
                         error: function (data) {
                             succeeded = false;
+                            " + deleteConfirmation.GetMessageDisplay().GetCallShowAjaxResponseScript("data") + @";
                         }
                     })
 
