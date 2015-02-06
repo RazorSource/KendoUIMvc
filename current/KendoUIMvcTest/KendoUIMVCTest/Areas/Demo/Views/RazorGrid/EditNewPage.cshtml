@@ -1,0 +1,26 @@
+﻿@model KendoUIMVCTest.Models.DemoModel
+
+@using KendoUIMVCTest.Models
+@using CommonMvc.Razor.Controls
+
+@{
+    ViewBag.Title = "Kendo UI MVC Razor Grid Edit New Page";
+}
+
+<h2>Razor Grid Edit New Page</h2>
+
+@{  IGrid<DemoModel> grid = UI.Grid("gridSample", "Id")
+        .SetRemoteDataSource("GetData", "RazorGrid", "Demo")
+        .SetWindowAddButton("Add", "RazorGrid")
+        .SetPageSize(4)
+        .SetPageData(true)
+        .SetServerPaging(true)
+        .SetGridContainerClass("col-md-6")
+        .AddEditColumnNewPage("", "Edit", "RazorGrid")
+        .AddDeleteColumn("", "Delete", "RazorGrid")
+        .AddColumn("FavoriteDay", "Favorite Day")
+        .AddLookupColumn("FavoriteDay", "Favorite Day", (IEnumerable<SelectListItem>)ViewBag.FavoriteDayList)
+        .AddDateColumn("BirthDate", "Birth Date");
+}
+
+@grid.Render()

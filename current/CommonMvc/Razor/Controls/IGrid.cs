@@ -135,6 +135,27 @@ namespace CommonMvc.Razor.Controls
             string actionName, string controllerName = null, string areaName = null);
 
         /// <summary>
+        /// Adds an edit column that links to a new page.  A query string parameter is appeneded to the URL, with the keyProperty defined as the name and the associated row
+        /// key as the value.
+        /// </summary>
+        /// <param name="columnLabel">Label to appear on column header.</param>
+        /// <param name="baseUrl">Base URL to use for editing. A query string parameter is appeneded to the URL, with the keyProperty defined as the name and the associated row
+        /// key as the value.</param>
+        /// <returns></returns>
+        IGrid<TModel> AddEditColumnNewPage(string columnLabel, string baseUrl);
+
+        /// <summary>
+        /// Adds an edit column that links to a new page.  A query string parameter is appeneded to the URL, with the keyProperty defined as the name and the associated row
+        /// key as the value.
+        /// </summary>
+        /// <param name="columnLabel">Label to appear on column header.</param>
+        /// <param name="actionName">Name of the action to invoke to display the edit page.</param>
+        /// <param name="controllerName">Name of the controller containing the action.</param>
+        /// <param name="areaName">Name of hte area containing the controller.</param>
+        /// <returns></returns>
+        IGrid<TModel> AddEditColumnNewPage(string columnLabel, string actionName, string controllerName = null, string areaName = null);
+
+        /// <summary>
         /// Adds an add button to the grid to add new records.
         /// </summary>
         // <param name="actionName">Name of the action to invoke to save a new record.</param>

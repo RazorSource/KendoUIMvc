@@ -13,6 +13,12 @@ namespace CommonMvc.Models
     public class ViewSettings
     {
         /// <summary>
+        /// Constant for the returnUrl param that is used between different pages to specify the URL that should be used
+        /// for redirecting upon the completion of the page.
+        /// </summary>
+        public const string RETURN_URL_PARAM = "returnUrl";
+
+        /// <summary>
         /// Layout options for form controls.
         /// </summary>
         public enum FormLayoutOption

@@ -11,6 +11,7 @@ using CommonMvc.Razor.Controls;
 using CommonMvc.Util;
 using Newtonsoft.Json;
 using System.Web;
+using CommonMvc.Models;
 
 namespace KendoUIMvc.Controls
 {
@@ -32,6 +33,7 @@ namespace KendoUIMvc.Controls
     {
         protected const string EDIT_COLUMN_ID = "_edit";
         protected const string DELETE_COLUMN_ID = "_delete";
+        protected const string GRID_STATE_PARAM_SUFFIX = "_state";
 
         protected HtmlHelper<TModel> htmlHelper;
         protected AjaxHelper<TModel> ajaxHelper;
@@ -227,6 +229,12 @@ namespace KendoUIMvc.Controls
         public IGrid<TModel> AddWindowEditColumn(string columnLabel, string windowTitle, string formHeader,
             string actionName, string controllerName = null, string areaName = null)
         {
+            // Ensure another edit column has not already been added to the grid.
+            if (this.remoteEditUrl != null)
+            {
+                throw new Exception("Only one edit modal column may be added to a RazorGrid.");
+            }
+
             string script = "bind" + this.name + @"Row('" + GetEditWindowName() + @"', '#: " + this.keyProperty + @" #')";
             ActionColumn editColumn = new ActionColumn(columnLabel, script, @"<span class=""k-icon k-i-pencil""></span>");
             editColumn.ColumnId = EDIT_COLUMN_ID;
@@ -234,13 +242,10 @@ namespace KendoUIMvc.Controls
             editColumn.Tooltip = editTooltip;
             columns.Add(editColumn);
 
-            //TODO:  Do something to handle multiple edit columns, or only allow one
             this.remoteEditUrl = MvcHtmlHelper.GetActionUrl(this.htmlHelper, actionName, controllerName, areaName);
 
-            // TODO:  Chain calls again when AjaxForm interface is refactored.
             editWindow = new RazorGridWindow<TModel>(this.htmlHelper, this.ajaxHelper, GetEditWindowName(), this);
             editWindow.SetModal(true);
-
 
             editWindow.SetAjaxForm(new AjaxForm<TModel>(this.htmlHelper, this.ajaxHelper, this.name + "_editForm", actionName, controllerName)
                     .SetAjaxOptions(new AjaxOptions() { OnSuccess = this.name + "_saveSuccess", OnFailure = this.name + "_showError" })
@@ -253,6 +258,43 @@ namespace KendoUIMvc.Controls
             editWindow.SetTitle(windowTitle);
 
             return this;
+        }
+
+        /// <summary>
+        /// Adds an edit column that links to a new page.  A query string parameter is appeneded to the URL, with the keyProperty defined as the name and the associated row
+        /// key as the value.
+        /// </summary>
+        /// <param name="columnLabel">Label to appear on column header.</param>
+        /// <param name="baseUrl">Base URL to use for editing. A query string parameter is appeneded to the URL, with the keyProperty defined as the name and the associated row
+        /// key as the value.</param>
+        /// <returns></returns>
+        public IGrid<TModel> AddEditColumnNewPage(string columnLabel, string baseUrl)
+        {
+            string url = baseUrl + MvcHtmlHelper.GetNextUrlParameterSeparator(baseUrl) + this.keyProperty + @"=#: " + this.keyProperty + " #&" +
+                ViewSettings.RETURN_URL_PARAM + "=" + GetReturnUrl() + @"#: encodeURIComponent(" + GetGridStateFunctionName() + @"()) #";
+            HyperLinkColumn editColumn = new HyperLinkColumn(columnLabel, url, @"<span class=""k-icon k-i-pencil""></span>");
+            editColumn.ColumnId = EDIT_COLUMN_ID;
+            editColumn.Width = 15;
+            editColumn.Tooltip = editTooltip;
+            columns.Add(editColumn);
+
+            return this;
+        }
+
+        /// <summary>
+        /// Adds an edit column that links to a new page.  A query string parameter is appeneded to the URL, with the keyProperty defined as the name and the associated row
+        /// key as the value.
+        /// </summary>
+        /// <param name="columnLabel">Label to appear on column header.</param>
+        /// <param name="actionName">Name of the action to invoke to display the edit page.</param>
+        /// <param name="controllerName">Name of the controller containing the action.</param>
+        /// <param name="areaName">Name of hte area containing the controller.</param>
+        /// <returns></returns>
+        public IGrid<TModel> AddEditColumnNewPage(string columnLabel, string actionName, string controllerName = null, string areaName = null)
+        {
+            string editPageUrl = MvcHtmlHelper.GetActionUrl(this.htmlHelper, actionName, controllerName, areaName);
+
+            return AddEditColumnNewPage(columnLabel, editPageUrl);
         }
 
         /// <summary>
@@ -494,6 +536,41 @@ namespace KendoUIMvc.Controls
             return this;
         }
 
+        private string GetReturnUrl()
+        {
+            string returnUrlBase = System.Web.HttpContext.Current.Request.RawUrl;
+
+            // If the grid state is the on the URL, remove it so the current state can be added.
+            int gridStateParamIndex = returnUrlBase.IndexOf(this.name + GRID_STATE_PARAM_SUFFIX);
+            if (gridStateParamIndex > 0)
+            {
+                returnUrlBase = returnUrlBase.Substring(0, gridStateParamIndex - 1);
+            }
+
+            returnUrlBase += MvcHtmlHelper.GetNextUrlParameterSeparator(returnUrlBase) + this.name + GRID_STATE_PARAM_SUFFIX + "=";
+
+            return HttpUtility.UrlEncode(returnUrlBase);
+        }
+
+        private int GetDefaultPage()
+        {
+            // For now grid state only contains page information.
+            string paramValue = MvcHtmlHelper.GetRequestParameter(this.htmlHelper, this.name + GRID_STATE_PARAM_SUFFIX);
+            int page = 1;
+
+            if (paramValue != null)
+            {
+                int.TryParse(paramValue, out page);
+            }           
+
+            return page;
+        }
+
+        protected string GetGridStateFunctionName()
+        {
+            return this.name + "_getGridState";
+        }
+
         /// <summary>
         /// Builds the HTML necessary to render the control.
         /// </summary>
@@ -501,10 +578,10 @@ namespace KendoUIMvc.Controls
         public MvcHtmlString Render()
         {
             StringBuilder html = new StringBuilder();
-            string dataTemplateName = name + "_layoutTemplate";
-            string dataSourceName = name + "_dataSource";
+            string dataTemplateName = this.name + "_layoutTemplate";
+            string dataSourceName = this.name + "_dataSource";
             // Used to track the current action for the record.  Either add or edit.
-            string actionMode = name + "_actionMode";
+            string actionMode = this.name + "_actionMode";
             string lastDataSourceActionName = "last" + this.name + "_dataSourceAction";
 
             string notificationName = AppendNotification(html);
@@ -614,6 +691,7 @@ namespace KendoUIMvc.Controls
             if (this.pageData)
             {
                 html.Append(@"
+                        page: " + GetDefaultPage() + @",
                         pageSize: " + this.pageSize + @",
                         serverPaging: " + MvcHtmlHelper.GetJavascriptBoolean(this.serverPaging) + @",");
             }
@@ -746,6 +824,10 @@ namespace KendoUIMvc.Controls
                 function " + this.name + @"_cancel() {
                     " + dataSourceName + @".cancelChanges();
                     $('#" + GetEditWindowName() + @"').data('kendoWindow').close();
+                }
+
+                function " + GetGridStateFunctionName() + @"() {
+                    return " + dataSourceName + @".page();
                 }
 
                 function bind" + this.name + @"Row(windowName, key) {
@@ -932,6 +1014,54 @@ namespace KendoUIMvc.Controls
             public override string RenderContent()
             {                
                 return @"<a href=""\\#"" onclick=""return " + this.Script + @";"">" + this.ActionLabel + @"</a>";
+            }
+
+            public override string Id
+            {
+                get
+                {
+                    return this.ColumnId;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Hyperlink column displays a link within the column content.
+        /// </summary>
+        public class HyperLinkColumn : Column
+        {
+            /// <summary>
+            /// Constructor.
+            /// </summary>
+            /// <param name="label">Label for the column header.</param>
+            /// <param name="url">URL that should be linked for the column.</param>
+            /// <param name="actionLabel">Action label to display in the column.  This could be either text or html to emit an icon, etc.</param>
+            public HyperLinkColumn(string label, string url, string actionLabel)
+                : base(label)
+            {
+                this.Url = url;
+                this.ActionLabel = actionLabel;
+            }
+
+            /// <summary>
+            /// Base URL that should be linked for the column.  The row key is appended to the end of the URL as a query string parameter, with the
+            /// key property name as the name of the parameter.
+            /// </summary>
+            public string Url { get; set; }
+
+            /// <summary>
+            /// Action label to display in the column.  This could be either text or html to emit an icon, etc.
+            /// </summary>
+            public string ActionLabel { get; set; }
+
+            /// <summary>
+            /// Used as a tag to identify the column uniquely when rendered.
+            /// </summary>
+            public string ColumnId { get; set; }
+
+            public override string RenderContent()
+            {
+                return @"<a href=""" + this.Url + @""">" + this.ActionLabel + @"</a>";
             }
 
             public override string Id

@@ -1,0 +1,20 @@
+﻿@model KendoUIMVCTest.Models.DemoModel
+
+@{
+    ViewBag.Title = "Kendo UI MVC HTML Form";
+}
+
+<h2>HTML Form</h2>
+
+@using (UI.BeginForm("frmSample", "Edit", "RazorGrid"))
+{
+    @UI.TextBoxFor(model => model.Id)
+    @UI.TextBoxFor(model => model.FavoriteDay)
+    @UI.DatePickerFor(model => model.BirthDate)
+    @UI.CheckboxFor(model => model.Agree)
+    @UI.CheckboxFor(model => model.LikeThis)
+    <div class="km-panel-action-footer">
+        @UI.Button("btnCancel", "Cancel")
+        @UI.SubmitButton("btnSave", "Save")
+    </div>
+}

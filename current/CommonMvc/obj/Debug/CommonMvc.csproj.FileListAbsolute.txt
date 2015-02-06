@@ -10,3 +10,16 @@ C:\Projects\KendoUIMvc\current\CommonMvc\bin\Debug\CommonMvc.pdb
 C:\Projects\KendoUIMvc\current\CommonMvc\bin\Debug\Newtonsoft.Json.dll
 C:\Projects\KendoUIMvc\current\CommonMvc\bin\Debug\Newtonsoft.Json.xml
 C:\Projects\KendoUIMvc\current\CommonMvc\obj\Debug\CommonMvc.csprojResolveAssemblyReference.cache
+C:\Projects\KendoUIMvc\current\CommonMvc\bin\Debug\Microsoft.Web.Infrastructure.dll
+C:\Projects\KendoUIMvc\current\CommonMvc\bin\Debug\System.Web.Helpers.dll
+C:\Projects\KendoUIMvc\current\CommonMvc\bin\Debug\System.Web.Mvc.dll
+C:\Projects\KendoUIMvc\current\CommonMvc\bin\Debug\System.Web.Razor.dll
+C:\Projects\KendoUIMvc\current\CommonMvc\bin\Debug\System.Web.WebPages.Deployment.dll
+C:\Projects\KendoUIMvc\current\CommonMvc\bin\Debug\System.Web.WebPages.dll
+C:\Projects\KendoUIMvc\current\CommonMvc\bin\Debug\System.Web.WebPages.Razor.dll
+C:\Projects\KendoUIMvc\current\CommonMvc\bin\Debug\System.Web.Helpers.xml
+C:\Projects\KendoUIMvc\current\CommonMvc\bin\Debug\System.Web.Mvc.xml
+C:\Projects\KendoUIMvc\current\CommonMvc\bin\Debug\System.Web.Razor.xml
+C:\Projects\KendoUIMvc\current\CommonMvc\bin\Debug\System.Web.WebPages.xml
+C:\Projects\KendoUIMvc\current\CommonMvc\bin\Debug\System.Web.WebPages.Deployment.xml
+C:\Projects\KendoUIMvc\current\CommonMvc\bin\Debug\System.Web.WebPages.Razor.xml

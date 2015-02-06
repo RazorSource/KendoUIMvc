@@ -191,6 +191,7 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\kendo-ui-mvc-util.js" />
     <Content Include="Content\KendoBootstrapFixup.css" />
     <Content Include="Content\kendo\js\angular.min.js" />
     <Content Include="Content\kendo\js\cultures\kendo.culture.af-ZA.min.js" />
@@ -977,6 +978,8 @@
     <Content Include="Areas\Demo\Views\RazorGrid\NoData.cshtml" />
     <Content Include="Areas\Demo\Views\HtmlForm\WithPartial.cshtml" />
     <Content Include="Areas\Demo\Views\HtmlForm\PartialFormControls.cshtml" />
+    <Content Include="Areas\Demo\Views\RazorGrid\EditNewPage.cshtml" />
+    <Content Include="Areas\Demo\Views\RazorGrid\Edit.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -1039,6 +1042,10 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\CommonMvc\CommonMvc.csproj">
+      <Project>{2e374ccb-a135-4f9e-b3df-f8204face553}</Project>
+      <Name>CommonMvc</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\KendoUIMvc\KendoUIMvc.csproj">
       <Project>{a159d048-43e4-46c2-becb-04b49ae3182a}</Project>
       <Name>KendoUIMvc</Name>

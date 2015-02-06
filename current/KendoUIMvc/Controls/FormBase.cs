@@ -28,6 +28,7 @@ namespace KendoUIMvc.Controls
         protected string title;
         protected IPanel<TModel> panel;
         protected IMessageDisplay<TModel> notification;
+        protected bool autoPostReturnUrl;
 
         protected abstract MvcForm RenderBeginForm(IDictionary<string, object> layoutAttributes);
 
@@ -42,6 +43,9 @@ namespace KendoUIMvc.Controls
 
             // By default include the panel around the form.
             this.includePanel = true;
+
+            // By default the returnUrl parameter is autoposted.
+            this.autoPostReturnUrl = true;
 
             // Initialize the notification control.
             notification = new Notification<TModel>(this.htmlHelper, this.formId + "_errorDisplay")
@@ -152,6 +156,20 @@ namespace KendoUIMvc.Controls
         }
 
         /// <summary>
+        /// Sets a boolen flag indicating if the return URL should automatically be added as a hidden field to the form, so it is
+        /// reposted on save events.  This is intended to allow redirects to the desired return URL to occur after edits are
+        /// successfully saved via a post action.  The hidden field will only be added, if the form is loaded with a returnUrl query
+        /// string parameter.  The default value is true.
+        /// </summary>
+        /// <param name="autoPostReturnUrl">Flag indicating if a hidden returnUrl parameter should automatically be set on the form.</param>
+        /// <returns></returns>
+        public TControl SetAutoPostReturnUrl(bool autoPostReturnUrl)
+        {
+            this.autoPostReturnUrl = autoPostReturnUrl;
+            return this as TControl;
+        }
+
+        /// <summary>
         /// Renders the opening tags for the form.  This call should typically be used within a using block to ensure proper closing
         /// tags are emitted when the form is disposed.
         /// </summary>
@@ -206,6 +224,16 @@ namespace KendoUIMvc.Controls
             }
 
             this.mvcForm = RenderBeginForm(attributes);
+
+            if (this.autoPostReturnUrl)
+            {
+                string returnUrl = MvcHtmlHelper.GetRequestParameter(this.htmlHelper, ViewSettings.RETURN_URL_PARAM);
+                if (returnUrl != null)
+                {
+                    MvcHtmlHelper.WriteUnencodedContent(this.htmlHelper, 
+                        this.htmlHelper.Hidden(ViewSettings.RETURN_URL_PARAM, returnUrl).ToString());
+                }
+            }
 
             return this as TControl;
         }

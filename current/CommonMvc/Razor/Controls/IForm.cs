@@ -69,6 +69,16 @@ namespace CommonMvc.Razor.Controls
         TControl SetTitle(string title);
 
         /// <summary>
+        /// Sets a boolen flag indicating if the return URL should automatically be added as a hidden field to the form, so it is
+        /// reposted on save events.  This is intended to allow redirects to the desired return URL to occur after edits are
+        /// successfully saved via a post action.  The hidden field will only be added, if the form is loaded with a returnUrl query
+        /// string parameter.  The default value is true.
+        /// </summary>
+        /// <param name="autoPostReturnUrl">Flag indicating if a hidden returnUrl parameter should automatically be set on the form.</param>
+        /// <returns></returns>
+        TControl SetAutoPostReturnUrl(bool autoPostReturnUrl);
+
+        /// <summary>
         /// Renders the opening tags for the form.  This call should typically be used within a using block to ensure proper closing
         /// tags are emitted when the form is disposed.
         /// </summary>

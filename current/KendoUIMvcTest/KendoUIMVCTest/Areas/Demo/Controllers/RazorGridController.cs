@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using KendoUIMvc.Models;
 using KendoUIMVCTest.Dao;
+using KendoUIMvc.Util;
+using CommonMvc.Models;
 
 namespace KendoUIMVCTest.Areas.Demo.Controllers
 {
@@ -18,13 +20,13 @@ namespace KendoUIMVCTest.Areas.Demo.Controllers
 
         public ActionResult Index()
         {
-            ViewBag.FavoriteDayList = DaysOfTheWeekDao.GetDaysOfTheWeek();
+            InitViewBag();
             return View();
         }
 
         public ActionResult BoundIndex()
         {
-            ViewBag.FavoriteDayList = DaysOfTheWeekDao.GetDaysOfTheWeek();
+            InitViewBag();
             return View();
         }
 
@@ -75,6 +77,15 @@ namespace KendoUIMVCTest.Areas.Demo.Controllers
             return filteredModels;
         }
 
+        [HttpGet]
+        public ActionResult Edit(int id)
+        {
+            InitViewBag();
+            DemoModel demoModel = GetDemoModels().FirstOrDefault(d => d.Id == id);
+
+            return View(demoModel);
+        }
+
         [HttpPost]
         public ActionResult Edit(DemoModel demoModel)
         {
@@ -87,12 +98,28 @@ namespace KendoUIMVCTest.Areas.Demo.Controllers
 
             UpdateDemoModel(demoModel);
 
-            return new ContentResult
+            if (this.Request.IsAjaxRequest())
             {
-                Content = JsonConvert.SerializeObject(new PageOfData<DemoModel>(demoModel)),
-                ContentType = "application/json",
-                ContentEncoding = Encoding.UTF8
-            };
+                return new ContentResult
+                {
+                    Content = JsonConvert.SerializeObject(new PageOfData<DemoModel>(demoModel)),
+                    ContentType = "application/json",
+                    ContentEncoding = Encoding.UTF8
+                };
+            }
+            else
+            {
+                string redirectUrl = this.Request.Params[ViewSettings.RETURN_URL_PARAM];
+
+                if (redirectUrl != null)
+                {
+                    return Redirect(redirectUrl);
+                }
+                else
+                {
+                    return RedirectToAction("EditNewPage");
+                }
+            }
         }
 
         [HttpPost]
@@ -194,6 +221,17 @@ namespace KendoUIMVCTest.Areas.Demo.Controllers
                 ContentType = "application/json",
                 ContentEncoding = Encoding.UTF8
             };
+        }
+
+        public ActionResult EditNewPage()
+        {
+            InitViewBag();
+            return View();
+        }
+
+        private void InitViewBag()
+        {
+            ViewBag.FavoriteDayList = DaysOfTheWeekDao.GetDaysOfTheWeek();
         }
     }
 }

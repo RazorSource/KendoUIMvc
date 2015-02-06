@@ -9,6 +9,8 @@ using System.Web.Routing;
 using System.Web.Mvc.Html;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+using System.Collections.Specialized;
+using System.Web;
 
 namespace KendoUIMvc.Util
 {
@@ -91,7 +93,7 @@ namespace KendoUIMvc.Util
         /// <param name="htmlHelper">Instance of HtmlHelper being used to generate the current view.</param>
         /// <param name="expression">The bound expression to evaluate for a property.</param>
         /// <returns>The boolean value for the provided property.</returns>
-        public static bool GetBooleanValue<TModel, TProperty>(System.Web.Mvc.HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression)
+        public static bool GetBooleanValue<TModel, TProperty>(HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression)
         {
             bool boolValue;
             string stringBool = htmlHelper.ValueFor(expression).ToString();
@@ -114,7 +116,7 @@ namespace KendoUIMvc.Util
         /// <param name="htmlHelper">Instance of HtmlHelper being used to generate the current view.</param>
         /// <param name="expression">The bound expression to evaluate for the display text.</param>
         /// <returns>The text to display for the property.</returns>
-        public static string GetDisplayText<TModel, TProperty>(System.Web.Mvc.HtmlHelper<TModel> htmlHelper,
+        public static string GetDisplayText<TModel, TProperty>(HtmlHelper<TModel> htmlHelper,
             Expression<Func<TModel, TProperty>> expression)
         {
             MemberExpression memberAccessExpression = (MemberExpression)expression.Body;
@@ -137,6 +139,30 @@ namespace KendoUIMvc.Util
             
             //If a display attribute is not tagged on the property use the display name.
             return GetExpressionPropertyId(htmlHelper, expression);
+        }
+
+        /// <summary>
+        /// Returns the query string separator needed to add another parameter to the provided URL.
+        /// Essentially if a ? already exists in the URL an & is returned.  If this is the first parameter and
+        /// ? does not already exist, ? is returned.
+        /// </summary>
+        /// <param name="currentUrl">Current URL to which another parameter will be added.</param>
+        /// <returns>The character to apply for the next parameter separator.</returns>
+        public static string GetNextUrlParameterSeparator(string currentUrl)
+        {
+            return currentUrl.Contains("?") ? "&" : "?";
+        }
+
+        /// <summary>
+        /// Gets the specified named parameter from the URL.
+        /// </summary>
+        /// <typeparam name="TModel">Type of model being bound.</typeparam>
+        /// <param name="htmlHelper">Instance of HtmlHelper being used to generate the current view.</param>
+        /// <param name="paramName">The name of the parameter.</param>
+        /// <returns>The parameter value as a string.  If the parameter does not exist null is returned.</returns>
+        public static string GetRequestParameter<TModel>(HtmlHelper<TModel> htmlHelper, string paramName)
+        {
+            return htmlHelper.ViewContext.RequestContext.HttpContext.Request.Params[paramName];
         }
     }
 }
