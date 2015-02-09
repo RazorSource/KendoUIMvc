@@ -158,7 +158,7 @@ namespace KendoUIMVCTest.Areas.Demo.Controllers
             if (demoModels == null)
             {
                 demoModels = new List<DemoModel>();
-                demoModels.Add(new DemoModel());
+                demoModels.Add(new DemoModel() { Id = 0, BirthDate = new DateTime(2015, 1, 14), FavoriteDay = 6 });
                 demoModels.Add(new DemoModel() { Id = 1, BirthDate = new DateTime(2015, 1, 19), FavoriteDay = 5 });
                 demoModels.Add(new DemoModel() { Id = 2, BirthDate = new DateTime(2015, 1, 20), FavoriteDay = 4 });
                 demoModels.Add(new DemoModel() { Id = 3, BirthDate = new DateTime(2015, 1, 21), FavoriteDay = 3 });

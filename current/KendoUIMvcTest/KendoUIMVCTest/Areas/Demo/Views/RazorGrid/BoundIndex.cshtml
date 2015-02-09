@@ -16,7 +16,7 @@
         .SetPageData(true)
         .SetServerPaging(true)
         .SetGridContainerClass("col-md-6")
-        .AddWindowEditColumn("", "Maintain Demo Data", "Demo Data", "Edit", "RazorGrid")
+        .AddEditColumnModal("Maintain Demo Data", "Demo Data", "Edit", "RazorGrid")
         .AddDeleteColumn("", "Delete", "RazorGrid")
         .AddColumnFor(model => model.FavoriteDay)
         .AddLookupColumnFor(model => model.FavoriteDay, (IEnumerable<SelectListItem>)ViewBag.FavoriteDayList)

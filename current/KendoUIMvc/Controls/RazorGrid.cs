@@ -219,14 +219,13 @@ namespace KendoUIMvc.Controls
         /// <summary>
         /// Adds an edit column that is used to show an edit form associated with the grid data.
         /// </summary>
-        /// <param name="columnLabel">Label for the column header.</param>
         /// <param name="windowTitle">Title to display on the edit window.</param>
         /// <param name="formHeader">Header caption to display on the form for the edit window.</param>
         /// <param name="actionName">Name of the action to invoke to save an edit.</param>
         /// <param name="controllerName">Name of the controller to invoke to save an edit.</param>
         /// <param name="areaName">Name of the area for the controller to invoke to save an edit.</param>
         /// <returns></returns>
-        public IGrid<TModel> AddWindowEditColumn(string columnLabel, string windowTitle, string formHeader,
+        public IGrid<TModel> AddEditColumnModal(string windowTitle, string formHeader,
             string actionName, string controllerName = null, string areaName = null)
         {
             // Ensure another edit column has not already been added to the grid.
@@ -236,7 +235,7 @@ namespace KendoUIMvc.Controls
             }
 
             string script = "bind" + this.name + @"Row('" + GetEditWindowName() + @"', '#: " + this.keyProperty + @" #')";
-            ActionColumn editColumn = new ActionColumn(columnLabel, script, @"<span class=""k-icon k-i-pencil""></span>");
+            ActionColumn editColumn = new ActionColumn("", script, @"<span class=""k-icon k-i-pencil""></span>");
             editColumn.ColumnId = EDIT_COLUMN_ID;
             editColumn.Width = 15;
             editColumn.Tooltip = editTooltip;
@@ -264,15 +263,14 @@ namespace KendoUIMvc.Controls
         /// Adds an edit column that links to a new page.  A query string parameter is appeneded to the URL, with the keyProperty defined as the name and the associated row
         /// key as the value.
         /// </summary>
-        /// <param name="columnLabel">Label to appear on column header.</param>
         /// <param name="baseUrl">Base URL to use for editing. A query string parameter is appeneded to the URL, with the keyProperty defined as the name and the associated row
         /// key as the value.</param>
         /// <returns></returns>
-        public IGrid<TModel> AddEditColumnNewPage(string columnLabel, string baseUrl)
+        public IGrid<TModel> AddEditColumnNewPage(string baseUrl)
         {
             string url = baseUrl + MvcHtmlHelper.GetNextUrlParameterSeparator(baseUrl) + this.keyProperty + @"=#: " + this.keyProperty + " #&" +
                 ViewSettings.RETURN_URL_PARAM + "=" + GetReturnUrl() + @"#: encodeURIComponent(" + GetGridStateFunctionName() + @"()) #";
-            HyperLinkColumn editColumn = new HyperLinkColumn(columnLabel, url, @"<span class=""k-icon k-i-pencil""></span>");
+            HyperLinkColumn editColumn = new HyperLinkColumn("", url, @"<span class=""k-icon k-i-pencil""></span>");
             editColumn.ColumnId = EDIT_COLUMN_ID;
             editColumn.Width = 15;
             editColumn.Tooltip = editTooltip;
@@ -285,16 +283,15 @@ namespace KendoUIMvc.Controls
         /// Adds an edit column that links to a new page.  A query string parameter is appeneded to the URL, with the keyProperty defined as the name and the associated row
         /// key as the value.
         /// </summary>
-        /// <param name="columnLabel">Label to appear on column header.</param>
         /// <param name="actionName">Name of the action to invoke to display the edit page.</param>
         /// <param name="controllerName">Name of the controller containing the action.</param>
         /// <param name="areaName">Name of hte area containing the controller.</param>
         /// <returns></returns>
-        public IGrid<TModel> AddEditColumnNewPage(string columnLabel, string actionName, string controllerName = null, string areaName = null)
+        public IGrid<TModel> AddEditColumnNewPage(string actionName, string controllerName = null, string areaName = null)
         {
             string editPageUrl = MvcHtmlHelper.GetActionUrl(this.htmlHelper, actionName, controllerName, areaName);
 
-            return AddEditColumnNewPage(columnLabel, editPageUrl);
+            return AddEditColumnNewPage(editPageUrl);
         }
 
         /// <summary>
@@ -696,9 +693,23 @@ namespace KendoUIMvc.Controls
                         serverPaging: " + MvcHtmlHelper.GetJavascriptBoolean(this.serverPaging) + @",");
             }
 
+            // NOTE: The parameterMap logic below is used to parse the default Kendo Date format to a format that can be used by
+            // the MVC model binders.
             html.Append(@"
                         type: 'json',
-                        transport: {");
+                        transport: {
+                            parameterMap: function(data, operation) {
+                                        if (operation === 'update' || operation === 'create') {
+                                            var propertyNames = Object.getOwnPropertyNames(data)
+                                            for (var nextProperty in propertyNames) {
+                                                var nextPropertyName = propertyNames[nextProperty];
+	                                            if (data[nextPropertyName] instanceof Date) {
+			                                            data[nextPropertyName] = kendo.toString(kendo.parseDate(data[nextPropertyName]), 'G');
+	                                            }
+                                            }
+                                        }
+                                        return data;
+                                    },");
 
             // Add update option if an edit column was created.
             if (this.remoteEditUrl != null)
@@ -743,7 +754,16 @@ namespace KendoUIMvc.Controls
                             total: 'total',
                             model: {
                                 id: '" + this.keyProperty + @"'
+                            },
+                            parse:function (response) {
+                                $.each(response, function (idx, elem) {
+                                    if (elem.BirthDate && typeof elem.BirthDate === 'string') {
+                                        elem.BirthDate = kendo.parseDate(elem.BirthDate, '  ');
+                                    }
+                                });
+                                return response;
                             }
+
                         },
                         requestStart: function (e) {
                             lastDataSourceActionName = e.type;

@@ -17,7 +17,7 @@ namespace KendoUIMVCTest.Areas.Demo.Controllers
 
         public ActionResult IndexBound()
         {
-            return View(new DemoModel());
+            return View(new DemoModel() { Id = 0, BirthDate = new DateTime(2015, 1, 14), FavoriteDay = 6 });
         }
     }
 }

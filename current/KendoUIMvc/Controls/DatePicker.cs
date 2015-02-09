@@ -56,7 +56,8 @@ namespace KendoUIMvc.Controls
             html.AppendLine(@"
                 <script type=""text/javascript"">
                     $(document).ready(function() {
-                        $('#" + this.controlId + @"').kendoDatePicker({                            
+                        $('#" + this.controlId + @"').kendoDatePicker({
+                            format: ""M/d/yyyy"",
                             parseFormats: [""yyyy-MM-ddTHH:mm:ss""]
                         });
                     });

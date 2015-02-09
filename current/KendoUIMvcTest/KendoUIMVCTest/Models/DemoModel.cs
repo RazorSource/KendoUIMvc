@@ -8,9 +8,7 @@ namespace KendoUIMVCTest.Models
     public class DemoModel
     {
         public DemoModel()
-        {
-            BirthDate = new DateTime(2015, 1, 14);
-            FavoriteDay = 6;
+        {            
         }
 
         public int Id { get; set; }
