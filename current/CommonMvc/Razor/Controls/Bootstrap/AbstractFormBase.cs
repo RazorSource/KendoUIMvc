@@ -7,13 +7,18 @@ using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using CommonMvc.Models;
 using CommonMvc.Razor.Controls;
-using KendoUIMvc.Models;
 using CommonMvc.Util;
 using CommonMvc.Models.Bootstrap;
 
-namespace KendoUIMvc.Controls
+namespace CommonMvc.Razor.Controls.Bootstrap
 {
-    public abstract class FormBase<TModel, TControl> : IDisposable where TControl : class
+    /// <summary>
+    /// Abstract base class that can be used for HTML forms that are layed out with the Bootstrap column model.  The
+    /// implementing class must provide implmenetations to create buttons and message displays for use within the form.
+    /// </summary>
+    /// <typeparam name="TModel"></typeparam>
+    /// <typeparam name="TControl"></typeparam>
+    public abstract class AbstractFormBase<TModel, TControl> : IDisposable where TControl : class
     {
         protected bool disposed;
         protected MvcForm mvcForm;
@@ -27,12 +32,29 @@ namespace KendoUIMvc.Controls
         protected bool includePanel;
         protected string title;
         protected IPanel<TModel> panel;
-        protected IMessageDisplay<TModel> notification;
+        protected IMessageDisplay<TModel> messageDisplay;
         protected bool autoPostReturnUrl;
 
+        /// <summary>
+        /// Renders the begin form tag for the form.
+        /// </summary>
+        /// <param name="layoutAttributes"></param>
+        /// <returns></returns>
         protected abstract MvcForm RenderBeginForm(IDictionary<string, object> layoutAttributes);
 
-        public FormBase(HtmlHelper<TModel> htmlHelper, string formId, string actionName, string controllerName)
+        /// <summary>
+        /// Creates an IMessageDisplay instance to use for the form to display messages to the user.
+        /// </summary>
+        /// <returns></returns>
+        protected abstract IMessageDisplay<TModel> CreateMessageDisplay();
+
+        /// <summary>
+        /// Creates an IPanel instance used to contain the form content.
+        /// </summary>
+        /// <returns></returns>
+        protected abstract IPanel<TModel> CreatePanel();
+
+        public AbstractFormBase(HtmlHelper<TModel> htmlHelper, string formId, string actionName, string controllerName)
         {
             this.htmlHelper = htmlHelper;
             this.formId = formId;
@@ -48,10 +70,7 @@ namespace KendoUIMvc.Controls
             this.autoPostReturnUrl = true;
 
             // Initialize the notification control.
-            notification = new Notification<TModel>(this.htmlHelper, this.formId + "_errorDisplay")
-                        .SetMessageType(MessageType.error)
-                        .SetAppendTo("#" + this.formId)
-                        .SetAutoHideAfter(0);
+            messageDisplay = CreateMessageDisplay();
         }
 
         protected virtual void RestoreDefaultViewSettings()
@@ -210,7 +229,7 @@ namespace KendoUIMvc.Controls
             {
                 // If a panel if included, render the start to the panel.  The panel
                 // will be close out in the dispose method.
-                this.panel = new Panel<TModel>(this.htmlHelper, this.formId + "Panel")
+                this.panel = CreatePanel()
                     .SetPanelStyle(this.formStyle) // Make the panels style the same as the forms.
                     .RenderBegin();
             }
@@ -251,7 +270,7 @@ namespace KendoUIMvc.Controls
             html.Append(@"
                 <div style=""clear: both;"" class=""km-panel-action-footer"">");
 
-            foreach (Button<TModel> nextButton in this.footerActionButtons)
+            foreach (IButton<TModel> nextButton in this.footerActionButtons)
             {
                 html.Append(nextButton.GetControlString());
             }
@@ -281,9 +300,9 @@ namespace KendoUIMvc.Controls
                 }
 
                 // Write out notification panel and related javascript to show errors.
-                if (notification != null)
+                if (messageDisplay != null)
                 {
-                    MvcHtmlHelper.WriteUnencodedContent(this.htmlHelper, notification.GetControlString());
+                    MvcHtmlHelper.WriteUnencodedContent(this.htmlHelper, messageDisplay.GetControlString());
                 }
                 
                 // Close out the panel if included.
@@ -295,12 +314,12 @@ namespace KendoUIMvc.Controls
         }
 
         /// <summary>
-        /// Gets the Notification used to display messages related to the form.
+        /// Gets the MessageDisplay used to display messages related to the form.
         /// </summary>
         /// <returns></returns>
         public IMessageDisplay<TModel> GetMessageDisplay()
         {
-            return notification;
+            return messageDisplay;
         }
 
         /// <summary>

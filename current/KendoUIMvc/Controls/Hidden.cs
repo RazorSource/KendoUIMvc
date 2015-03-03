@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using CommonMvc.Razor.Controls;
-using KendoUIMvc.Util;
+using CommonMvc.Util;
 
 namespace KendoUIMvc.Controls
 {

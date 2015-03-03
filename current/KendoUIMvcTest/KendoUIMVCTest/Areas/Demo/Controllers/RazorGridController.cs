@@ -8,7 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using KendoUIMvc.Models;
 using KendoUIMVCTest.Dao;
-using KendoUIMvc.Util;
+using CommonMvc.Util;
 using CommonMvc.Models;
 
 namespace KendoUIMVCTest.Areas.Demo.Controllers

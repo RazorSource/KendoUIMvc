@@ -1,0 +1,8 @@
+﻿@model KendoUIMVCTest.Models.DemoModel
+
+@{
+    ViewBag.Title = "Kendo UI MVC Text Area Columns";
+}
+
+<h2>Text Area Columns</h2>
+@UI.TextAreaFor(model => model.FavoriteDay).SetColumns(5)

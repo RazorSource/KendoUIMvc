@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
-using KendoUIMvc.Util;
+using CommonMvc.Util;
 using CommonMvc.Razor.Controls;
 using CommonMvc.Razor;
 
@@ -74,7 +74,7 @@ namespace KendoUIMvc
         /// <param name="name">Name of the control.</param>
         /// <param name="value">Initial value of the control.</param>
         /// <returns></returns>
-        public ITextBox<TModel, object> TextBox(string name, object value)
+        public ITextBox<TModel, object> TextBox(string name, object value = null)
         {
             return new TextBox<TModel, object>(this.htmlHelper, name, value);
         }
@@ -362,6 +362,28 @@ namespace KendoUIMvc
         public IHidden<TModel, object> Hidden(string name, object value)
         {
             return new Hidden<TModel, object>(this.htmlHelper, name, value);
+        }
+
+        /// <summary>
+        /// Renders a text area control.
+        /// </summary>
+        /// <typeparam name="TProperty">The data type of the property being bound.</typeparam>
+        /// <param name="expression">Expression used to bind a control to a property.</param>
+        /// <returns></returns>
+        public ITextArea<TModel, TProperty> TextAreaFor<TProperty>(Expression<Func<TModel, TProperty>> expression)
+        {
+            return new TextArea<TModel, TProperty>(this.htmlHelper, expression);
+        }
+
+        /// <summary>
+        /// Renders a text area control that is not bound. 
+        /// </summary>
+        /// <param name="name">Name of the control.</param>
+        /// <param name="value">Initial value of the control.</param>
+        /// <returns></returns>
+        public ITextArea<TModel, string> TextArea(string name, string value = null)
+        {
+            return new TextArea<TModel, string>(this.htmlHelper, name, value);
         }
     }
 }

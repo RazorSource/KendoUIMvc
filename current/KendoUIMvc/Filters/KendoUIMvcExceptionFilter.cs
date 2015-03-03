@@ -22,8 +22,10 @@ namespace KendoUIMvc.Filters
                 exceptionContext.HttpContext.Response.TrySkipIisCustomErrors = true;
                 HandleAjaxException(exceptionContext.HttpContext.Response, exceptionContext.Exception);
             }
-
-            base.OnException(exceptionContext);
+            else
+            {
+                base.OnException(exceptionContext);
+            }
         }
 
         protected void HandleAjaxException(HttpResponseBase response, Exception ex)

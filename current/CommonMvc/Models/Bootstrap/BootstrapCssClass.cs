@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KendoUIMvc.Models
+namespace CommonMvc.Models.Bootstrap
 {
     /// <summary>
     /// Contains constant values for Twitter Bootstrap CSS classes.

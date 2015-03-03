@@ -50,7 +50,23 @@ namespace CommonMvc.Razor
         /// <param name="name">Name of the control.</param>
         /// <param name="value">Initial value of the control.</param>
         /// <returns></returns>
-        ITextBox<TModel, object> TextBox(string name, object value);
+        ITextBox<TModel, object> TextBox(string name, object value = null);
+
+        /// <summary>
+        /// Renders a text area control.
+        /// </summary>
+        /// <typeparam name="TProperty">The data type of the property being bound.</typeparam>
+        /// <param name="expression">Expression used to bind a control to a property.</param>
+        /// <returns></returns>
+        ITextArea<TModel, TProperty> TextAreaFor<TProperty>(Expression<Func<TModel, TProperty>> expression);
+
+        /// <summary>
+        /// Renders a text area control that is not bound. 
+        /// </summary>
+        /// <param name="name">Name of the control.</param>
+        /// <param name="value">Initial value of the control.</param>
+        /// <returns></returns>
+        ITextArea<TModel, string> TextArea(string name, string value = null);
 
         /// <summary>
         /// Renders the beginning of an HTML form tag.  The tag should be used within a using block to ensure

@@ -172,6 +172,7 @@
     <Compile Include="Areas\Demo\Controllers\PanelController.cs" />
     <Compile Include="Areas\Demo\Controllers\RazorGridController.cs" />
     <Compile Include="Areas\Demo\Controllers\TabStripController.cs" />
+    <Compile Include="Areas\Demo\Controllers\TextAreaController.cs" />
     <Compile Include="Areas\Demo\Controllers\WindowController.cs" />
     <Compile Include="Areas\Demo\DemoAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -980,6 +981,9 @@
     <Content Include="Areas\Demo\Views\HtmlForm\PartialFormControls.cshtml" />
     <Content Include="Areas\Demo\Views\RazorGrid\EditNewPage.cshtml" />
     <Content Include="Areas\Demo\Views\RazorGrid\Edit.cshtml" />
+    <Content Include="Areas\Demo\Views\TextArea\Index.cshtml" />
+    <Content Include="Areas\Demo\Views\TextArea\Rows.cshtml" />
+    <Content Include="Areas\Demo\Views\TextArea\Columns.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

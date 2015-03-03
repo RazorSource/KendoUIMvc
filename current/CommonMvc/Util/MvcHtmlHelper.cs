@@ -12,7 +12,7 @@ using System.Reflection;
 using System.Collections.Specialized;
 using System.Web;
 
-namespace KendoUIMvc.Util
+namespace CommonMvc.Util
 {
     public class MvcHtmlHelper
     {

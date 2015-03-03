@@ -90,18 +90,17 @@
     <Compile Include="Controls\RazorGrid.cs" />
     <Compile Include="Controls\RazorGridWindow.cs" />
     <Compile Include="Controls\TabStrip.cs" />
+    <Compile Include="Controls\TextArea.cs" />
     <Compile Include="Controls\TextBox.cs" />
     <Compile Include="Controls\Window.cs" />
     <Compile Include="Filters\KendoUIMvcExceptionFilter.cs" />
     <Compile Include="KendoUIHtmlHelperExtension.cs" />
     <Compile Include="KendoUIHtmlHelper.cs" />
     <Compile Include="KendoUIWebViewPage.cs" />
-    <Compile Include="Models\BootstrapCssClass.cs" />
     <Compile Include="Models\KendoError.cs" />
     <Compile Include="Models\KendoErrorCollection.cs" />
     <Compile Include="Models\PageOfData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Util\MvcHtmlHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -112,6 +111,7 @@
       <Name>CommonMvc</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
